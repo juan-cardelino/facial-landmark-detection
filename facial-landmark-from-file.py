@@ -10,6 +10,9 @@ import os
 import urllib.request as urlreq
 import numpy as np
 
+# location of the models
+data_dir = "data"
+input_dir = "input"
 
 # save face detection algorithm's url in haarcascade_url variable
 haarcascade_url = "https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_alt2.xml"
@@ -69,8 +72,8 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-
-frame = cv2.imread('input2.png')
+input_fname = os.path.join(input_dir, 'input2.png')
+frame = cv2.imread(input_fname)
 
 # convert frame to grayscale
 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
