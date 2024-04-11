@@ -125,7 +125,7 @@ f.close()
 cv2.imwrite('face-detect.jpg', frame)    
 
 # Show image
-frame1 = cv2.resize(frame,(600,500))
+frame1 = cv2.resize(frame,(1000,800))
 cv2.imshow("frame", frame1)
 cv2.waitKey()
 # terminate the capture window

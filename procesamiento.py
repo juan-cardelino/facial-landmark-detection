@@ -14,5 +14,11 @@ ojoizq = marcadores[42:48]
 centroideder = np.mean(ojoder, axis= 0)
 centroideizq = np.mean(ojoizq, axis= 0)
 
-print(centroideder)
-print(centroideizq)
+frente = marcadores[17:27]
+centrofrente = np.mean(frente, axis=0)
+
+boca = marcadores[48:]
+centroboca = np.mean(boca, axis=0)
+
+# idea que encontre en linea de como hace destancia de un punto a una recta https://es.stackoverflow.com/questions/62209/distancia-entre-punto-y-segmento
+#d = norm(np.cross(p2-p1, p1-p3))/norm(p2-p1)
