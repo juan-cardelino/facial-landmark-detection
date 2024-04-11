@@ -72,7 +72,8 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-input_fname = os.path.join(input_dir, 'input2.png')
+#input_fname = os.path.join(input_dir, 'input2.png')
+input_fname = os.path.join(input_dir, 'juan2.jpg')
 frame = cv2.imread(input_fname)
 
 # convert frame to grayscale
@@ -87,6 +88,7 @@ for (x,y,w,d) in faces:
     _, landmarks = landmark_detector.fit(gray, np.array(faces))
     
     lista = []
+    lista2 = np.ones([68, 2])
     
     for landmark in landmarks:
         k = 0
@@ -96,8 +98,24 @@ for (x,y,w,d) in faces:
             # with blue colour in BGR and thickness 2
             cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
             cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
-            lista.append((x, y))
-        
+            lista.append(str(x)+" "+str(y))
+            lista2[k-1][0] = x
+            lista2[k-1][1] = y
+
+ojoder = lista2[36:42]
+ojoizq = lista2[42:48]
+
+centroideder = np.mean(ojoder, axis= 0)
+centroideizq = np.mean(ojoizq, axis= 0)
+
+for x, y in ojoder:
+    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
+for x, y in ojoizq:
+    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
+
+cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
+cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
+  
 f = open("Marcadores.txt", "w")
 for i in lista:
     f.write(str(i)+"\n")
@@ -107,7 +125,8 @@ f.close()
 cv2.imwrite('face-detect.jpg', frame)    
 
 # Show image
-cv2.imshow("frame", frame)
+frame1 = cv2.resize(frame,(600,500))
+cv2.imshow("frame", frame1)
 cv2.waitKey()
 # terminate the capture window
 #if cv2.waitKey(20) & 0xFF  == ord('q'):
