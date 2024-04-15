@@ -72,8 +72,8 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-#input_fname = os.path.join(input_dir, 'input2.png')
-input_fname = os.path.join(input_dir, 'juan2.jpg')
+input_fname = os.path.join(input_dir, 'input2.png')
+#input_fname = os.path.join(input_dir, 'juan2.jpg')
 frame = cv2.imread(input_fname)
 
 # convert frame to grayscale
