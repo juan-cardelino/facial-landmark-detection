@@ -1,5 +1,6 @@
 import numpy as np
 import json
+import cv2
 
 def norm(a):
     return np.sqrt(a[0]*a[0]+a[1]*a[1])
@@ -30,14 +31,25 @@ def rotacion(a, cos, sen):
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
-marcadores = np.genfromtxt("Marcadores.txt")
-#print(marcadores[0][0])
+if 1:
+    with open("deteccion.json") as archivo:
+        deteccion = json.load(archivo)
+    
+    ojoder = np.array(deteccion["ojo derecho"])
+    ojoizq = np.array(deteccion["ojo izquierdo"])
+    cejader = deteccion["ceja derecha"][1:-2]
+    cejaizq = deteccion["ceja izquierda"][1:-2]
+    frente = np.array(cejader + cejaizq)
+    labiosup = deteccion["labio superior"]
+    labioinf = deteccion["labio inferior"]
+    boca = np.array(labiosup+labioinf)
 
-ojoder = marcadores[36:42]
-ojoizq = marcadores[42:48]
-
-#print(ojoderecho)
-#print(ojoizquierdo)
+if 0:
+    marcadores = np.genfromtxt("Marcadores.txt")
+    ojoder = marcadores[36:42]
+    ojoizq = marcadores[42:48]
+    frente = np.array(marcadores[18:21].tolist()+marcadores[23:26].tolist())
+    boca = marcadores[48:]
 
 centroideder = np.mean(ojoder, axis= 0)
 centroideizq = np.mean(ojoizq, axis= 0)
@@ -48,33 +60,33 @@ print(distojos)
 cos_angulo_ojos = producto_escalar(centroideder, centroideizq)/(norm(centroideder)*norm(centroideizq))
 sen_angulo_ojos = seno(cos_angulo_ojos)
 
-ojos_rotados = rotacion(marcadores[36:48], cos_angulo_ojos, sen_angulo_ojos)
+#ojos_rotados = rotacion(marcadores[36:48], cos_angulo_ojos, sen_angulo_ojos)
 
-
-
-print(cos_angulo_ojos)
-print(sen_angulo_ojos)
-
-frente = np.array(marcadores[18:21].tolist()+marcadores[23:26].tolist())
 centrofrente = np.mean(frente, axis=0)
-#print(frente)
 
-boca = marcadores[48:]
 centroboca = np.mean(boca, axis=0)
 
 distfrente_ojo = punto_recta(centroideder, centroideizq, centrofrente)
-#print(distfrente_ojo)
 
 distboca_ojo = punto_recta(centroideder, centroideizq, centroboca)
-#print(distboca_ojo)
 
 # idea que encontre en linea de como hace destancia de un punto a una recta https://es.stackoverflow.com/questions/62209/distancia-entre-punto-y-segmento
 #d = norm(np.cross(p2-p1, p1-p3))/norm(p2-p1)
 
 # Eipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
 
+image = cv2.imread("face-detect.jpg")
+cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
+cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
+cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 0, 255), 5)
+cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 0, 255), 5)
+cv2.imwrite('face-processed.jpg', image)
+cv2.imshow("Image", image)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
 data = {
-    "deteccion": {
+    "puntos calculados": {
         "ojo derecho":centroideder.tolist(),
         "ojo izquierdo":centroideizq.tolist()
     },

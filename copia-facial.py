@@ -9,6 +9,7 @@ import cv2
 import os
 import urllib.request as urlreq
 import numpy as np
+import json
 
 # location of the models
 data_dir = "data"
@@ -102,24 +103,47 @@ for (x,y,w,d) in faces:
             lista2[k-1][0] = x
             lista2[k-1][1] = y
 
+contorno = lista2[0:17]
+cejader = lista2[17:22]
+cejaizq = lista2[22:27]
+tabique = lista2[27:31]
+fosas = lista2[31:36]
 ojoder = lista2[36:42]
 ojoizq = lista2[42:48]
+labiosup = lista2[48:55].tolist()+lista2[61:64].tolist()
+labioinf = lista2[55:61].tolist()+lista2[64:68].tolist()
 
-centroideder = np.mean(ojoder, axis= 0)
-centroideizq = np.mean(ojoizq, axis= 0)
+#centroideder = np.mean(ojoder, axis= 0)
+#centroideizq = np.mean(ojoizq, axis= 0)
 
-for x, y in ojoder:
-    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
-for x, y in ojoizq:
-    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
+#for x, y in labioinf:
+#    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
+#for x, y in ojoizq:
+#    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
 
-cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
-cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
-  
-f = open("Marcadores.txt", "w")
-for i in lista:
-    f.write(str(i)+"\n")
-f.close()
+#cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
+#cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
+if 0:
+    f = open("Marcadores.txt", "w")
+    for i in lista:
+        f.write(str(i)+"\n")
+    f.close()
+
+if 1:
+    deteccion = {
+        "contorno":contorno.tolist(),
+        "ceja derecha":cejader.tolist(),
+        "ceja izquierda":cejaizq.tolist(),
+        "tabique":tabique.tolist(),
+        "fosas nasales":fosas.tolist(),
+        "ojo derecho":ojoder.tolist(),
+        "ojo izquierdo":ojoizq.tolist(),
+        "labio superior":labiosup,
+        "labio inferior":labioinf
+    }
+    
+    with open('deteccion.json', 'w') as file:
+        json.dump(deteccion, file, indent=4)
 
 # save last instance of detected image
 cv2.imwrite('face-detect.jpg', frame)    

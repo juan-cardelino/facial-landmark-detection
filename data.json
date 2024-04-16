@@ -1,20 +1,20 @@
 {
-    "deteccion": {
+    "puntos calculados": {
         "ojo derecho": [
-            306.358025,
-            364.23646333333335
+            306.35802205403644,
+            364.23646036783856
         ],
         "ojo izquierdo": [
-            457.39538,
-            372.3179566666667
+            457.3953806559245,
+            372.3179524739583
         ]
     },
     "medidas": {
-        "distancia ojos": 151.25340703565237,
-        "distancia ojo-frente": 6.987486935705881,
-        "distancia ojo-boca": 207.7048987049716
+        "distancia ojos": 151.25341056682527,
+        "distancia ojo-frente": 7.672258051371498,
+        "distancia ojo-boca": 207.7049060380009
     },
     "proporcion": {
-        "frente-boca": 1.0336414161595247
+        "frente-boca": 1.0369382611018723
     }
 }
