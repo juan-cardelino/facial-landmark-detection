@@ -73,8 +73,10 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-input_fname = os.path.join(input_dir, 'input2.png')
-#input_fname = os.path.join(input_dir, 'juan2.jpg')
+if 1:
+    input_fname = os.path.join(input_dir, 'input2.png')
+else:
+    input_fname = os.path.join(input_dir, 'juan2.jpg')
 frame = cv2.imread(input_fname)
 
 # convert frame to grayscale
@@ -97,39 +99,29 @@ for (x,y,w,d) in faces:
             k = k + 1
             # display landmarks on "frame/image,"
             # with blue colour in BGR and thickness 2
-            cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
-            cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
+            if k>=37 and k<=48:
+            #if 1:
+                cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
+                #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
             lista.append(str(x)+" "+str(y))
             lista2[k-1][0] = x
             lista2[k-1][1] = y
 
-contorno = lista2[0:17]
-cejader = lista2[17:22]
-cejaizq = lista2[22:27]
-tabique = lista2[27:31]
-fosas = lista2[31:36]
-ojoder = lista2[36:42]
-ojoizq = lista2[42:48]
-labiosup = lista2[48:55].tolist()+lista2[61:64].tolist()
-labioinf = lista2[55:61].tolist()+lista2[64:68].tolist()
-
-#centroideder = np.mean(ojoder, axis= 0)
-#centroideizq = np.mean(ojoizq, axis= 0)
-
-#for x, y in labioinf:
-#    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
-#for x, y in ojoizq:
-#    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
-
-#cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
-#cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
 if 0:
     f = open("Marcadores.txt", "w")
     for i in lista:
         f.write(str(i)+"\n")
     f.close()
-
-if 1:
+else:
+    contorno = lista2[0:17]
+    cejader = lista2[17:22]
+    cejaizq = lista2[22:27]
+    tabique = lista2[27:31]
+    fosas = lista2[31:36]
+    ojoder = lista2[36:42]
+    ojoizq = lista2[42:48]
+    labiosup = lista2[48:55].tolist()+lista2[61:64].tolist()
+    labioinf = lista2[55:61].tolist()+lista2[64:68].tolist()
     deteccion = {
         "contorno":contorno.tolist(),
         "ceja derecha":cejader.tolist(),
@@ -149,8 +141,7 @@ if 1:
 cv2.imwrite('face-detect.jpg', frame)    
 
 # Show image
-frame1 = cv2.resize(frame,(1000,800))
-cv2.imshow("frame", frame1)
+cv2.imshow("frame", cv2.resize(frame,(1000,800)))
 cv2.waitKey()
 # terminate the capture window
 #if cv2.waitKey(20) & 0xFF  == ord('q'):

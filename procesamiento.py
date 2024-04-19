@@ -63,8 +63,7 @@ if 1:
     labiosup = deteccion["labio superior"]
     labioinf = deteccion["labio inferior"]
     boca = np.array(labiosup+labioinf)
-
-if 0:
+else:
     marcadores = np.genfromtxt("Marcadores.txt")
     ojoder = marcadores[36:42]
     ojoizq = marcadores[42:48]
@@ -74,93 +73,106 @@ if 0:
 centroideder = np.mean(ojoder, axis= 0)
 centroideizq = np.mean(ojoizq, axis= 0)
 origen_ojo = (centroideder+centroideizq)/2
+unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2
+
+print(unidad)
 
 distojos = norma(centroideder-centroideizq)
-print(distojos)
-
-cos_angulo_ojos = producto_escalar(centroideder, centroideizq)/(norma(centroideder)*norma(centroideizq))
-sen_angulo_ojos = seno(cos_angulo_ojos)
-
-#ojos_rotados = rotacion(marcadores[36:48], cos_angulo_ojos, sen_angulo_ojos)
 
 centrofrente = np.mean(frente, axis=0)
-
 centroboca = np.mean(boca, axis=0)
-
-distfrente_ojo = punto_recta(centroideder, centroideizq, centrofrente)
-
-distboca_ojo = punto_recta(centroideder, centroideizq, centroboca)
 
 eje_ojos = np.abs(centroideder-centroideizq)
 eje_ojos = eje_ojos/norma(eje_ojos)
 p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
 
+distfrente_ojo = np.abs(pr(centrofrente-origen_ojo, p_eje_ojos))
+distfrente_ojo_u = np.abs(pr(centrofrente-origen_ojo, eje_ojos))
+distboca_ojo = np.abs(pr(centroboca-origen_ojo, p_eje_ojos))
+distboca_ojo_u = np.abs(pr(centroboca-origen_ojo, eje_ojos))
 
-distfrente_ojo2 = pr(centrofrente, p_eje_ojos)
-distfrente_ojo21 = pr(centrofrente, eje_ojos)
-distboca_ojo2 = pr(centroboca, p_eje_ojos)
-origen_ojo1 = pr(centroideder, p_eje_ojos)
-origen_ojo2 = pr(centroideizq, p_eje_ojos)
+#print('origen')
+#print(origen_ojo)
+#print(pr(origen_ojo, p_eje_ojos))
+#print(centroideder)
+#print(centroideizq)
 
-print("algo")
-print([distfrente_ojo21, distfrente_ojo2])
-print(cambio(centrofrente, eje_ojos))
+print('frente:', distfrente_ojo)
+print('boca:', distboca_ojo)
+print('frente+boca:', distfrente_ojo+distboca_ojo)
 
-print('origen')
-print(origen_ojo1)
-print(pr(origen_ojo, p_eje_ojos))
-#print(norma(origen_ojo1))
-print(centroideder)
-print(centroideizq)
+#angulos ojos
 
-print('frente-boca')
-print(distfrente_ojo+distboca_ojo)
-#print(norma(distboca_ojo2-distfrente_ojo2))
+angulo_ojo_derecho = np.arcsin(pr(ojoder[3]-ojoder[0], p_eje_ojos)/norma(ojoder[3]-ojoder[0]))
+angulo_ojo_izquierdo = np.arcsin(pr(ojoizq[3]-ojoizq[0], p_eje_ojos)/norma(ojoizq[3]-ojoizq[0]))
 
-print('frente')
-print(distfrente_ojo)
-#print(norma(distfrente_ojo2-origen_ojo1))
-#print(norma(distfrente_ojo2)-norma(origen_ojo1))
-
-print("boca")
-print(distboca_ojo)
-#print(norma(distboca_ojo2-origen_ojo1))
-
-# idea que encontre en linea de como hace destancia de un punto a una recta https://es.stackoverflow.com/questions/62209/distancia-entre-punto-y-segmento
-#d = norm(np.cross(p2-p1, p1-p3))/norm(p2-p1)
+print(angulo_ojo_derecho*(90/np.pi))
+print(angulo_ojo_izquierdo*(90/np.pi))
 
 # Eipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
 
 image = cv2.imread("face-detect.jpg")
-cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 0, 255), 5)
-cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 0, 255), 5)
-cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 0, 255), 5)
-cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 0, 255), 5)
-cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 0, 255), 5)
-cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*50), int(origen_ojo[1]+eje_ojos[1]*50)), 1, (0, 255, 0), 5)
-cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*50), int(origen_ojo[1]+p_eje_ojos[1]*50)), 1, (0, 255, 0), 5)
 
-#cv2.circle(image, (int(cejader[0][0]), int(cejader[0][1])), 1, (0, 255, 0), 5)
-#cv2.circle(image, (int(cejader[-1][0]), int(cejader[-1][1])), 1, (0, 255, 0), 5)
-#for x, y in labioinf:
-#    cv2.circle(frame, (int(x), int(y)), 1, (0, 255, 0), 5)
+if 0:
+    for i in frente:
+     cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+
+    for i in boca:
+        cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+
+if 0:
+    for i in np.arange(int(distfrente_ojo)):
+        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
+        cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+
+    for i in np.arange(int(distboca_ojo)):
+        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+        cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*(-i)), int(origen_ojo[1]+p_eje_ojos[1]*(-i))), 1, (0, 0, 255), 5)
+
+if 1:
+    for i in np.arange(int(distojos)):
+        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
+        cv2.circle(image, (int(centroideder[0]+eje_ojos[0]*i), int(centroideder[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+    algo = (ojoder[3]-ojoder[0])
+    algo = algo/norma(algo)
+    for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
+        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
+        cv2.circle(image, (int(ojoder[0][0]+algo[0]*i), int(ojoder[0][1]+algo[1]*i)), 1, (0, 125, 255), 5)
+    algo = (ojoizq[3]-ojoizq[0])
+    algo = algo/norma(algo)
+    for i in np.arange(int(norma(ojoizq[3]-ojoizq[0]))):
+        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
+        cv2.circle(image, (int(ojoizq[0][0]+algo[0]*i), int(ojoizq[0][1]+algo[1]*i)), 1, (0, 125, 255), 5)
+    
+cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 5)
+cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 5)
+#cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
+#cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
+#cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+#cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
+
 cv2.imwrite('face-processed.jpg', image)
-cv2.imshow("Image", image)
+cv2.imshow("Image", cv2.resize(image,(900,800)))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 data = {
     "puntos calculados": {
-        "ojo derecho":centroideder.tolist(),
-        "ojo izquierdo":centroideizq.tolist()
+        "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
+        "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
     },
     "medidas":{
-        "distancia ojos":distojos,
-        "distancia ojo-frente":distfrente_ojo,
-        "distancia ojo-boca":distboca_ojo
+        "distancia ojos":distojos/unidad,
+        "distancia ojo-frente":distfrente_ojo/unidad,
+        "distancia ojo-boca":distboca_ojo/unidad
     },
     "proporcion":{
         "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
+    },
+    "angulos":{
+        "ojo derecho": angulo_ojo_derecho,
+        "ojo izquierdo": angulo_ojo_izquierdo
     }
 }
 
