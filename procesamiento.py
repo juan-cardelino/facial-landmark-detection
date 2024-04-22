@@ -32,6 +32,7 @@ def cambio(vector, eje_u):
     aux = np.array([eje_u[1], -eje_u[0]])
     return np.array([sum(vector*eje_u), sum(vector*aux)])
 
+# FIXME: poner nombres más descriptivos *y de paso, no es igual a producto_escalar?
 def pr(u,v):
     return sum(u*v)
 
@@ -51,7 +52,8 @@ def rotacion(a, cos, sen):
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
-if 1:
+# TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
+if 1:   # FIXME: transformalo en una variable que se llame "verbose"
     with open("deteccion.json") as archivo:
         deteccion = json.load(archivo)
     
@@ -73,9 +75,9 @@ else:
 centroideder = np.mean(ojoder, axis= 0)
 centroideizq = np.mean(ojoizq, axis= 0)
 origen_ojo = (centroideder+centroideizq)/2
-unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2
+unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2  # FIXME: usa nombres coherentes con la documentación
 
-print(unidad)
+print(unidad)   
 
 distojos = norma(centroideder-centroideizq)
 
@@ -91,6 +93,7 @@ distfrente_ojo_u = np.abs(pr(centrofrente-origen_ojo, eje_ojos))
 distboca_ojo = np.abs(pr(centroboca-origen_ojo, p_eje_ojos))
 distboca_ojo_u = np.abs(pr(centroboca-origen_ojo, eje_ojos))
 
+# TODO: ponelo adentro del "if verbose"
 #print('origen')
 #print(origen_ojo)
 #print(pr(origen_ojo, p_eje_ojos))
