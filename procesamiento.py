@@ -206,5 +206,6 @@ if verbose >= 2:
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     
-# Eipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
-
+# Elipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
+# Elipse 2.1 https://www.datanalytics.com/2024/02/08/ajuste-elipse/
+# Elipse 2.2 https://github.com/cjgb/ellipses/blob/dev/mylib.py
