@@ -99,8 +99,8 @@ for (x,y,w,d) in faces:
             k = k + 1
             # display landmarks on "frame/image,"
             # with blue colour in BGR and thickness 2
-            if k>=37 and k<=48:
-            #if 1:
+            #if k>=37 and k<=48:
+            if 1:
                 cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
                 #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
             lista.append(str(x)+" "+str(y))

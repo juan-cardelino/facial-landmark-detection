@@ -33,8 +33,8 @@ def cambio(vector, eje_u):
     return np.array([sum(vector*eje_u), sum(vector*aux)])
 
 # FIXME: poner nombres más descriptivos *y de paso, no es igual a producto_escalar?
-def pr(u,v):
-    return sum(u*v)
+def proyeccion(u,v):
+    return producto_escalar(u,v)/norma(u)
 
 def seno(alpha):
     return np.sin(np.arccos(alpha))
@@ -52,136 +52,159 @@ def rotacion(a, cos, sen):
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
+def carga_marcadores(archivo, verbose):
+    if verbose:   # FIXME: transformalo en una variable que se llame "verbose"
+        with open(archivo + ".json") as archivo:
+            deteccion = json.load(archivo)
+    
+        ojoder = np.array(deteccion["ojo derecho"])
+        ojoizq = np.array(deteccion["ojo izquierdo"])
+        cejader = deteccion["ceja derecha"][2:-1]
+        cejaizq = deteccion["ceja izquierda"][1:-2]
+        frente = np.array(cejader + cejaizq)
+        labiosup = deteccion["labio superior"]
+        labioinf = deteccion["labio inferior"]
+        boca = np.array(labiosup+labioinf)
+    else:
+        marcadores = np.genfromtxt(archivo + ".txt")
+        ojoder = marcadores[36:42]
+        ojoizq = marcadores[42:48]
+        frente = np.array(marcadores[18:21].tolist()+marcadores[23:26].tolist())
+        boca = marcadores[48:]
+    return ojoder, ojoizq, frente, boca
+
+verbose = 2
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
-if 1:   # FIXME: transformalo en una variable que se llame "verbose"
-    with open("deteccion.json") as archivo:
-        deteccion = json.load(archivo)
-    
-    ojoder = np.array(deteccion["ojo derecho"])
-    ojoizq = np.array(deteccion["ojo izquierdo"])
-    cejader = deteccion["ceja derecha"][2:-1]
-    cejaizq = deteccion["ceja izquierda"][1:-2]
-    frente = np.array(cejader + cejaizq)
-    labiosup = deteccion["labio superior"]
-    labioinf = deteccion["labio inferior"]
-    boca = np.array(labiosup+labioinf)
-else:
-    marcadores = np.genfromtxt("Marcadores.txt")
-    ojoder = marcadores[36:42]
-    ojoizq = marcadores[42:48]
-    frente = np.array(marcadores[18:21].tolist()+marcadores[23:26].tolist())
-    boca = marcadores[48:]
-
-centroideder = np.mean(ojoder, axis= 0)
-centroideizq = np.mean(ojoizq, axis= 0)
-origen_ojo = (centroideder+centroideizq)/2
-unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2  # FIXME: usa nombres coherentes con la documentación
-
-print(unidad)   
-
-distojos = norma(centroideder-centroideizq)
-
-centrofrente = np.mean(frente, axis=0)
-centroboca = np.mean(boca, axis=0)
-
-eje_ojos = np.abs(centroideder-centroideizq)
-eje_ojos = eje_ojos/norma(eje_ojos)
-p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
-
-distfrente_ojo = np.abs(pr(centrofrente-origen_ojo, p_eje_ojos))
-distfrente_ojo_u = np.abs(pr(centrofrente-origen_ojo, eje_ojos))
-distboca_ojo = np.abs(pr(centroboca-origen_ojo, p_eje_ojos))
-distboca_ojo_u = np.abs(pr(centroboca-origen_ojo, eje_ojos))
-
 # TODO: ponelo adentro del "if verbose"
-#print('origen')
-#print(origen_ojo)
-#print(pr(origen_ojo, p_eje_ojos))
-#print(centroideder)
-#print(centroideizq)
-
-print('frente:', distfrente_ojo)
-print('boca:', distboca_ojo)
-print('frente+boca:', distfrente_ojo+distboca_ojo)
-
-#angulos ojos
-
-angulo_ojo_derecho = np.arcsin(pr(ojoder[3]-ojoder[0], p_eje_ojos)/norma(ojoder[3]-ojoder[0]))
-angulo_ojo_izquierdo = np.arcsin(pr(ojoizq[3]-ojoizq[0], p_eje_ojos)/norma(ojoizq[3]-ojoizq[0]))
-
-print(angulo_ojo_derecho*(90/np.pi))
-print(angulo_ojo_izquierdo*(90/np.pi))
-
-# Eipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
-
-image = cv2.imread("face-detect.jpg")
-
-if 0:
-    for i in frente:
-     cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
-
-    for i in boca:
-        cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
-
-if 0:
-    for i in np.arange(int(distfrente_ojo)):
-        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
-        cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
-
-    for i in np.arange(int(distboca_ojo)):
-        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
-        cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*(-i)), int(origen_ojo[1]+p_eje_ojos[1]*(-i))), 1, (0, 0, 255), 5)
-
-if 1:
-    for i in np.arange(int(distojos)):
-        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
-        cv2.circle(image, (int(centroideder[0]+eje_ojos[0]*i), int(centroideder[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
-    algo = (ojoder[3]-ojoder[0])
-    algo = algo/norma(algo)
-    for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
-        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
-        cv2.circle(image, (int(ojoder[0][0]+algo[0]*i), int(ojoder[0][1]+algo[1]*i)), 1, (0, 125, 255), 5)
-    algo = (ojoizq[3]-ojoizq[0])
-    algo = algo/norma(algo)
-    for i in np.arange(int(norma(ojoizq[3]-ojoizq[0]))):
-        #cv2.circle(image, (int(origen_ojo[0]+eje_ojos[0]*i), int(origen_ojo[1]+eje_ojos[1]*i)), 1, (255, 0, 255), 5)
-        cv2.circle(image, (int(ojoizq[0][0]+algo[0]*i), int(ojoizq[0][1]+algo[1]*i)), 1, (0, 125, 255), 5)
+if verbose >= 1:
+    ojoder, ojoizq, frente, boca = carga_marcadores("deteccion", True)
     
-cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 5)
-cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 5)
-#cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
-#cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
-#cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
-#cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
-cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
+    #centoride ojos
+    centroideder = np.mean(ojoder, axis= 0)
+    centroideizq = np.mean(ojoizq, axis= 0)
+    
+    distojos = norma(centroideder-centroideizq)
+    unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2  # FIXME: usa nombres coherentes con la documentación
+    
+    #origen y ejes
+    origen_ojo = (centroideder+centroideizq)/2
+    eje_ojos = np.abs(centroideder-centroideizq)
+    eje_ojos = eje_ojos/norma(eje_ojos)
+    p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
+    
+    #Proporciones
+    centrofrente = np.mean(frente, axis=0)
+    centroboca = np.mean(boca, axis=0)
 
-cv2.imwrite('face-processed.jpg', image)
-cv2.imshow("Image", cv2.resize(image,(900,800)))
-cv2.waitKey(0)
-cv2.destroyAllWindows()
-
-data = {
-    "puntos calculados": {
-        "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
-        "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
-    },
-    "medidas":{
-        "distancia ojos":distojos/unidad,
-        "distancia ojo-frente":distfrente_ojo/unidad,
-        "distancia ojo-boca":distboca_ojo/unidad
-    },
-    "proporcion":{
-        "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
-    },
-    "angulos":{
-        "ojo derecho": angulo_ojo_derecho,
-        "ojo izquierdo": angulo_ojo_izquierdo
+    distfrente_ojo = np.abs(producto_escalar(centrofrente-origen_ojo, p_eje_ojos))
+    distfrente_ojo_u = np.abs(producto_escalar(centrofrente-origen_ojo, eje_ojos))
+    distboca_ojo = np.abs(producto_escalar(centroboca-origen_ojo, p_eje_ojos))
+    distboca_ojo_u = np.abs(producto_escalar(centroboca-origen_ojo, eje_ojos))
+    
+    #angulos ojos
+    angulo_ojo_derecho = np.arcsin(proyeccion(ojoder[3]-ojoder[0], p_eje_ojos))
+    angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
+    
+    #Almacenamiento estructurado
+    data = {
+        "puntos calculados": {
+            "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
+            "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
+        },
+        "medidas":{
+            "distancia ojos":distojos/unidad,
+            "distancia ojo-frente":distfrente_ojo/unidad,
+            "distancia ojo-boca":distboca_ojo/unidad
+        },
+        "proporcion":{
+            "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
+        },
+        "angulos":{
+            "ojo derecho": angulo_ojo_derecho,
+            "ojo izquierdo": angulo_ojo_izquierdo
+        }
     }
-}
 
+    #Guardado
+    with open('data.json', 'w') as file:
+        json.dump(data, file, indent=4)
 
+if verbose >= 3:
+    #Origen y ejes
+    print('\n Origen y ejes')
+    print('unidad', unidad)
+    print('coordenadas origen', origen_ojo)
+    print('proyeccion en v de origen', producto_escalar(origen_ojo, p_eje_ojos))
+    
+    #Centroide
+    print('\n Centroides')
+    print('centroide derecho', centroideder)
+    print('centroide izauierdo', centroideizq)
+    
+    #Proporciones
+    print('\n Proporciones')
+    print('frente-ojo:', distfrente_ojo)
+    print('boca-ojo:', distboca_ojo)
+    print('frente-boca:', distfrente_ojo+distboca_ojo)
+    
+    #Angulos
+    print('\n Angulos')
+    print('anglo de ojo derecho', angulo_ojo_derecho*(90/np.pi))
+    print('anglo de ojo izquierdo',angulo_ojo_izquierdo*(90/np.pi))
 
-with open('data.json', 'w') as file:
-    json.dump(data, file, indent=4)
+if verbose >= 2:
+    image = cv2.imread("face-detect.jpg")
 
+    #Dibujo frente y boca, solo se usa si la imagen viene vacia de copia facial 
+    if 0:
+        for i in frente:
+            cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+
+        for i in boca:
+            cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+
+    #Proyecciones de frente y boca, solo se usa para verificar
+    if 0:
+        for i in np.arange(int(distfrente_ojo)):
+            cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+
+        for i in np.arange(int(distboca_ojo)):
+            cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*(-i)), int(origen_ojo[1]+p_eje_ojos[1]*(-i))), 1, (0, 0, 255), 5)
+
+    #Ejes ojos
+    if 0:
+        for i in np.arange(int(distojos)):
+            cv2.circle(image, (int(centroideder[0]+eje_ojos[0]*i), int(centroideder[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+        aux = (ojoder[3]-ojoder[0])
+        aux = aux/norma(aux)
+        for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
+            cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (0, 125, 255), 5)
+        aux = (ojoizq[3]-ojoizq[0])
+        aaux = aux/norma(aux)
+        for i in np.arange(int(norma(ojoizq[3]-ojoizq[0]))):
+            cv2.circle(image, (int(ojoizq[0][0]+aux[0]*i), int(ojoizq[0][1]+aux[1]*i)), 1, (0, 125, 255), 5)
+    
+    #Centroides
+    if 1:
+        cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 5)
+        cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 5)
+        # Frente y boca
+        if 0:
+            cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
+            cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
+    
+    #origen y ejes u y v
+    if 0: 
+        cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+        cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+        cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
+
+    #Guardar imagen procesada
+    cv2.imwrite('face-processed.jpg', image)
+    #Mostrar imagen
+    cv2.imshow("Image", cv2.resize(image,(900,800)))
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+    
+# Eipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
 
