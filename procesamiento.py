@@ -196,11 +196,11 @@ if verbose >= 2:
         aux = (ojoder[3]-ojoder[0])
         aux = aux/norma(aux)
         for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
-            cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (0, 125, 255), 5)
+            cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
         aux = (ojoizq[3]-ojoizq[0])
-        aaux = aux/norma(aux)
+        aux = aux/norma(aux)
         for i in np.arange(int(norma(ojoizq[3]-ojoizq[0]))):
-            cv2.circle(image, (int(ojoizq[0][0]+aux[0]*i), int(ojoizq[0][1]+aux[1]*i)), 1, (0, 125, 255), 5)
+            cv2.circle(image, (int(ojoizq[0][0]+aux[0]*i), int(ojoizq[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
     
     #Centroides
     if 1:
@@ -217,13 +217,20 @@ if verbose >= 2:
         cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
         cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
-    if 1:
-        elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 30)
+    if 0:
+        elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
         for x, y in elipse_ojoder:
-            cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
-        elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 30)
+            cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
+        elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
         for x, y in elipse_ojoizq:
-            cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
+            cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
+    
+    if 0:
+        for x, y in ojoder:
+            cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
+
+        for x, y in ojoizq:
+            cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
             
     #Guardar imagen procesada
     cv2.imwrite('face-processed.jpg', image)

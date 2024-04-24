@@ -73,7 +73,7 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-if 0:
+if 1:
     input_fname = os.path.join(input_dir, 'input2.png')
 else:
     input_fname = os.path.join(input_dir, 'juan2.jpg')
