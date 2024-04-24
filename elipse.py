@@ -160,7 +160,7 @@ def cart_to_pol(coeffs):
 
 def get_best_ellipse_alt(points):
 
-    tmp = fit_ellipse(np.array(points["x"]), np.array(points['y']))
+    tmp = fit_ellipse(points[0], points[1])
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
 
     out = {

@@ -74,12 +74,12 @@ def carga_marcadores(archivo, verbose):
         boca = marcadores[48:]
     return ojoder, ojoizq, frente, boca
 
-def numpy_a_dict(a):
-    aux = { "x":[], "y":[]}
+def extraer_x_e_y(a):
+    aux_x = aux_y = []
     for x, y in a:
-        aux['x'] = aux['x']+[x]
-        aux['y'] = aux['y']+[y]
-    return aux
+        aux_x = aux_x+[x]
+        aux_y = aux_y+[y]
+    return np.array(aux_x), np.array(aux_y)
 
 verbose = 2
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
@@ -115,8 +115,8 @@ if verbose >= 1:
     angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
     
     #Forma ojos
-    valores_elipse_ojoder = elipse.get_best_ellipse_alt(numpy_a_dict(ojoder))
-    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(numpy_a_dict(ojoizq))
+    valores_elipse_ojoder = elipse.get_best_ellipse_alt(extraer_x_e_y(ojoder))
+    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(extraer_x_e_y(ojoizq))
     
     #Almacenamiento estructurado
     data = {
@@ -217,7 +217,7 @@ if verbose >= 2:
         cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
         cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
-    if 0:
+    if 1:
         elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 30)
         for x, y in elipse_ojoder:
             cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
