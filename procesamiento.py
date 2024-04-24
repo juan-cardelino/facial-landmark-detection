@@ -1,9 +1,10 @@
 import numpy as np
 import json
 import cv2
+import elipse
 
 def norma(a):
-    return np.sqrt(a[0]*a[0]+a[1]*a[1])
+    return np.sqrt(sum(a*a))
 
 def punto_recta(a, b, c):
     A = (b[1]-a[1])
@@ -73,11 +74,19 @@ def carga_marcadores(archivo, verbose):
         boca = marcadores[48:]
     return ojoder, ojoizq, frente, boca
 
+def numpy_a_dict(a):
+    aux = { "x":[], "y":[]}
+    for x, y in a:
+        aux['x'] = aux['x']+[x]
+        aux['y'] = aux['y']+[y]
+    return aux
+
 verbose = 2
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
 # TODO: ponelo adentro del "if verbose"
 if verbose >= 1:
     ojoder, ojoizq, frente, boca = carga_marcadores("deteccion", True)
+    print(ojoder)
     
     #centoride ojos
     centroideder = np.mean(ojoder, axis= 0)
@@ -105,6 +114,10 @@ if verbose >= 1:
     angulo_ojo_derecho = np.arcsin(proyeccion(ojoder[3]-ojoder[0], p_eje_ojos))
     angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
     
+    #Forma ojos
+    valores_elipse_ojoder = elipse.get_best_ellipse_alt(numpy_a_dict(ojoder))
+    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(numpy_a_dict(ojoizq))
+    
     #Almacenamiento estructurado
     data = {
         "puntos calculados": {
@@ -112,6 +125,7 @@ if verbose >= 1:
             "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
         },
         "medidas":{
+            "unidad":unidad,
             "distancia ojos":distojos/unidad,
             "distancia ojo-frente":distfrente_ojo/unidad,
             "distancia ojo-boca":distboca_ojo/unidad
@@ -122,6 +136,10 @@ if verbose >= 1:
         "angulos":{
             "ojo derecho": angulo_ojo_derecho,
             "ojo izquierdo": angulo_ojo_izquierdo
+        },
+        "forma ojos":{
+            "ratio ojo derecho":valores_elipse_ojoder["ratio"],
+            "ratio ojo izquierdo":valores_elipse_ojoizq["ratio"]
         }
     }
 
@@ -199,6 +217,14 @@ if verbose >= 2:
         cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
         cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
+    if 0:
+        elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 30)
+        for x, y in elipse_ojoder:
+            cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
+        elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 30)
+        for x, y in elipse_ojoizq:
+            cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
+            
     #Guardar imagen procesada
     cv2.imwrite('face-processed.jpg', image)
     #Mostrar imagen
