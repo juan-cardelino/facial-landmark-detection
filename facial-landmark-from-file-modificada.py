@@ -73,10 +73,15 @@ print ("checking webcam for connection ...")
 #webcam_cap = cv2.VideoCapture(1)
 
 #_, frame = webcam_cap.read()
-if 1:
+imagen = 3
+if imagen == 0:
     input_fname = os.path.join(input_dir, 'input2.png')
-else:
+elif imagen == 1:
     input_fname = os.path.join(input_dir, 'juan2.jpg')
+elif imagen == 2:
+    input_fname = os.path.join(input_dir, 'paisaje.jpg')
+elif imagen == 3:
+    input_fname = os.path.join(input_dir, 'House.jpg')
 frame = cv2.imread(input_fname)
 
 # convert frame to grayscale
@@ -85,13 +90,16 @@ gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 # Detect faces using the haarcascade classifier on the "grayscale image"
 faces = detector.detectMultiScale(gray)
 
+print("caras detectadas: ",len(faces))
 
+
+numero_cara = 0
 for (x,y,w,d) in faces:
     # Detect landmarks on "gray"
     _, landmarks = landmark_detector.fit(gray, np.array(faces))
     
-    lista = []
-    lista2 = np.ones([68, 2])
+    lista = np.ones([68, 2])
+    numero_cara = numero_cara + 1
     
     for landmark in landmarks:
         k = 0
@@ -103,35 +111,48 @@ for (x,y,w,d) in faces:
             if 1:
                 cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
                 #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
-            lista.append(str(x)+" "+str(y))
-            lista2[k-1][0] = x
-            lista2[k-1][1] = y
+            lista[k-1][0] = x
+            lista[k-1][1] = y
+        
+        caras = {
+            "contorno":contorno.tolist(),
+            "ceja derecha":cejader.tolist(),
+            "ceja izquierda":cejaizq.tolist(),
+            "tabique":tabique.tolist(),
+            "fosas nasales":fosas.tolist(),
+            "ojo derecho":ojoder.tolist(),
+            "ojo izquierdo":ojoizq.tolist(),
+            "labio superior":labiosup,
+            "labio inferior":labioinf
+        }
 
 if 0:
     f = open("Marcadores.txt", "w")
-    for i in lista:
-        f.write(str(i)+"\n")
+    for x, y in lista:
+        f.write(str(x)+" "+str(y)+"\n")
     f.close()
 else:
-    contorno = lista2[0:17]
-    cejader = lista2[17:22]
-    cejaizq = lista2[22:27]
-    tabique = lista2[27:31]
-    fosas = lista2[31:36]
-    ojoder = lista2[36:42]
-    ojoizq = lista2[42:48]
-    labiosup = lista2[48:55].tolist()+lista2[61:64].tolist()
-    labioinf = lista2[55:61].tolist()+lista2[64:68].tolist()
+    contorno = lista[0:17]
+    cejader = lista[17:22]
+    cejaizq = lista[22:27]
+    tabique = lista[27:31]
+    fosas = lista[31:36]
+    ojoder = lista[36:42]
+    ojoizq = lista[42:48]
+    labiosup = lista[48:55].tolist()+lista[61:64].tolist()
+    labioinf = lista[55:61].tolist()+lista[64:68].tolist()
     deteccion = {
-        "contorno":contorno.tolist(),
-        "ceja derecha":cejader.tolist(),
-        "ceja izquierda":cejaizq.tolist(),
-        "tabique":tabique.tolist(),
-        "fosas nasales":fosas.tolist(),
-        "ojo derecho":ojoder.tolist(),
-        "ojo izquierdo":ojoizq.tolist(),
-        "labio superior":labiosup,
-        "labio inferior":labioinf
+        "caras":{
+            "contorno":contorno.tolist(),
+            "ceja derecha":cejader.tolist(),
+            "ceja izquierda":cejaizq.tolist(),
+            "tabique":tabique.tolist(),
+            "fosas nasales":fosas.tolist(),
+            "ojo derecho":ojoder.tolist(),
+            "ojo izquierdo":ojoizq.tolist(),
+            "labio superior":labiosup,
+            "labio inferior":labioinf
+        }
     }
     
     with open('deteccion.json', 'w') as file:

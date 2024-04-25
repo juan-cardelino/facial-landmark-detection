@@ -58,13 +58,13 @@ def carga_marcadores(archivo, verbose):
         with open(archivo + ".json") as archivo:
             deteccion = json.load(archivo)
     
-        ojoder = np.array(deteccion["ojo derecho"])
-        ojoizq = np.array(deteccion["ojo izquierdo"])
-        cejader = deteccion["ceja derecha"][2:-1]
-        cejaizq = deteccion["ceja izquierda"][1:-2]
+        ojoder = np.array(deteccion["cara1"]["ojo derecho"])
+        ojoizq = np.array(deteccion["cara1"]["ojo izquierdo"])
+        cejader = deteccion["cara1"]["ceja derecha"][2:-1]
+        cejaizq = deteccion["cara1"]["ceja izquierda"][1:-2]
         frente = np.array(cejader + cejaizq)
-        labiosup = deteccion["labio superior"]
-        labioinf = deteccion["labio inferior"]
+        labiosup = deteccion["cara1"]["labio superior"]
+        labioinf = deteccion["cara1"]["labio inferior"]
         boca = np.array(labiosup+labioinf)
     else:
         marcadores = np.genfromtxt(archivo + ".txt")
