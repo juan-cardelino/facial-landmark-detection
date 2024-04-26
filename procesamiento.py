@@ -61,7 +61,7 @@ def extraer_x_e_y(a):
         aux_y = aux_y+[y]
     return np.array(aux_x), np.array(aux_y)
 
-verbose = 1
+verbose = 2
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
 # TODO: ponelo adentro del "if verbose"
 if verbose >= 1:
@@ -174,7 +174,7 @@ if verbose >= 2:
         cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
         cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
-    if 0:
+    if 1:
         elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
         for x, y in elipse_ojoder:
             cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
