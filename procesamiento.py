@@ -58,13 +58,13 @@ def carga_marcadores(archivo, verbose):
         with open(archivo + ".json") as archivo:
             deteccion = json.load(archivo)
     
-        ojoder = np.array(deteccion["cara1"]["ojo derecho"])
-        ojoizq = np.array(deteccion["cara1"]["ojo izquierdo"])
-        cejader = deteccion["cara1"]["ceja derecha"][2:-1]
-        cejaizq = deteccion["cara1"]["ceja izquierda"][1:-2]
+        ojoder = np.array(deteccion["caras"][0]["ojo derecho"])
+        ojoizq = np.array(deteccion["caras"][0]["ojo izquierdo"])
+        cejader = deteccion["caras"][0]["ceja derecha"][2:-1]
+        cejaizq = deteccion["caras"][0]["ceja izquierda"][1:-2]
         frente = np.array(cejader + cejaizq)
-        labiosup = deteccion["cara1"]["labio superior"]
-        labioinf = deteccion["cara1"]["labio inferior"]
+        labiosup = deteccion["caras"][0]["labio superior"]
+        labioinf = deteccion["caras"][0]["labio inferior"]
         boca = np.array(labiosup+labioinf)
     else:
         marcadores = np.genfromtxt(archivo + ".txt")
@@ -240,5 +240,5 @@ if verbose >= 2:
     cv2.destroyAllWindows()
     
 # Elipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
-# Elipse 2.1 https://www.datanalytics.com/2024/02/08/ajuste-elipse/
-# Elipse 2.2 https://github.com/cjgb/ellipses/blob/dev/mylib.py
+# Elipse 2.1 https://www.datanalytics.com/2024/02/08/ajuste-elipse/ Pagina web donde lo encontre
+# Elipse 2.2 https://github.com/cjgb/ellipses/blob/dev/mylib.py Repertorio de github

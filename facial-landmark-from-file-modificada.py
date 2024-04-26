@@ -11,6 +11,19 @@ import urllib.request as urlreq
 import numpy as np
 import json
 
+def guardado(a_guardar, verbose = False):
+    if verbose:
+        f = open("Marcadores.txt", "w")
+        for x, y in a_guardar:
+            f.write(str(x)+" "+str(y)+"\n")
+        f.close()
+    else:
+        with open('deteccion.json', 'w') as file:
+            json.dump(a_guardar, file, indent=4)
+
+    
+    return
+
 # location of the models
 data_dir = "data"
 input_dir = "input"
@@ -91,15 +104,16 @@ gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 faces = detector.detectMultiScale(gray)
 
 print("caras detectadas: ",len(faces))
-
-
-numero_cara = 0
+    
+#deteccion = {"caras":np.ones(len(faces)-1).tolist()}
+deteccion = {"caras":[]}
+iter = 0
 for (x,y,w,d) in faces:
+    deteccion["caras"] = deteccion["caras"]+[1]
     # Detect landmarks on "gray"
     _, landmarks = landmark_detector.fit(gray, np.array(faces))
     
     lista = np.ones([68, 2])
-    numero_cara = numero_cara + 1
     
     for landmark in landmarks:
         k = 0
@@ -113,50 +127,22 @@ for (x,y,w,d) in faces:
                 #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
             lista[k-1][0] = x
             lista[k-1][1] = y
-        
-        caras = {
-            "contorno":contorno.tolist(),
-            "ceja derecha":cejader.tolist(),
-            "ceja izquierda":cejaizq.tolist(),
-            "tabique":tabique.tolist(),
-            "fosas nasales":fosas.tolist(),
-            "ojo derecho":ojoder.tolist(),
-            "ojo izquierdo":ojoizq.tolist(),
-            "labio superior":labiosup,
-            "labio inferior":labioinf
-        }
-
-if 0:
-    f = open("Marcadores.txt", "w")
-    for x, y in lista:
-        f.write(str(x)+" "+str(y)+"\n")
-    f.close()
-else:
-    contorno = lista[0:17]
-    cejader = lista[17:22]
-    cejaizq = lista[22:27]
-    tabique = lista[27:31]
-    fosas = lista[31:36]
-    ojoder = lista[36:42]
-    ojoizq = lista[42:48]
-    labiosup = lista[48:55].tolist()+lista[61:64].tolist()
-    labioinf = lista[55:61].tolist()+lista[64:68].tolist()
-    deteccion = {
-        "caras":{
-            "contorno":contorno.tolist(),
-            "ceja derecha":cejader.tolist(),
-            "ceja izquierda":cejaizq.tolist(),
-            "tabique":tabique.tolist(),
-            "fosas nasales":fosas.tolist(),
-            "ojo derecho":ojoder.tolist(),
-            "ojo izquierdo":ojoizq.tolist(),
-            "labio superior":labiosup,
-            "labio inferior":labioinf
-        }
+    print(deteccion)
+    deteccion["caras"][iter] = {
+        "contorno":lista[0:17].tolist(),
+        "ceja derecha":lista[17:22].tolist(),
+        "ceja izquierda":lista[22:27].tolist(),
+        "tabique":lista[27:31].tolist(),
+        "fosas nasales":lista[31:36].tolist(),
+        "ojo derecho":lista[36:42].tolist(),
+        "ojo izquierdo":lista[42:48].tolist(),
+        "labio superior":lista[48:55].tolist()+lista[61:64].tolist(),
+        "labio inferior":lista[55:61].tolist()+lista[64:68].tolist()
     }
+    iter = iter + 1
     
-    with open('deteccion.json', 'w') as file:
-        json.dump(deteccion, file, indent=4)
+guardado(deteccion)
+    
 
 # save last instance of detected image
 cv2.imwrite('face-detect.jpg', frame)    
