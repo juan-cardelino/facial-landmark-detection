@@ -1,12 +1,17 @@
-# Facial-landmark-detection
+# Facial-landmark-detection-from-file
+
+### Instalation
+
+In order to use this code is necesary to install the modules in requirements.txt and run the installer.py program to download the models use.
+
 ### Face Detection
 
-This detects faces and facial landmarks on an image, the image can be access via a url or in local directory.
+This detects faces and facial landmarks on an image, the image has to be located in local directory: input.
 
 A python file to detect facial landmarks via webcam.
 A jupyter notebook to detect image files located in directory. 
 
-This project uses Python 3.7 and openCV 4.1.2
+This project uses Python 3.10, openCV 4.9.0.80, numpy 1.26.4 and scipy 1.13.0
 
 The model used for landmark detection can be got from: 
 https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml
@@ -41,4 +46,6 @@ https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcas
 https://github.com/albertofernandezvillan
 <br>https://github.com/kurnianggoro/GSOC2017
 <br>https://github.com/sacchitchadha
-<br>https://github.com/tensorflowlagos
+<br>https://github.com/
+
+

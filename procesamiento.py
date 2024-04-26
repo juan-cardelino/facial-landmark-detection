@@ -6,28 +6,8 @@ import elipse
 def norma(a):
     return np.sqrt(sum(a*a))
 
-def punto_recta(a, b, c):
-    A = (b[1]-a[1])
-    B = (a[0]-b[0])
-    C = -(A*a[0]+B*a[0])
-    aux = np.abs(A*c[0]+B*c[1]+C)/np.sqrt(A**2+B**2)
-    return aux
-
 def producto_escalar(a, b):
     return sum(a*b)
-
-#def perpendicular(v, u):
-#    v1 = v/norma(v)
-#    u1 = u - (sum(v1*u)*v1)
-#    return v1, u1/norma(u1)
-
-#def cambio(vector, eje_u):
-#    aux = np.array([[eje_u[0], eje_u[1]],[eje_u[1], -eje_u[0]]])
-#    aux2 = np.array([vector,]).T
-#    print(aux)
-#    print(vector)
-#    print(aux2)
-#   return aux*aux2.T
 
 def cambio(vector, eje_u):
     aux = np.array([eje_u[1], -eje_u[0]])
@@ -81,12 +61,11 @@ def extraer_x_e_y(a):
         aux_y = aux_y+[y]
     return np.array(aux_x), np.array(aux_y)
 
-verbose = 2
+verbose = 1
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
 # TODO: ponelo adentro del "if verbose"
 if verbose >= 1:
     ojoder, ojoizq, frente, boca = carga_marcadores("deteccion", True)
-    print(ojoder)
     
     #centoride ojos
     centroideder = np.mean(ojoder, axis= 0)
@@ -147,28 +126,6 @@ if verbose >= 1:
     with open('data.json', 'w') as file:
         json.dump(data, file, indent=4)
 
-if verbose >= 3:
-    #Origen y ejes
-    print('\n Origen y ejes')
-    print('unidad', unidad)
-    print('coordenadas origen', origen_ojo)
-    print('proyeccion en v de origen', producto_escalar(origen_ojo, p_eje_ojos))
-    
-    #Centroide
-    print('\n Centroides')
-    print('centroide derecho', centroideder)
-    print('centroide izauierdo', centroideizq)
-    
-    #Proporciones
-    print('\n Proporciones')
-    print('frente-ojo:', distfrente_ojo)
-    print('boca-ojo:', distboca_ojo)
-    print('frente-boca:', distfrente_ojo+distboca_ojo)
-    
-    #Angulos
-    print('\n Angulos')
-    print('anglo de ojo derecho', angulo_ojo_derecho*(90/np.pi))
-    print('anglo de ojo izquierdo',angulo_ojo_izquierdo*(90/np.pi))
 
 if verbose >= 2:
     image = cv2.imread("face-detect.jpg")
@@ -242,3 +199,26 @@ if verbose >= 2:
 # Elipse 1 https://espanol.libretexts.org/Matematicas/Algebra_lineal/%C3%81lgebra_Matricial_con_Aplicaciones_Computacionales_(Colbry)/39%3A_20_Asignaci%C3%B3n_en_clase_-_Ajuste_de_m%C3%ADnimos_cuadrados_(LSF)/39.3%3A_Ejemplo_LSF_-_Estimando_las_mejores_elipses
 # Elipse 2.1 https://www.datanalytics.com/2024/02/08/ajuste-elipse/ Pagina web donde lo encontre
 # Elipse 2.2 https://github.com/cjgb/ellipses/blob/dev/mylib.py Repertorio de github
+
+if verbose >= 3:
+    #Origen y ejes
+    print('\n Origen y ejes')
+    print('unidad', unidad)
+    print('coordenadas origen', origen_ojo)
+    print('proyeccion en v de origen', producto_escalar(origen_ojo, p_eje_ojos))
+    
+    #Centroide
+    print('\n Centroides')
+    print('centroide derecho', centroideder)
+    print('centroide izauierdo', centroideizq)
+    
+    #Proporciones
+    print('\n Proporciones')
+    print('frente-ojo:', distfrente_ojo)
+    print('boca-ojo:', distboca_ojo)
+    print('frente-boca:', distfrente_ojo+distboca_ojo)
+    
+    #Angulos
+    print('\n Angulos')
+    print('anglo de ojo derecho', angulo_ojo_derecho*(90/np.pi))
+    print('anglo de ojo izquierdo',angulo_ojo_izquierdo*(90/np.pi))
