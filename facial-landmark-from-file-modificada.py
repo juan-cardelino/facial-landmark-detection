@@ -24,6 +24,8 @@ def guardado(a_guardar, verbose = True):
         print('marcadores guardado en formato txt')
     return
 
+verbose = 1
+
 input_dir = "input"
 detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
 landmark_detector  = cv2.face.createFacemarkLBF()
@@ -35,16 +37,11 @@ landmark_detector.loadModel("data/LFBmodel.yaml")
 
 #_, frame = webcam_cap.read()
 print('cargando archivo')
-imagen = 0
-if imagen == 0:
-    input_fname = os.path.join(input_dir, 'input2.png')
-elif imagen == 1:
-    input_fname = os.path.join(input_dir, 'juan2.jpg')
-elif imagen == 2:
-    input_fname = os.path.join(input_dir, 'paisaje.jpg')
-elif imagen == 3:
-    input_fname = os.path.join(input_dir, 'House.jpg')
+imagen = 1
+input_fname = os.path.join(input_dir, str(os.listdir("input")[imagen]))
 frame = cv2.imread(input_fname)
+
+#print(os.listdir("input")[0])
 
 # convert frame to grayscale
 gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -71,7 +68,7 @@ for (x,y,w,d) in faces:
             # display landmarks on "frame/image,"
             # with blue colour in BGR and thickness 2
             #if k>=37 and k<=48:
-            if 1:
+            if verbose >= 2:
                 cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 5)
                 #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)
             lista[k-1][0] = x
@@ -92,20 +89,19 @@ for (x,y,w,d) in faces:
 if len(faces) != 0:  
     guardado(deteccion)
     
-
     # save last instance of detected image
-    cv2.imwrite('face-detect.jpg', frame)    
+    cv2.imwrite('detected/face-detect.jpg', frame)    
+    if verbose >= 3:
+        # Show image
+        cv2.imshow("frame", cv2.resize(frame,(1000,800)))
+        cv2.waitKey()
+        # terminate the capture window
+        #if cv2.waitKey(20) & 0xFF  == ord('q'):
+        #    webcam_cap.release()
+        #    cv2.destroyAllWindows()
+        #    break
 
-    # Show image
-    cv2.imshow("frame", cv2.resize(frame,(1000,800)))
-    cv2.waitKey()
-    # terminate the capture window
-    #if cv2.waitKey(20) & 0xFF  == ord('q'):
-    #    webcam_cap.release()
-    #    cv2.destroyAllWindows()
-    #    break
-
-    cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
 else:
     print('Error: No se detecto cara')
 print('Ejecucion finalizada')
