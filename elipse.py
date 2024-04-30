@@ -2,7 +2,7 @@ import math
 import random
 import numpy as np
 from scipy.optimize import minimize
-from math import pi, cos, sin
+#from math import pi, cos, sin
 
 def get_ellipse(center, major, ratio, rotation, n_points):
     rotation_radians = rotation / 360 * 2 * math.pi

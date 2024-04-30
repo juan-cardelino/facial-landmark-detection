@@ -292,5 +292,11 @@
                 ]
             ]
         }
-    ]
+    ],
+    "cantidad de caras": 1,
+    "mejor cara": {
+        "indice": 0,
+        "ancho": 390
+    },
+    "Error": "No se encontraron errores"
 }

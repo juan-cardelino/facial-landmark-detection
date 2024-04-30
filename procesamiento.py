@@ -33,25 +33,19 @@ def rotacion(a, cos, sen):
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
-def carga_marcadores(archivo, verbose):
-    if verbose:   # FIXME: transformalo en una variable que se llame "verbose"
-        with open(archivo + ".json") as archivo:
-            deteccion = json.load(archivo)
-    
-        ojoder = np.array(deteccion["caras"][0]["ojo derecho"])
-        ojoizq = np.array(deteccion["caras"][0]["ojo izquierdo"])
-        cejader = deteccion["caras"][0]["ceja derecha"][2:-1]
-        cejaizq = deteccion["caras"][0]["ceja izquierda"][1:-2]
-        frente = np.array(cejader + cejaizq)
-        labiosup = deteccion["caras"][0]["labio superior"]
-        labioinf = deteccion["caras"][0]["labio inferior"]
-        boca = np.array(labiosup+labioinf)
-    else:
-        marcadores = np.genfromtxt(archivo + ".txt")
-        ojoder = marcadores[36:42]
-        ojoizq = marcadores[42:48]
-        frente = np.array(marcadores[18:21].tolist()+marcadores[23:26].tolist())
-        boca = marcadores[48:]
+def carga_marcadores(archivo):
+    with open(archivo + ".json") as archivo:
+        deteccion = json.load(archivo)
+    cara = deteccion["mejor cara"]["indice"]
+    print(cara)
+    ojoder = np.array(deteccion["caras"][cara]["ojo derecho"])
+    ojoizq = np.array(deteccion["caras"][cara]["ojo izquierdo"])
+    cejader = deteccion["caras"][cara]["ceja derecha"][2:-1]
+    cejaizq = deteccion["caras"][cara]["ceja izquierda"][1:-2]
+    frente = np.array(cejader + cejaizq)
+    labiosup = deteccion["caras"][cara]["labio superior"]
+    labioinf = deteccion["caras"][cara]["labio inferior"]
+    boca = np.array(labiosup+labioinf)
     return ojoder, ojoizq, frente, boca
 
 def extraer_x_e_y(a):
@@ -65,7 +59,7 @@ verbose = 2
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
 # TODO: ponelo adentro del "if verbose"
 if verbose >= 1:
-    ojoder, ojoizq, frente, boca = carga_marcadores("deteccion", True)
+    ojoder, ojoizq, frente, boca = carga_marcadores("deteccion")
     
     #centoride ojos
     centroideder = np.mean(ojoder, axis= 0)
@@ -128,7 +122,7 @@ if verbose >= 1:
 
 
 if verbose >= 2:
-    image = cv2.imread("face-detect.jpg")
+    image = cv2.imread("detected/face-detect.jpg")
 
     #Dibujo frente y boca, solo se usa si la imagen viene vacia de copia facial 
     if 0:
@@ -174,7 +168,8 @@ if verbose >= 2:
         cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
         cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
-    if 1:
+    #Elipse
+    if 0:
         elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
         for x, y in elipse_ojoder:
             cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
@@ -182,6 +177,7 @@ if verbose >= 2:
         for x, y in elipse_ojoizq:
             cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
     
+    #Centroides ojos
     if 0:
         for x, y in ojoder:
             cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
