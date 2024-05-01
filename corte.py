@@ -32,3 +32,14 @@ rotated_image = cv2.warpAffine(image, rotate_matrix, (width, height))
 cv2.imshow("rotated image:", cv2.resize(rotated_image,(900,800)))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+start_x = boundingbox[0]
+end_x = boundingbox[0]+boundingbox[2]
+start_y = boundingbox[1]
+end_y = boundingbox[1]+boundingbox[3]
+
+image_cropped = image[start_y:end_y, start_x:end_x]
+
+cv2.imshow("rotated image:", cv2.resize(image_cropped,(900,800)))
+cv2.waitKey(0)
+cv2.destroyAllWindows()
