@@ -17,9 +17,9 @@ def guardado(a_guardar):
     print('Marcadores guardados en formato json')       
     return
 
-verbose = 4
-imagen = 3
-minimo_ancho_de_cara = 0
+verbose = 2
+imagen = 4
+minimo_ancho_de_cara = 57
 
 input_dir = "input"
 detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
@@ -60,13 +60,14 @@ for (x,y,w,d) in faces:
         lista = landmarks[0][0]
     
         if verbose >= 2:
-            for x, y in lista:
-                cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), int(w/64))
+            for xx, yy in lista:
+                cv2.circle(frame, (int(xx), int(yy)), 1, (255, 0, 0), int(w/64))
                 #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)           
    
         deteccion["caras"] = deteccion["caras"]+[1]
+        deteccion["cantidad de caras"] = deteccion["cantidad de caras"]+1
         deteccion["caras"][iter] = {
-            "ancho":int(w),
+            "boundingbox":[int(x), int(y), int(w), int(d)],
             "contorno":lista[0:17].tolist(),
             "ceja derecha":lista[17:22].tolist(),
             "ceja izquierda":lista[22:27].tolist(),
@@ -87,7 +88,7 @@ for (x,y,w,d) in faces:
 if len(faces) != 0:
     deteccion["mejor cara"]["indice"]=int(mejor_cara[0])
     deteccion["mejor cara"]["ancho"]=int(mejor_cara[1])
-    if mejor_cara[1]<minimo_ancho_de_cara:
+    if len(deteccion["caras"])==0:
         deteccion["Error"]="Mejor cara demasiado chica"
     guardado(deteccion)
     

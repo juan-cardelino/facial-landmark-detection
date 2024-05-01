@@ -2,6 +2,7 @@ import numpy as np
 import json
 import cv2
 import elipse
+import math
 
 def norma(a):
     return np.sqrt(sum(a*a))
@@ -37,7 +38,7 @@ def carga_marcadores(archivo):
     with open(archivo + ".json") as archivo:
         deteccion = json.load(archivo)
     cara = deteccion["mejor cara"]["indice"]
-    print(cara)
+    cara = 0
     ojoder = np.array(deteccion["caras"][cara]["ojo derecho"])
     ojoizq = np.array(deteccion["caras"][cara]["ojo izquierdo"])
     cejader = deteccion["caras"][cara]["ceja derecha"][2:-1]
@@ -46,7 +47,8 @@ def carga_marcadores(archivo):
     labiosup = deteccion["caras"][cara]["labio superior"]
     labioinf = deteccion["caras"][cara]["labio inferior"]
     boca = np.array(labiosup+labioinf)
-    return ojoder, ojoizq, frente, boca
+    boundingbox = deteccion["caras"][cara]["boundingbox"]
+    return ojoder, ojoizq, frente, boca, boundingbox
 
 def extraer_x_e_y(a):
     aux_x = aux_y = []
@@ -55,11 +57,11 @@ def extraer_x_e_y(a):
         aux_y = aux_y+[y]
     return np.array(aux_x), np.array(aux_y)
 
-verbose = 2
+verbose = 1
 # TODO: para que el código no te quede ilegible, podés encapsular esto en funciones
 # TODO: ponelo adentro del "if verbose"
 if verbose >= 1:
-    ojoder, ojoizq, frente, boca = carga_marcadores("deteccion")
+    ojoder, ojoizq, frente, boca, boundingbox = carga_marcadores("deteccion")
     
     #centoride ojos
     centroideder = np.mean(ojoder, axis= 0)
@@ -73,6 +75,9 @@ if verbose >= 1:
     eje_ojos = np.abs(centroideder-centroideizq)
     eje_ojos = eje_ojos/norma(eje_ojos)
     p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
+    
+    #Angulo cara
+    angulo_cara = math.degrees(math.atan2(eje_ojos[1],eje_ojos[0]))
     
     #Proporciones
     centrofrente = np.mean(frente, axis=0)
@@ -107,13 +112,15 @@ if verbose >= 1:
             "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
         },
         "angulos":{
+            "cara":angulo_cara,
             "ojo derecho": angulo_ojo_derecho,
             "ojo izquierdo": angulo_ojo_izquierdo
         },
         "forma ojos":{
             "ratio ojo derecho":valores_elipse_ojoder["ratio"],
             "ratio ojo izquierdo":valores_elipse_ojoizq["ratio"]
-        }
+        },
+        "boundingbox":boundingbox
     }
 
     #Guardado
@@ -184,6 +191,11 @@ if verbose >= 2:
 
         for x, y in ojoizq:
             cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
+    
+    #Boundingbox
+    if 0:
+        cv2.circle(image, (boundingbox[0], boundingbox[1]), 1, (0, 255, 0), 5)
+        cv2.circle(image, (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[3]), 1, (0, 255, 0), 5)
             
     #Guardar imagen procesada
     cv2.imwrite('face-processed.jpg', image)
