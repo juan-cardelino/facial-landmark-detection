@@ -1,29 +1,29 @@
 {
     "puntos calculados": {
         "ojo derecho": [
-            -1.2684399039852783,
-            -0.06740681910238888
+            -1.0928405251977138,
+            -0.11622997497255923
         ],
         "ojo izquierdo": [
-            1.26843990398528,
-            0.06740681910238888
+            1.0928405251977025,
+            0.11622997497255348
         ]
     },
     "medidas": {
-        "unidad": 8.434212065679176,
-        "distancia ojos": 2.5404593830909294,
-        "distancia ojo-frente": 0.7652648325433229,
-        "distancia ojo-boca": 2.891549207874225
+        "unidad": 19.826102612736968,
+        "distancia ojos": 2.198008026005841,
+        "distancia ojo-frente": 0.7338170746739479,
+        "distancia ojo-boca": 2.2286370606211214
     },
     "proporcion": {
-        "frente-boca": 1.2646556491099528
+        "frente-boca": 1.3292671954712236
     },
     "angulos": {
-        "ojo derecho": 0.0030148939136488083,
-        "ojo izquierdo": 0.01234144205296045
+        "ojo derecho": -0.102606626143936,
+        "ojo izquierdo": 0.07059467556070183
     },
     "forma ojos": {
-        "ratio ojo derecho": 0.3085724287047258,
-        "ratio ojo izquierdo": 0.2599259757317538
+        "ratio ojo derecho": 0.11686481147313216,
+        "ratio ojo izquierdo": 0.1623467556587427
     }
 }
