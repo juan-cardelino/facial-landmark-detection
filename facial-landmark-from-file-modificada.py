@@ -105,7 +105,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
     return
 
 
-verbose = 2
+verbose = 1
 imagen = 4
 minimo_ancho_de_cara = 57
 
