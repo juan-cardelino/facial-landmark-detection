@@ -25,7 +25,9 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
     print('modelos cargados')
     
     for imagen in imagenes: 
-    
+        
+        nombre_j = imagen[:imagen.rfind('.')]
+        
         input_fname = os.path.join(input_dir, str(imagen))
         frame = cv2.imread(input_fname)
     
@@ -80,7 +82,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
             else:
                 deteccion["mejor cara"]["indice"]=int(mejor_cara[0])
                 deteccion["mejor cara"]["ancho"]=int(mejor_cara[1])
-                cv2.imwrite('detected/'+imagen+'.jpg', frame)
+                cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
         
             if verbose >= 3:
                 # Show image
@@ -97,7 +99,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
         else:
             deteccion["Error"] = "No se detecto ninguna cara"
             print('Error: No se detecto cara')
-        guardado(deteccion, imagen)
+        guardado(deteccion, nombre_j)
         print('Ejecucion finalizada')
     
     return
