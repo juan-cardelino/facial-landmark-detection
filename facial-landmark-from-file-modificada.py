@@ -41,9 +41,8 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
         
         print("caras detectadas: ",len(faces))
 
-        deteccion = {"caras":[], "cantidad de caras":0, "mejor cara":{}, "Error":"No se encontraron errores"}
+        deteccion = {"caras":[], "cantidad de caras":0, "Error":"No se encontraron errores"}
         iter = 0
-        mejor_cara = [0, 0]
         for (x,y,w,d) in faces:
             if verbose >= 4:
                 cv2.rectangle(frame, (x, y), (x+w, y+d), (255,255,255), int(w/64))
@@ -72,16 +71,12 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
                     "labio superior":lista[48:55].tolist()+lista[61:64].tolist(),
                     "labio inferior":lista[55:61].tolist()+lista[64:68].tolist()
                 }
-                if mejor_cara[1]<w:
-                    mejor_cara = [iter, w]
                 iter = iter + 1
   
         if len(faces) != 0:
             if len(deteccion["caras"])==0:
                 deteccion["Error"]="Mejor cara demasiado chica"
             else:
-                deteccion["mejor cara"]["indice"]=int(mejor_cara[0])
-                deteccion["mejor cara"]["ancho"]=int(mejor_cara[1])
                 cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
         
             if verbose >= 3:
@@ -99,6 +94,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
         else:
             deteccion["Error"] = "No se detecto ninguna cara"
             print('Error: No se detecto cara')
+        deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
         guardado(deteccion, nombre_j)
         print('Ejecucion finalizada')
     
@@ -106,7 +102,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
 
 
 verbose = 1
-imagen = 4
+imagen = 2
 minimo_ancho_de_cara = 57
 
 cuerpo([os.listdir("input")[imagen], os.listdir("input")[imagen+1]], minimo_ancho_de_cara, verbose)

@@ -48,4 +48,5 @@ def cuerpo(imagenes, verbose = 1, input_dir = 'detected'):
         
         return
 
-cuerpo(['input2.jpg'], 2)
+cuerpo(['input2.jpg'], 1)
+

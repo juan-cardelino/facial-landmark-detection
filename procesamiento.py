@@ -229,4 +229,4 @@ def cuerpo(imagenes, verbose = 1, input_dir = "detected"):
 
 verbose = 0
 
-cuerpo(['input2.jpg'], 1)
+cuerpo(['collage-de-sonriente.jpg'], 3)
