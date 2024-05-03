@@ -57,11 +57,21 @@ def carga_marcadores(archivo, max_caras):
     return ojoder, ojoizq, frente, boca, boundingbox, cant_caras
 
 def extraer_x_e_y(a):
-    aux_x = aux_y = []
+    aux_x = []
+    aux_y = []
     for x, y in a:
         aux_x = aux_x+[x]
         aux_y = aux_y+[y]
     return np.array(aux_x), np.array(aux_y)
+
+def correcion(puntos):
+    print(puntos)
+    aux1 = np.mean(puntos, axis=0)
+    aux2 = np.array(puntos[1:3].tolist()+puntos[4:6].tolist())
+    aux3 = (aux2-aux1)*4+aux1
+    aux4 = np.array([puntos[0].tolist()]+aux3.tolist()+[puntos[3].tolist()])
+    print(aux4)
+    return aux4
 
 def calculos(ojoder, ojoizq, frente, boca):
     #centoride ojos
@@ -94,8 +104,11 @@ def calculos(ojoder, ojoizq, frente, boca):
     angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
     
     #Forma ojos
+    print('ojo derecho')
     valores_elipse_ojoder = elipse.get_best_ellipse_alt(extraer_x_e_y(ojoder))
-    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(extraer_x_e_y(ojoizq))
+    print('ojo izquierdo')
+    print(ojoizq)
+    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(extraer_x_e_y(correcion(ojoizq)))
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
 
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
@@ -110,7 +123,6 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = calculos(ojoder[i], ojoizq[i], frente[i], boca[i])
     
                 #Almacenamiento estructurado
-                print(boundingbox[i])
                 if i == 0:
                     data = {
                         "puntos calculados": {
@@ -141,7 +153,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     #Guardado
                     with open('Json/'+nombre_j+'_data.json', 'w') as file:
                         json.dump(data, file, indent=4)
-                    print('mejor cara juardada en '+nombre_j+'.json')
+                    print('mejor cara guardada en '+nombre_j+'.json')
         if verbose >= 2:
             image = cv2.imread(input_dir+"/"+imagen)
 
@@ -222,7 +234,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
             print('\n Origen y ejes')
             print('unidad', unidad)
             print('coordenadas origen', origen_ojo)
-            print('proyeccion en v de origen', producto_escalar(origen_ojo, p_eje_ojos))
+            #print('proyeccion en v de origen', producto_escalar(origen_ojo, p_eje_ojos))
     
             #Centroide
             print('\n Centroides')
@@ -243,4 +255,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 
 verbose = 0
 imagen = 0
-cuerpo([os.listdir("detected")[imagen]], max_caras = 1, verbose = 1)
+cuerpo([os.listdir("detected")[imagen]], max_caras = 2, verbose = 1)

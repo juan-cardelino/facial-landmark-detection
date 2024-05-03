@@ -117,6 +117,8 @@ def cart_to_pol(coeffs):
     g = coeffs[5]
 
     den = b**2 - a*c
+    print(den)
+    print(den>0)
     if den > 0:
         raise ValueError('coeffs do not represent an ellipse: b^2 - 4ac must'
                          ' be negative!')
