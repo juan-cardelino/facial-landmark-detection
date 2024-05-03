@@ -4,6 +4,21 @@ import numpy as np
 from scipy.optimize import minimize
 #from math import pi, cos, sin
 
+def extraer_x_e_y(a):
+    aux_x = []
+    aux_y = []
+    for x, y in a:
+        aux_x = aux_x+[x]
+        aux_y = aux_y+[y]
+    return np.array(aux_x), np.array(aux_y)
+
+def abrir_ojo(puntos):
+    aux1 = np.mean(puntos, axis=0)
+    aux2 = np.concatenate((puntos[1:3],puntos[4:6]))
+    aux3 = (aux2-aux1)*1.5+aux1
+    aux4 = np.concatenate((puntos[0:1],aux3,puntos[3:4]))
+    return aux4
+
 def get_ellipse(center, major, ratio, rotation, n_points):
     rotation_radians = rotation / 360 * 2 * math.pi
     rsin, rcos = math.sin(rotation_radians), math.cos(rotation_radians)
@@ -66,7 +81,7 @@ def get_best_ellipse(points):
 
 # taken from https://scipython.com/blog/direct-linear-least-squares-fitting-of-an-ellipse/
 
-def fit_ellipse(x, y):
+def fit_ellipse(points):
     """
 
     Fit the coefficients a,b,c,d,e,f, representing an ellipse described by
@@ -78,6 +93,7 @@ def fit_ellipse(x, y):
 
 
     """
+    x, y = points
 
     D1 = np.vstack([x**2, x*y, y**2]).T
     D2 = np.vstack([x, y, np.ones(len(x))]).T
@@ -117,8 +133,7 @@ def cart_to_pol(coeffs):
     g = coeffs[5]
 
     den = b**2 - a*c
-    print(den)
-    print(den>0)
+    
     if den > 0:
         raise ValueError('coeffs do not represent an ellipse: b^2 - 4ac must'
                          ' be negative!')
@@ -162,7 +177,19 @@ def cart_to_pol(coeffs):
 
 def get_best_ellipse_alt(points):
 
-    tmp = fit_ellipse(points[0], points[1])
+    x, y = extraer_x_e_y(points)
+    tmp = fit_ellipse(extraer_x_e_y(points))
+    
+    a = tmp[0]
+    b = tmp[1] / 2
+    c = tmp[2]
+    
+    den = b**2 - a*c
+    
+    if den > 0:
+        print("Elipse: Aplicar abrir_ojo")
+        tmp = fit_ellipse(extraer_x_e_y(abrir_ojo(points)))
+    
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
 
     out = {

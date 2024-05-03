@@ -65,12 +65,10 @@ def extraer_x_e_y(a):
     return np.array(aux_x), np.array(aux_y)
 
 def correcion(puntos):
-    print(puntos)
     aux1 = np.mean(puntos, axis=0)
-    aux2 = np.array(puntos[1:3].tolist()+puntos[4:6].tolist())
-    aux3 = (aux2-aux1)*4+aux1
-    aux4 = np.array([puntos[0].tolist()]+aux3.tolist()+[puntos[3].tolist()])
-    print(aux4)
+    aux2 = np.concatenate((puntos[1:3],puntos[4:6]))
+    aux3 = (aux2-aux1)*1.5+aux1
+    aux4 = np.concatenate((puntos[0:1],aux3,puntos[3:4]))
     return aux4
 
 def calculos(ojoder, ojoizq, frente, boca):
@@ -104,11 +102,8 @@ def calculos(ojoder, ojoizq, frente, boca):
     angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
     
     #Forma ojos
-    print('ojo derecho')
-    valores_elipse_ojoder = elipse.get_best_ellipse_alt(extraer_x_e_y(ojoder))
-    print('ojo izquierdo')
-    print(ojoizq)
-    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(extraer_x_e_y(correcion(ojoizq)))
+    valores_elipse_ojoder = elipse.get_best_ellipse_alt(ojoder)
+    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(ojoizq)
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
 
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
