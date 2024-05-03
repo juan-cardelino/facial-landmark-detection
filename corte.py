@@ -37,7 +37,7 @@ def cuerpo(imagenes, verbose = 1, input_dir = 'detected'):
                         start_y = boundingbox[1]
                         end_y = boundingbox[1]+boundingbox[3]
 
-                        image_cropped = image[start_y:end_y, start_x:end_x]
+                        image_cropped = rotated_image[start_y:end_y, start_x:end_x]
                 
                 if verbose >=2:
 
@@ -48,4 +48,4 @@ def cuerpo(imagenes, verbose = 1, input_dir = 'detected'):
         
         return
 
-cuerpo(['input2.jpg'], 1)
+cuerpo(['input2.jpg'], 2)
