@@ -53,6 +53,8 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
                 lista = landmarks[0][0]
     
                 if verbose >= 2:
+                    #cv2.rectangle(frame, (int(x), int(y)), (int(x+w), int(y+w)), (255,255,255), int(w/64))
+                    #cv2.circle(frame, (int(x+w/2), int(y+w/2)), int(w/np.sqrt(2)), (255, 0, 0), int(w/64))
                     for xx, yy in lista:
                         cv2.circle(frame, (int(xx), int(yy)), 1, (255, 0, 0), int(w/64))
                         #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)           
@@ -101,7 +103,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
     return
 
 
-verbose = 1
+verbose = 3
 imagen = 4
 minimo_ancho_de_cara = 57
 

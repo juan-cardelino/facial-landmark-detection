@@ -189,6 +189,22 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 if 0:
                     cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
                     cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
+            
+            if 1:
+                #for i in np.concatenate((ojoder[0][1:3],ojoder[0][4:])):
+                #    aux = centroideder-i
+                #    aux = aux/norma(aux)
+                #    for j in np.arange(int(norma(centroideder-i))):
+                #        cv2.circle(image, (int(i[0]+aux[0]*j),int(i[1]+aux[1]*j)), 1, (0,0,255), 5)
+                #        print(int(i[0]+aux[0]*j),int(i[1]+aux[1]*j))
+                for i in ojoder[1]:
+                    cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+                
+                cv2.circle(image, (int(centroideder[0]),int(centroideder[1])), 1, (0,255,0), 5)    
+                #aux = (ojoder[3]-ojoder[0])
+                #aux = aux/norma(aux)
+                #for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
+                #    cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
     
             #origen y ejes u y v
             if 0: 
@@ -250,4 +266,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 
 verbose = 0
 imagen = 0
-cuerpo([os.listdir("detected")[imagen]], max_caras = 2, verbose = 1)
+cuerpo([os.listdir("detected")[imagen]], max_caras = 2, verbose = 2)
