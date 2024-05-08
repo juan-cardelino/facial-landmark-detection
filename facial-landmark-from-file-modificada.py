@@ -53,6 +53,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
                 _, landmarks = landmark_detector.fit(gray, np.array([[x, y, w, d]]))
     
                 lista = landmarks[0][0]
+                print(lista)
     
                 if verbose >= 2:
                     #cv2.rectangle(frame, (int(x), int(y)), (int(x+w), int(y+w)), (255,255,255), int(w/64))
@@ -111,8 +112,8 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
 
 verbose = 1
 imagen = 4
-minimo_ancho_de_cara = 100
-archivos = os.listdir("input")
+minimo_ancho_de_cara = 50
+archivos = os.listdir("input")[3:4]
 print(archivos)
 
 cuerpo(archivos, minimo_ancho_de_cara, verbose)

@@ -82,6 +82,11 @@ while(True):
     for (x,y,w,d) in faces:
         # Detect landmarks on "gray"
         _, landmarks = landmark_detector.fit(gray, np.array(faces))
+        
+        lista = landmarks[0][0]
+        ojoder = lista[36:42]
+        centroideder = np.mean(ojoder, axis=0)
+        cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
 
         for landmark in landmarks:
             for x,y in landmark[0]:
