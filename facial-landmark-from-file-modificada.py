@@ -17,16 +17,18 @@ def guardado(a_guardar, nombre):
     print('Marcadores guardados en formato json')       
     return
 
-def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", output_dir="detected"):
+def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", output_dir="detected", model_dir = "data"):
     
-    detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
+    detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
     landmark_detector  = cv2.face.createFacemarkLBF()
-    landmark_detector.loadModel("data/LFBmodel.yaml")
+    landmark_detector.loadModel(model_dir+"/LFBmodel.yaml")
     print('modelos cargados')
     
     for imagen in imagenes: 
         
         nombre_j = imagen[:imagen.rfind('.')]
+        
+        print("archivo: "+nombre_j)
         
         input_fname = os.path.join(input_dir, str(imagen))
         frame = cv2.imread(input_fname)
@@ -76,10 +78,13 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
                 iter = iter + 1
   
         if len(faces) != 0:
+            print("cantidad de caras suficientemente grandes: "+str(len(deteccion["caras"])))
             if len(deteccion["caras"])==0:
                 deteccion["Error"]="Mejor cara demasiado chica"
+                print("Error: Mejor cara demasiado chica")
             else:
                 cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
+                print(nombre_j+".jpg guardado en "+output_dir)
         
             if verbose >= 3:
                 # Show image
@@ -98,13 +103,16 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 2, input_dir="input", 
             print('Error: No se detecto cara')
         deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
         guardado(deteccion, nombre_j)
-        print('Ejecucion finalizada')
+        print("")
+    print('Ejecucion finalizada')
     
     return
 
 
-verbose = 3
+verbose = 1
 imagen = 4
-minimo_ancho_de_cara = 57
+minimo_ancho_de_cara = 100
+archivos = os.listdir("input")
+print(archivos)
 
-cuerpo([os.listdir("input")[imagen], os.listdir("input")[imagen+1]], minimo_ancho_de_cara, verbose)
+cuerpo(archivos, minimo_ancho_de_cara, verbose)

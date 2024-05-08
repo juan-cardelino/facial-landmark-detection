@@ -1,0 +1,36 @@
+{
+    "puntos calculados": {
+        "ojo derecho": [
+            -1.2286125932707574,
+            -0.2480862975857296
+        ],
+        "ojo izquierdo": [
+            1.2286125932707574,
+            0.2480862975857296
+        ]
+    },
+    "medidas": {
+        "unidad": 19.288078289965824,
+        "distancia ojos": 2.5068192718209987,
+        "distancia ojo-frente": 0.902799547419944,
+        "distancia ojo-boca": 3.280254391600341
+    },
+    "proporcion": {
+        "frente-boca": 1.2752224186428096
+    },
+    "angulos": {
+        "cara": 11.415887128264652,
+        "ojo derecho": -0.13144588827242362,
+        "ojo izquierdo": 0.1477658974640593
+    },
+    "forma ojos": {
+        "ratio ojo derecho": 0.25247293111453545,
+        "ratio ojo izquierdo": 0.2888810758769119
+    },
+    "boundingbox": [
+        591,
+        115,
+        144,
+        144
+    ]
+}
