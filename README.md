@@ -4,6 +4,10 @@
 
 In order to use this code is necesary to install the modules in requirements.txt and run the installer.py program to download the models use.
 
+Necesary instalation to run the code:
+    `pip install requirements.txt`
+    `python.exe installer.py`
+
 ### Face Detection
 
 This detects faces and facial landmarks on an image, the image has to be located in local directory: input.
