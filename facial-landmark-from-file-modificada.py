@@ -65,7 +65,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
                 deteccion["cantidad de caras"] = deteccion["cantidad de caras"]+1
                 deteccion["caras"][iter] = {
                     "boundingbox":[int(x), int(y), int(w), int(d)],
-                    "contorno":lista[0:17].tolist(),
+                    "contorno":landmarks[iter][0][0:17].tolist(),
                     "ceja derecha":lista[17:22].tolist(),
                     "ceja izquierda":lista[22:27].tolist(),
                     "tabique":lista[27:31].tolist(),

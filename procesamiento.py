@@ -267,4 +267,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 verbose = 0
 imagen = 0
 archivos = os.listdir("detected")
-cuerpo(archivos, max_caras = 1, verbose = 1)
+#cuerpo(archivos, max_caras = 1, verbose = 1)

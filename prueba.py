@@ -95,3 +95,7 @@ if 1:
     cv2.waitKey(0)
 
 cv2.destroyAllWindows()
+
+algo = [1, 2, 3]
+for i in algo:
+    print(algo)

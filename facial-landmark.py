@@ -9,6 +9,7 @@ import cv2
 import os
 import urllib.request as urlreq
 import numpy as np
+import procesamiento as pr
 
 
 # save face detection algorithm's url in haarcascade_url variable
@@ -68,6 +69,8 @@ landmark_detector.loadModel(LBFmodel_file)
 print ("checking webcam for connection ...")
 webcam_cap = cv2.VideoCapture(0)
 
+iter_p = 0
+
 while(True):
     # read webcam
     _, frame = webcam_cap.read()
@@ -83,10 +86,26 @@ while(True):
         # Detect landmarks on "gray"
         _, landmarks = landmark_detector.fit(gray, np.array(faces))
         
-        lista = landmarks[0][0]
-        ojoder = lista[36:42]
-        centroideder = np.mean(ojoder, axis=0)
-        cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
+        lista = landmarks[0]
+        print(len(landmarks))
+        if 0:
+            for i in landmarks:
+                centroideder=np.mean(i[0][36:42], axis=0)
+                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(i[0][36:42], i[0][42:48], i[0][48:55], i[0][17:22])
+                cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
+                cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 2)
+                cv2.circle(frame, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 2)
+                cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
+        
+        lista_p = landmarks
+        if 0:
+            if iter_p == 0:
+                print(lista_p)
+                print(lista_p[0])
+                print(lista_p[0][0])
+                print(lista_p[0][0][0])
+                print(lista_p[0][0][0][0])
+                iter_p += 1
 
         for landmark in landmarks:
             for x,y in landmark[0]:
