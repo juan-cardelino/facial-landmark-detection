@@ -11,13 +11,13 @@ import os
 import numpy as np
 import json
 
-def guardado(a_guardar, nombre):
-    with open('Json/'+nombre+'_deteccion.json', 'w') as file:
+def guardado(a_guardar, nombre, json_dir = "Json"):
+    with open(json_dir+'/'+nombre+'_deteccion.json', 'w') as file:
         json.dump(a_guardar, file, indent=4)
     print('Marcadores guardados en formato json')       
     return
 
-def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", output_dir="detected", model_dir = "data"):
+def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json",model_dir = "data"):
     
     detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
     landmark_detector  = cv2.face.createFacemarkLBF()
@@ -53,7 +53,6 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
                 _, landmarks = landmark_detector.fit(gray, np.array([[x, y, w, d]]))
     
                 lista = landmarks[0][0]
-                print(lista)
     
                 if verbose >= 2:
                     #cv2.rectangle(frame, (int(x), int(y)), (int(x+w), int(y+w)), (255,255,255), int(w/64))
@@ -103,7 +102,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
             deteccion["Error"] = "No se detecto ninguna cara"
             print('Error: No se detecto cara')
         deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
-        guardado(deteccion, nombre_j)
+        guardado(deteccion, nombre_j, json_dir=json_dir)
         print("")
     print('Ejecucion finalizada')
     
@@ -117,3 +116,4 @@ archivos = os.listdir("input")[3:4]
 print(archivos)
 
 cuerpo(archivos, minimo_ancho_de_cara, verbose)
+cuerpo(os.listdir("FFHQ"), minimo_ancho_de_cara, 2, "FFHQ", "FFHQ detected", "FFHQ Json")
