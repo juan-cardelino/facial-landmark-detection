@@ -81,6 +81,8 @@ while(True):
     # Detect faces using the haarcascade classifier on the "grayscale image"
     faces = detector.detectMultiScale(gray)
     
+    # save last instance of detected image
+    cv2.imwrite('face-detect.jpg', frame) 
 
     for (x,y,w,d) in faces:
         # Detect landmarks on "gray"
@@ -88,7 +90,7 @@ while(True):
         
         lista = landmarks[0]
         print(len(landmarks))
-        if 0:
+        if 1:
             for i in landmarks:
                 centroideder=np.mean(i[0][36:42], axis=0)
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(i[0][36:42], i[0][42:48], i[0][48:55], i[0][17:22])
@@ -113,8 +115,7 @@ while(True):
                 # with blue colour in BGR and thickness 2
                 cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 2)
 
-    # save last instance of detected image
-    cv2.imwrite('face-detect.jpg', frame)    
+       
     
     # Show image
     cv2.imshow("frame", frame)

@@ -99,3 +99,7 @@ cv2.destroyAllWindows()
 algo = [1, 2, 3]
 for i in algo:
     print(algo)
+    
+algo = (-0.024424451081098857+0.053190070790805184j)
+algo = 5
+print(np.real(algo))

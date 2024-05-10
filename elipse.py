@@ -170,7 +170,7 @@ def cart_to_pol(coeffs):
     if not width_gt_height:
         # Ensure that phi is the angle to rotate to the semi-major axis.
         phi += np.pi/2
-    phi = phi % np.pi
+    phi = np.real(phi) % np.pi
 
     return x0, y0, ap, bp, e, phi
 
