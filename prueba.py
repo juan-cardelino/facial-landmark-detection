@@ -104,10 +104,52 @@ if 0:
     algo = (-0.024424451081098857+0.053190070790805184j)
     print(np.abs(algo))
 
+if 0:
+    while True:
+        try:
+            x = int(input("Please enter a number: "))
+            break
+        except ValueError:
+            print("Oops!  That was no valid number.  Try again...")
+if 0:        
+    class B(Exception):
+        pass
 
-while True:
+    class C(B):
+        pass
+
+    class D(C):
+        pass
+
+    for cls in [B, C, D]:
+        try:
+            raise cls()
+        except B:
+            print("B")
+        except D:
+            print("D")
+        except C:
+            print("C")
+
+if 0:
     try:
-        x = int(input("Please enter a number: "))
-        break
-    except ValueError:
-        print("Oops!  That was no valid number.  Try again...")
+        raise Exception('spam', 'eggs')
+        print("holas")
+    except Exception as inst:
+        print(type(inst))    # the exception type
+        print(inst.args)     # arguments stored in .args
+        print(inst)          # __str__ allows args to be printed directly,
+                             # but may be overridden in exception subclasses
+        x, y = inst.args     # unpack args
+        print('x =', x)
+        print('y =', y)
+if 1:
+    puntos = [[936.9950561523438,637.3349609375],
+                [942.6434326171875,632.6384887695312],
+                [948.8971557617188,632.423828125],
+                [954.689453125,634.623046875],
+                [949.6332397460938,636.6954956054688],
+                [943.4136352539062,637.2012329101562]]
+    puntos = np.array(puntos).T
+    print(type(puntos[0]))
+    print(puntos[0])

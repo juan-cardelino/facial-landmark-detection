@@ -5,12 +5,8 @@ from scipy.optimize import minimize
 #from math import pi, cos, sin
 
 def extraer_x_e_y(a):
-    aux_x = []
-    aux_y = []
-    for x, y in a:
-        aux_x = aux_x+[x]
-        aux_y = aux_y+[y]
-    return np.array(aux_x), np.array(aux_y)
+    aux = np.array(a).T
+    return aux[0], aux[1]
 
 def abrir_ojo(puntos):
     aux1 = np.mean(puntos, axis=0)
