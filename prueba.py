@@ -2,6 +2,7 @@ import cv2
 import numpy as np
 import os
 import elipse
+import json
 
 def extraer_x_e_y(a):
     aux_x = aux_y = []
@@ -33,6 +34,41 @@ def coreccion(points):
         aux_y = aux_y+[y]
     return elipse.fit_ellipse(np.array(aux_x), np.array(aux_y))
 
+def get_best_ellipse_alt_alt(puntos):
+    aux1 = np.mean(puntos, axis=0)
+    
+    aux5 = puntos - aux1
+    aux6 = []
+    for i in aux5:
+        aux6.append(norma(i))
+    
+    aux7 = np.concatenate((aux6[:1], aux6[3:4]))
+    aux7 = np.mean(aux7)
+    print(puntos[1:3])
+    aux81 = np.mean(puntos[1:3], axis=0)
+    print(aux81-aux1)
+    aux82 = np.mean(puntos[4:6], axis=0)
+    print(aux82)
+    aux8 = np.mean([norma(aux81-aux1), norma(aux82-aux1)])
+    print(aux8)
+    print("aux7",aux7)
+    return aux7, aux7/aux8, aux1
+
+def get_best_ellipse_alt_alter(puntos):
+    aux1 = np.mean(puntos, axis=0)
+    aux2 = np.concatenate((puntos[0:1], puntos[3:4], [np.mean(puntos[1:3], axis=0)], [np.mean(puntos[4:6], axis=0)]))
+    print(aux2)
+    aux5 = aux2 - aux1
+    aux6 = []
+    for i in aux5:
+        aux6.append(norma(i))
+    
+    aux7 = np.mean(aux6[0:2])
+    aux8 = np.mean(aux6[2:4])
+    print(aux8)
+    print("aux7",aux7)
+    return aux7, aux7/aux8, aux1
+
 if 0:
     imagen = 2
     os.listdir("input")[imagen]
@@ -59,19 +95,43 @@ if 0:
     aux2 = np.concatenate((puntos[1:3],puntos[4:6]))
     aux3 = (aux2-aux1)*1.5+aux1
     aux4 = np.concatenate((puntos[0:1],aux3,puntos[3:4]))
+    
+    aux5 = puntos - aux1
+    aux6 = []
+    for i in aux5:
+        aux6.append(norma(i))
+    
+    aux7 = np.concatenate((aux6[:1], aux6[3:4]))
+    aux7 = np.mean(aux7)
+    aux8 = np.concatenate((aux6[1:3], aux6[4:6]))
+    print(aux8)
+    aux8 = np.mean(aux8)
+    
+    print(aux1)
+    print(aux7)
+    print(aux8)
+    print(aux8/aux7)
 
 
     if 0:
-        for x, y in aux4:
+        for x, y in puntos:
             cv2.circle(img, (int(x), int(y)), 0, (0, 255, 0), 1)
 
     #valores_elipse_ojoizq = elipse.get_best_ellipse_alt(puntos)
     valores_elipse_ojoizq = elipse.get_best_ellipse_alt(aux4)
+    print(valores_elipse_ojoizq['center'])
+    print(valores_elipse_ojoizq['major'])
+    print(valores_elipse_ojoizq['major']*valores_elipse_ojoizq["ratio"])
+    print(valores_elipse_ojoizq["ratio"])
+    
 
     #Aparentemente el orden de los puntos genera diferencia en el codigo, porque? ni idea
 
     if 1:
         elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
+        elipse_ojoizq = elipse.get_ellipse(aux1, aux7, aux8/aux7, 0, 100)
+        
+        
         for x, y in elipse_ojoizq:
             cv2.circle(img, (int(x), int(y)), 1, (0, 255, 0), 1)
     if 1:    
@@ -143,7 +203,7 @@ if 0:
         x, y = inst.args     # unpack args
         print('x =', x)
         print('y =', y)
-if 1:
+if 0:
     puntos = [[936.9950561523438,637.3349609375],
                 [942.6434326171875,632.6384887695312],
                 [948.8971557617188,632.423828125],
@@ -153,3 +213,38 @@ if 1:
     puntos = np.array(puntos).T
     print(type(puntos[0]))
     print(puntos[0])
+    
+if 1:
+    datos = os.listdir("Json")
+    datos2 = []
+    ojos = []
+    for i in datos:
+        if i.find("deteccion") != -1:
+            with open('Json/'+i) as archivo:
+                deteccion = json.load(archivo)
+            if deteccion["Error"] == "No se encontraron errores":
+                datos2.append(i)
+                ojos.append(np.array(deteccion["caras"][0]["ojo derecho"]))
+                ojos.append(np.array(deteccion["caras"][0]["ojo izquierdo"]))
+    
+    print(datos2)
+    
+    for i in ojos:
+        eje_m, ratio, centro = get_best_ellipse_alt_alter(i)
+        valores_elipse_ojo = elipse.get_best_ellipse_alt(i)
+        print("")
+        print("Centro")
+        print((valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'])
+        print("Eje  mayor")
+        print((valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'])
+        print("Eje  menor")
+        print(((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]))
+        print("Ratio")
+        print((valores_elipse_ojo["ratio"])/ratio)
+        print(valores_elipse_ojo["ratio"])
+        print(ratio)
+        print("Ratio error relativo")
+        print((valores_elipse_ojo["ratio"]-ratio)/ratio)
+        print("")
+    
+    
