@@ -232,11 +232,13 @@ if 1:
     for i in ojos:
         eje_m, ratio, centro = get_best_ellipse_alt_alter(i)
         valores_elipse_ojo = elipse.get_best_ellipse_alt(i)
-        if 0:
+        if 1:
             print("")
             print("Centro")
             print((valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'])
             print("Eje  mayor")
+            print("teo",valores_elipse_ojo['major'])
+            print("exp",eje_m)
             print((valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'])
             print("Eje  menor")
             print(((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]))

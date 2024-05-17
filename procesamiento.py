@@ -190,7 +190,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
                     cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
             
-            if 1:
+            if 0:
                 #for i in np.concatenate((ojoder[0][1:3],ojoder[0][4:])):
                 #    aux = centroideder-i
                 #    aux = aux/norma(aux)
@@ -213,20 +213,20 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
             #Elipse
-            if 0:
+            if 1:
                 elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
                 for x, y in elipse_ojoder:
                     cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
-                elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
-                for x, y in elipse_ojoizq:
-                    cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
+                #elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
+                #for x, y in elipse_ojoizq:
+                #    cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
     
             #Centroides ojos
-            if 0:
-                for x, y in ojoder:
-                    cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
+            if 1:
+                for x, y in ojoder[0]:
+                    cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
 
-                for x, y in ojoizq:
+                for x, y in ojoizq[0]:
                     cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
     
             #Boundingbox
@@ -267,4 +267,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 verbose = 0
 imagen = 0
 archivos = os.listdir("detected")
-#cuerpo(archivos, max_caras = 1, verbose = 1)
+cuerpo([archivos[0]], max_caras = 1, verbose =2)

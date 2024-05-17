@@ -109,11 +109,11 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
     return
 
 
-verbose = 1
+verbose = 2
 imagen = 4
 minimo_ancho_de_cara = 50
-archivos = os.listdir("input")[3:4]
+archivos = os.listdir("input")[2:3]
 print(archivos)
 
 cuerpo(archivos, minimo_ancho_de_cara, verbose)
-cuerpo(os.listdir("FFHQ"), minimo_ancho_de_cara, 2, "FFHQ", "FFHQ detected", "FFHQ Json")
+#cuerpo(os.listdir("FFHQ"), minimo_ancho_de_cara, 2, "FFHQ", "FFHQ detected", "FFHQ Json")
