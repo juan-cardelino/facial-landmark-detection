@@ -278,6 +278,7 @@ if 1:
         print("Maximo: ",max(ratio))
         
         print(eje_mayor)
+        print(ratio)
         
 
 
