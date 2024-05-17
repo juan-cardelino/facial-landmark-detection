@@ -57,7 +57,6 @@ def get_best_ellipse_alt_alt(puntos):
 def get_best_ellipse_alt_alter(puntos):
     aux1 = np.mean(puntos, axis=0)
     aux2 = np.concatenate((puntos[0:1], puntos[3:4], [np.mean(puntos[1:3], axis=0)], [np.mean(puntos[4:6], axis=0)]))
-    print(aux2)
     aux5 = aux2 - aux1
     aux6 = []
     for i in aux5:
@@ -65,9 +64,7 @@ def get_best_ellipse_alt_alter(puntos):
     
     aux7 = np.mean(aux6[0:2])
     aux8 = np.mean(aux6[2:4])
-    print(aux8)
-    print("aux7",aux7)
-    return aux7, aux7/aux8, aux1
+    return aux7, aux8/aux7, aux1
 
 if 0:
     imagen = 2
@@ -223,28 +220,69 @@ if 1:
             with open('Json/'+i) as archivo:
                 deteccion = json.load(archivo)
             if deteccion["Error"] == "No se encontraron errores":
+                print(i)
                 datos2.append(i)
                 ojos.append(np.array(deteccion["caras"][0]["ojo derecho"]))
                 ojos.append(np.array(deteccion["caras"][0]["ojo izquierdo"]))
     
-    print(datos2)
+    #print(datos2)
+    
+    errores = []
     
     for i in ojos:
         eje_m, ratio, centro = get_best_ellipse_alt_alter(i)
         valores_elipse_ojo = elipse.get_best_ellipse_alt(i)
-        print("")
-        print("Centro")
-        print((valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'])
-        print("Eje  mayor")
-        print((valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'])
-        print("Eje  menor")
-        print(((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]))
+        if 0:
+            print("")
+            print("Centro")
+            print((valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'])
+            print("Eje  mayor")
+            print((valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'])
+            print("Eje  menor")
+            print(((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]))
+            print("Ratio")
+            print((valores_elipse_ojo["ratio"])/ratio)
+            print(valores_elipse_ojo["ratio"])
+            print(ratio)
+            print("Ratio error relativo")
+            print((valores_elipse_ojo["ratio"]-ratio)/valores_elipse_ojo["ratio"])
+            print("ratios")
+            print("teo", valores_elipse_ojo["ratio"])
+            print("exp", ratio)
+            print("")
+        
+        errores.append([(valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'], (valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'], ((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]), (valores_elipse_ojo["ratio"]-ratio)/valores_elipse_ojo["ratio"]])
+    if 1:
+        centro = []
+        eje_mayor = []
+        eje_menor = []
+        ratio = []
+        for i in errores:
+            centro.append(norma(i[0])*100)
+            eje_mayor.append(i[1]*100)
+            eje_menor.append(i[2]*100)
+            ratio.append(i[3]*100)
+        print("centro")
+        print("Promedio: ",np.mean(centro))
+        print("Maximo: ",max(centro))
+        print("Eje mayor")
+        print("Promedio: ",np.mean(eje_mayor))
+        print("Maximo: ",max(eje_mayor))
+        print("Eje menor")
+        print("Promedio: ",np.mean(eje_menor))
+        print("Maximo: ",max(eje_menor))
         print("Ratio")
-        print((valores_elipse_ojo["ratio"])/ratio)
-        print(valores_elipse_ojo["ratio"])
-        print(ratio)
-        print("Ratio error relativo")
-        print((valores_elipse_ojo["ratio"]-ratio)/ratio)
-        print("")
-    
-    
+        print("Promedio: ",np.mean(ratio))
+        print("Maximo: ",max(ratio))
+        
+        print(eje_mayor)
+        
+
+
+if 0:
+    aux = []
+    aux = [[674.23028564, 179.21231079],[680.81091309, 176.44174194],[687.1696167,  176.87538147],[691.63867188, 180.10926819],[686.73260498, 181.9070282 ],[680.35028076, 181.04837036]]
+    aux = np.array(aux)
+    print(aux[1:3])
+    print(np.mean(aux[1:3], axis=0))
+    #print(np.mean(aux, axis=1))
