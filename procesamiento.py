@@ -35,6 +35,27 @@ def rotacion(a, cos, sen):
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
+def get_best_ellipse_alt_alt(puntos, angulo):
+    aux1 = np.mean(puntos, axis=0)
+    
+    aux2 = puntos - aux1
+    aux3 = []
+    for i in aux2:
+        aux3.append(norma(i))
+    
+    aux4 = np.concatenate((aux3[:1], aux3[3:4]))
+    aux4 = np.mean(aux4)
+    aux51 = np.mean(puntos[1:3], axis=0)
+    aux52 = np.mean(puntos[4:6], axis=0)
+    aux5 = np.mean([norma(aux51-aux1), norma(aux52-aux1)])
+    salida = {
+            'center': aux1.tolist(),
+            'major': aux4,
+            'ratio': aux5 / aux4,
+            'rotation': angulo
+        }
+    return salida
+
 def carga_marcadores(archivo, max_caras):
     with open('Json/'+archivo + "_deteccion.json") as archivo:
         deteccion = json.load(archivo)
@@ -102,8 +123,15 @@ def calculos(ojoder, ojoizq, frente, boca):
     angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
     
     #Forma ojos
-    valores_elipse_ojoder = elipse.get_best_ellipse_alt(ojoder)
-    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(ojoizq)
+    try:
+        valores_elipse_ojoder = elipse.get_best_ellipse_alt(ojoder)
+    except ValueError:
+        valores_elipse_ojoder = get_best_ellipse_alt_alt(ojoder, angulo_ojo_derecho)
+    try:
+        valores_elipse_ojoizq = elipse.get_best_ellipse_alt(ojoizq)
+    except ValueError:
+        valores_elipse_ojoizq = get_best_ellipse_alt_alt(ojoizq, angulo_ojo_izquierdo)
+        
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
 
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
@@ -217,9 +245,9 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
                 for x, y in elipse_ojoder:
                     cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
-                #elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
-                #for x, y in elipse_ojoizq:
-                #    cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
+                elipse_ojoizq = elipse.get_ellipse(valores_elipse_ojoizq['center'], valores_elipse_ojoizq['major'], valores_elipse_ojoizq["ratio"], valores_elipse_ojoizq['rotation'], 100)
+                for x, y in elipse_ojoizq:
+                    cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
     
             #Centroides ojos
             if 1:
@@ -267,4 +295,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 verbose = 0
 imagen = 0
 archivos = os.listdir("detected")
-cuerpo([archivos[0]], max_caras = 1, verbose =2)
+cuerpo([archivos[0]], max_caras = 2, verbose =2)

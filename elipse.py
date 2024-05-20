@@ -182,9 +182,9 @@ def get_best_ellipse_alt(points):
     
     den = b**2 - a*c
     #print(den)
-    if den > 0:
-        print("Elipse: Aplicar abrir_ojo")
-        tmp = fit_ellipse(extraer_x_e_y(abrir_ojo(points)))
+    #if den > 0:
+    #    print("Elipse: Aplicar abrir_ojo")
+    #    tmp = fit_ellipse(extraer_x_e_y(abrir_ojo(points)))
     
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
 

@@ -212,12 +212,13 @@ if 0:
     print(puntos[0])
     
 if 1:
-    datos = os.listdir("Json")
+    file = 'FFHQ Json'
+    datos = os.listdir(file)
     datos2 = []
     ojos = []
     for i in datos:
         if i.find("deteccion") != -1:
-            with open('Json/'+i) as archivo:
+            with open(file+'/'+i) as archivo:
                 deteccion = json.load(archivo)
             if deteccion["Error"] == "No se encontraron errores":
                 print(i)
@@ -253,7 +254,7 @@ if 1:
             print("exp", ratio)
             print("")
         
-        errores.append([(valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center'], (valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major'], ((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"]), (valores_elipse_ojo["ratio"]-ratio)/valores_elipse_ojo["ratio"]])
+        errores.append([np.abs((valores_elipse_ojo['center']-centro)/valores_elipse_ojo['center']), np.abs((valores_elipse_ojo['major']-eje_m)/valores_elipse_ojo['major']), np.abs(((valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])-(eje_m*ratio))/(valores_elipse_ojo['major']*valores_elipse_ojo["ratio"])), np.abs((valores_elipse_ojo["ratio"]-ratio)/valores_elipse_ojo["ratio"])])
     if 1:
         centro = []
         eje_mayor = []
@@ -278,7 +279,6 @@ if 1:
         print("Maximo: ",max(ratio))
         
         print(eje_mayor)
-        print(ratio)
         
 
 
