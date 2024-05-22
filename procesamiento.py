@@ -134,6 +134,48 @@ def calculos(ojoder, ojoizq, frente, boca):
         
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
 
+def calculos_alter(ojoder, ojoizq, frente, boca):
+    #centoride ojos
+    centroideder = np.mean(ojoder, axis= 0)
+    centroideizq = np.mean(ojoizq, axis= 0)
+    
+    distojos = norma(centroideder-centroideizq)
+    unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2  # FIXME: usa nombres coherentes con la documentación
+    
+    #origen y ejes
+    origen_ojo = (centroideder+centroideizq)/2
+    eje_ojos = np.abs(centroideder-centroideizq)
+    eje_ojos = eje_ojos/norma(eje_ojos)
+    p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
+    
+    #Angulo cara
+    angulo_cara = math.degrees(math.atan2(eje_ojos[1],eje_ojos[0]))
+    
+    #Proporciones
+    centrofrente = np.mean(frente, axis=0)
+    centroboca = np.mean(boca, axis=0)
+
+    distfrente_ojo = np.abs(producto_escalar(centrofrente-origen_ojo, p_eje_ojos))
+    distfrente_ojo_u = np.abs(producto_escalar(centrofrente-origen_ojo, eje_ojos))
+    distboca_ojo = np.abs(producto_escalar(centroboca-origen_ojo, p_eje_ojos))
+    distboca_ojo_u = np.abs(producto_escalar(centroboca-origen_ojo, eje_ojos))
+    
+    #angulos ojos
+    angulo_ojo_derecho = np.arcsin(proyeccion(ojoder[3]-ojoder[0], p_eje_ojos))
+    angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
+    
+    #Forma ojos
+    try:
+        valores_elipse_ojoder = elipse.get_best_ellipse_alt(ojoder)
+    except ValueError:
+        valores_elipse_ojoder = get_best_ellipse_alt_alt(ojoder, angulo_ojo_derecho)
+    try:
+        valores_elipse_ojoizq = elipse.get_best_ellipse_alt(ojoizq)
+    except ValueError:
+        valores_elipse_ojoizq = get_best_ellipse_alt_alt(ojoizq, angulo_ojo_izquierdo)
+        
+    return eje_ojos, p_eje_ojos, centrofrente, centroboca
+
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
     
     for imagen in imagenes:
@@ -144,7 +186,9 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 
             for i in range(cant_caras):
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = calculos(ojoder[i], ojoizq[i], frente[i], boca[i])
-    
+                eje_ojos, p_eje_ojos, centrofrente, centroboca = calculos_alter(ojoder[i], ojoizq[i], frente[i], boca[i])
+
+                
                 #Almacenamiento estructurado
                 if i == 0:
                     data = {
@@ -189,9 +233,9 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
 
             #Proyecciones de frente y boca, solo se usa para verificar
-            if 0:
-                for i in np.arange(int(distfrente_ojo)):
-                    cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+            if 1:
+                #for i in np.arange(int(distfrente_ojo)):
+                #    cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
 
                 for i in np.arange(int(distboca_ojo)):
                     cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*(-i)), int(origen_ojo[1]+p_eje_ojos[1]*(-i))), 1, (0, 0, 255), 5)
@@ -200,22 +244,22 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
             if 0:
                 for i in np.arange(int(distojos)):
                     cv2.circle(image, (int(centroideder[0]+eje_ojos[0]*i), int(centroideder[1]+eje_ojos[1]*i)), 1, (0, 0, 255), 5)
-                aux = (ojoder[3]-ojoder[0])
+                aux = (ojoder[0][3]-ojoder[0][0])
                 aux = aux/norma(aux)
-                for i in np.arange(int(norma(ojoder[3]-ojoder[0]))):
-                    cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
-                aux = (ojoizq[3]-ojoizq[0])
+                for i in np.arange(int(norma(ojoder[0][3]-ojoder[0][0]))):
+                    cv2.circle(image, (int(ojoder[0][0][0]+aux[0]*i), int(ojoder[0][0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
+                aux = (ojoizq[0][3]-ojoizq[0][0])
                 aux = aux/norma(aux)
-                for i in np.arange(int(norma(ojoizq[3]-ojoizq[0]))):
-                    cv2.circle(image, (int(ojoizq[0][0]+aux[0]*i), int(ojoizq[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
+                for i in np.arange(int(norma(ojoizq[0][3]-ojoizq[0][0]))):
+                    cv2.circle(image, (int(ojoizq[0][0][0]+aux[0]*i), int(ojoizq[0][0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
     
             #Centroides
             if 1:
                 cv2.circle(image, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 5)
                 cv2.circle(image, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 5)
                 # Frente y boca
-                if 0:
-                    cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
+                if 1:
+                    #cv2.circle(image, (int(centrofrente[0]), int(centrofrente[1])), 1, (0, 255, 0), 5)
                     cv2.circle(image, (int(centroboca[0]), int(centroboca[1])), 1, (0, 255, 0), 5)
             
             if 0:
@@ -235,13 +279,13 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 #    cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
     
             #origen y ejes u y v
-            if 0: 
-                cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
-                cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+            if 1: 
+                #cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+                #cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
                 cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
             #Elipse
-            if 1:
+            if 0:
                 elipse_ojoder = elipse.get_ellipse(valores_elipse_ojoder['center'], valores_elipse_ojoder['major'], valores_elipse_ojoder["ratio"], valores_elipse_ojoder['rotation'], 100)
                 for x, y in elipse_ojoder:
                     cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
@@ -250,7 +294,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
     
             #Centroides ojos
-            if 1:
+            if 0:
                 for x, y in ojoder[0]:
                     cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
 
@@ -263,7 +307,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 cv2.circle(image, (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[3]), 1, (0, 255, 0), 5)
             
             #Guardar imagen procesada
-            cv2.imwrite('face-processed.jpg', image)
+            cv2.imwrite('Read4.jpg', image)
             #Mostrar imagen
             cv2.imshow("Image", cv2.resize(image,(900,800)))
             cv2.waitKey(0)
@@ -295,4 +339,4 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
 verbose = 0
 imagen = 0
 archivos = os.listdir("detected")
-cuerpo([archivos[0]], max_caras = 2, verbose =2)
+cuerpo([archivos[2]], max_caras = 2, verbose =2)

@@ -1,8 +1,12 @@
 # Facial feature detection
 
-This program use a facial landmark detection algorithm to detect faces and its landmarks on an image. The landmakrs are use to calculate facial features.
+This program use a facial landmark detection algorithm to detect faces and its landmarks on an image.
 
-### Instalation
+![Landmark Detection example](Read1.jpg)
+
+The landmakrs are use to calculate facial features.
+
+## Instalation
 
 In order to use this code is necesary to install the modules in requirements.txt and run the installer.py program to download the models use.
 
@@ -21,9 +25,14 @@ https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml
 The model used for aproximating point to a elipse can be got from:
 https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
+## Ejemplos
+
+![Landmark Detection](Read1.jpg)
+
 ## Credits
 Landmark detection:
 https://github.com/Danotsonof/facial-landmark-detection
+
 Elipse:
 https://github.com/cjgb/ellipses
 
