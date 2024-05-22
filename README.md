@@ -27,7 +27,10 @@ https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
 ## Ejemplos
 
-![Landmark Detection](Read1.jpg)
+![Eyes centroids](Read2.jpg)
+![Eyes forehead distance and eyes mouth distances](Read3.jpg)
+![Eyes mouth distances](Read4.jpg)
+
 
 ## Credits
 Landmark detection:
