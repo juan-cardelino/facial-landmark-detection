@@ -1,4 +1,6 @@
-# Facial-landmark-detection-from-file-modificada
+# Facial feature detection
+
+This program use a facial detection algorithm to detect faces and its landmarks on an image. The landmakrs are use to calculate facial features.
 
 ### Instalation
 
@@ -24,33 +26,7 @@ Also the model used for face detection can be found here:
 https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_alt2.xml
 
 
-## Landmark Detection on image
 
-![Landmark Detection](face-detect.jpg)
-<br>Picture on phone placed in front of webcam
-
-## Result Samples
-
-![Face Detection](face-detection.jpg)
-
-#### Landmark Detection
-
-![Face Landmark Detection - 3](3-landmark-detections.jpg)
-
-![Landmark Detection](zoomed-in1.jpg)
-
-![Landmark Detection](zoomed-in2.jpg)
-
-![Landmark Detection](zoomed-in3.jpg)
-
-
-
-### Credits
-
-https://github.com/albertofernandezvillan
-<br>https://github.com/kurnianggoro/GSOC2017
-<br>https://github.com/sacchitchadha
-<br>https://github.com/
 
 # Procesamiento
 

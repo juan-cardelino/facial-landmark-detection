@@ -9,7 +9,7 @@ import cv2
 import os
 import urllib.request as urlreq
 import numpy as np
-import procesamiento as pr
+#import procesamiento as pr
 
 
 # save face detection algorithm's url in haarcascade_url variable
@@ -92,10 +92,10 @@ while(True):
             for i in landmarks:
                 centroideder=np.mean(i[0][36:42], axis=0)
                 #centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(i[0][36:42], i[0][42:48], i[0][48:55], i[0][17:22])
-                cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
+                #cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
                 #cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 2)
                 #cv2.circle(frame, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 2)
-                cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
+                #cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
         
         lista_p = landmarks
         if 0:
@@ -117,7 +117,7 @@ while(True):
     cv2.imwrite('face-detect.jpg', frame)    
     
     # Show image
-    cv2.imshow("frame", frame)
+    cv2.imshow("frame", cv2.resize(frame,(1600,800)))
 
     # terminate the capture window
     if cv2.waitKey(20) & 0xFF  == ord('q'):
