@@ -1,6 +1,6 @@
 # Facial feature detection
 
-This prorgam calculates facial features from an image. It fist detects faces a facial landmarks on a given image.
+This prorgam calculates facial features from an image. It fist detects faces and facial landmarks on a given image.
 
 <p align="center">
     <img src=Read1.jpg width = "75%">
