@@ -1,10 +1,12 @@
 # Facial feature detection
 
-This program use a facial landmark detection algorithm to detect faces and its landmarks on an image.
+This prorgam calculates facial features from an image. It fist detects faces a facial landmarks on a given image.
 
-![Landmark Detection example](Read1.jpg)
+<p align="center">
+    <img src=Read1.jpg width = "75%">
+</p>
 
-The landmakrs are use to calculate facial features.
+Then uses the landmarks to perform the necesary calculations to obtain facial features
 
 ## Instalation
 
@@ -27,10 +29,20 @@ https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
 ## Ejemplos
 
-![Eyes centroids](Read2.jpg)
-![Eyes forehead distance and eyes mouth distances](Read3.jpg)
-![Eyes mouth distances](Read4.jpg)
+### Eyes centroids
+<p align="center">
+    <img src=Read2.jpg width = "50%">
+</p>
 
+### Eyes-forhead distance
+<p align="center">
+    <img src=Read3.jpg width = "50%">
+</p>
+
+### Eyes-mouth distance
+<p align="center">
+    <img src=Read4.jpg width = "50%">
+</p>
 
 ## Credits
 Landmark detection:
