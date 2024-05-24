@@ -13,8 +13,10 @@ Then uses the landmarks to perform the necesary calculations to obtain facial fe
 In order to use this code is necesary to install the modules in requirements.txt and run the installer.py program to download the models use.
 
 Necesary instalation to run the code:
-    `pip install requirements.txt`
-    `python.exe installer.py`
+
+    pip install requirements.txt
+    
+    python.exe installer.py
 
 This project uses Python 3.10, openCV 4.9.0.80, numpy 1.26, scipy 1.13.0, json and math
 
@@ -24,7 +26,7 @@ https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcas
 Also the model used for landmark detection can be got from: 
 https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml
 
-The model used for aproximating point to a elipse can be got from:
+The model used for aproximating point to an elipse can be got from:
 https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
 ## Ejemplos
@@ -48,7 +50,7 @@ https://github.com/cjgb/ellipses/blob/dev/mylib.py
 Landmark detection:
 https://github.com/Danotsonof/facial-landmark-detection
 
-Elipse:
+elliptic least squares:
 https://github.com/cjgb/ellipses
 
 
