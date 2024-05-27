@@ -109,7 +109,7 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
     return
 
 
-verbose = 3
+verbose = 1
 imagen = 4
 minimo_ancho_de_cara = 50
 archivos = os.listdir("input")[4:5]

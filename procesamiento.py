@@ -225,17 +225,17 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
             image = cv2.imread(input_dir+"/"+imagen)
 
             #Dibujo frente y boca, solo se usa si la imagen viene vacia de copia facial 
-            if 0:
-                for i in frente:
-                    cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
+            if 1:
+                #for i in frente[0]:
+                #    cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
 
-                for i in boca:
+                for i in boca[0]:
                     cv2.circle(image, (int(i[0]), int(i[1])), 1, (255, 0, 0), 5)
 
             #Proyecciones de frente y boca, solo se usa para verificar
-            if 1:
-                #for i in np.arange(int(distfrente_ojo)):
-                #    cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
+            if 0:
+                for i in np.arange(int(distfrente_ojo)):
+                    cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*i), int(origen_ojo[1]+p_eje_ojos[1]*i)), 1, (0, 0, 255), 5)
 
                 for i in np.arange(int(distboca_ojo)):
                     cv2.circle(image, (int(origen_ojo[0]+p_eje_ojos[0]*(-i)), int(origen_ojo[1]+p_eje_ojos[1]*(-i))), 1, (0, 0, 255), 5)
@@ -279,9 +279,9 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 #    cv2.circle(image, (int(ojoder[0][0]+aux[0]*i), int(ojoder[0][1]+aux[1]*i)), 1, (255, 0, 0), 5)
     
             #origen y ejes u y v
-            if 1: 
-                #cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
-                #cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+            if 0: 
+                cv2.putText(image, "v" ,(int(origen_ojo[0]+p_eje_ojos[0]*25), int(origen_ojo[1]+p_eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
+                cv2.putText(image, "u" ,(int(origen_ojo[0]+eje_ojos[0]*25), int(origen_ojo[1]+eje_ojos[1]*25)), cv2.FONT_HERSHEY_SIMPLEX , 1, (0, 0, 255), 2)
                 cv2.circle(image, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 5)
 
             #Elipse
@@ -294,9 +294,9 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     cv2.circle(image, (int(x), int(y)), 1, (0, 255, 0), 5)
     
             #Centroides ojos
-            if 0:
+            if 1:
                 for x, y in ojoder[0]:
-                    cv2.circle(image, (int(x), int(y)), 1, (0, 0, 255), 5)
+                    cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
 
                 for x, y in ojoizq[0]:
                     cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
@@ -307,7 +307,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 cv2.circle(image, (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[3]), 1, (0, 255, 0), 5)
             
             #Guardar imagen procesada
-            cv2.imwrite('Read4.jpg', image)
+            cv2.imwrite('face-processed.jpg', image)
             #Mostrar imagen
             cv2.imshow("Image", cv2.resize(image,(900,800)))
             cv2.waitKey(0)
