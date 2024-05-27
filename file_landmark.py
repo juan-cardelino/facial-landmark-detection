@@ -7,7 +7,6 @@ Detection from web cam
 # Import Packages
 import cv2
 import os
-#import urllib.request as urlreq
 import numpy as np
 import json
 
