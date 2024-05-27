@@ -29,6 +29,18 @@ https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml
 The model used for aproximating point to an elipse can be got from:
 https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
+## Tutorial
+
+To process an image, the following process must be followed
+
+First insert the image in Input folder
+
+Then run the following code
+
+    python.exe facial-landmark-from-file-modificada.py
+    
+    python.exe procesamiento.py
+
 ## Ejemplos
 
 ### Eyes centroids
