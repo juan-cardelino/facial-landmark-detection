@@ -16,7 +16,7 @@ def guardado(a_guardar, nombre, json_dir = "Json"):
     print('Marcadores guardados en formato json')       
     return
 
-def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json",model_dir = "data"):
+def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json",model_dir = "data"):
     
     detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
     landmark_detector  = cv2.face.createFacemarkLBF()
@@ -86,33 +86,15 @@ def cuerpo(imagenes, minimo_ancho_de_cara = 57, verbose = 1, input_dir="input", 
                 print(nombre_j+".jpg guardado en "+output_dir)
         
             if verbose >= 3:
-                # Show image
-                #cv2.imshow("algo", gray)
                 cv2.imshow("frame", cv2.resize(frame,(1000,800)))
                 cv2.waitKey()
-                # terminate the capture window
-                #if cv2.waitKey(20) & 0xFF  == ord('q'):
-                #    webcam_cap.release()
-                #    cv2.destroyAllWindows()
-                #    break
-        
                 cv2.destroyAllWindows()
         else:
             deteccion["Error"] = "No se detecto ninguna cara"
             print('Error: No se detecto cara')
         deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
         guardado(deteccion, nombre_j, json_dir=json_dir)
-        print("")
-    print('Ejecucion finalizada')
+        #print("")
+    #print('Extraccion de landmarks finalizada')
     
     return
-
-
-verbose = 1
-imagen = 4
-minimo_ancho_de_cara = 50
-archivos = os.listdir("input")[4:5]
-print(archivos)
-
-cuerpo(archivos, minimo_ancho_de_cara, verbose)
-#cuerpo(os.listdir("FFHQ"), minimo_ancho_de_cara, 2, "FFHQ", "FFHQ detected", "FFHQ Json")

@@ -211,7 +211,7 @@ if 0:
     print(type(puntos[0]))
     print(puntos[0])
     
-if 1:
+if 0:
     file = 'FFHQ Json'
     datos = os.listdir(file)
     datos2 = []
@@ -232,7 +232,7 @@ if 1:
     
     for i in ojos:
         eje_m, ratio, centro = get_best_ellipse_alt_alter(i)
-        valores_elipse_ojo = elipse.get_best_ellipse_alt(i)
+        valores_elipse_ojo = elipse.get_best_ellipse_conical(i)
         if 1:
             print("")
             print("Centro")
@@ -289,3 +289,15 @@ if 0:
     print(aux[1:3])
     print(np.mean(aux[1:3], axis=0))
     #print(np.mean(aux, axis=1))
+
+if 0:
+    # input
+    print("inserte primer numero a sumar:")
+    num1 = int(input())
+    
+    print("inserte segundo numero a sumar:")
+    num2 = int(input())
+ 
+    # printing the sum in intager
+    print("el resultado de la suma es:")
+    print(num1 + num2)

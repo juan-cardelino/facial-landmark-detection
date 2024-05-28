@@ -114,11 +114,11 @@ def calculos(ojoder, ojoizq, frente, boca):
     #Forma ojos
     try:
         valores_elipse_ojoder = elipse.get_best_ellipse_conical(ojoder)
-    except ValueError:
+    except:
         valores_elipse_ojoder = get_best_ellipse_radius(ojoder, angulo_ojo_derecho)
     try:
         valores_elipse_ojoizq = elipse.get_best_ellipse_conical(ojoizq)
-    except ValueError:
+    except:
         valores_elipse_ojoizq = get_best_ellipse_radius(ojoizq, angulo_ojo_izquierdo)
         
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
@@ -140,6 +140,38 @@ def calculos_alter(ojoder, ojoizq, frente, boca):
     
     return eje_ojos, p_eje_ojos, centrofrente, centroboca
 
+def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j):
+    data = {
+        "puntos calculados": {
+            "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
+            "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
+        },
+        "medidas":{
+            "unidad":unidad,
+            "distancia ojos":distojos/unidad,
+            "distancia ojo-frente":distfrente_ojo/unidad,
+            "distancia ojo-boca":distboca_ojo/unidad
+        },
+        "proporcion":{
+            "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
+        },
+        "angulos":{
+            "cara":angulo_cara,
+            "ojo derecho": angulo_ojo_derecho,
+            "ojo izquierdo": angulo_ojo_izquierdo
+        },
+        "forma ojos":{
+            "ratio ojo derecho":valores_elipse_ojoder["ratio"],
+            "ratio ojo izquierdo":valores_elipse_ojoizq["ratio"]
+        },
+        "boundingbox":boundingbox
+    }
+
+        #Guardado
+    with open('Json/'+nombre_j+'_data.json', 'w') as file:
+        json.dump(data, file, indent=4)
+    return
+
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
     
     for imagen in imagenes:
@@ -152,39 +184,11 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = calculos(ojoder[i], ojoizq[i], frente[i], boca[i])
                 eje_ojos, p_eje_ojos, centrofrente, centroboca = calculos_alter(ojoder[i], ojoizq[i], frente[i], boca[i])
 
-                
                 #Almacenamiento estructurado
                 if i == 0:
-                    data = {
-                        "puntos calculados": {
-                            "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
-                            "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
-                        },
-                        "medidas":{
-                            "unidad":unidad,
-                            "distancia ojos":distojos/unidad,
-                            "distancia ojo-frente":distfrente_ojo/unidad,
-                            "distancia ojo-boca":distboca_ojo/unidad
-                        },
-                        "proporcion":{
-                            "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
-                        },
-                        "angulos":{
-                            "cara":angulo_cara,
-                            "ojo derecho": angulo_ojo_derecho,
-                            "ojo izquierdo": angulo_ojo_izquierdo
-                        },
-                        "forma ojos":{
-                            "ratio ojo derecho":valores_elipse_ojoder["ratio"],
-                            "ratio ojo izquierdo":valores_elipse_ojoizq["ratio"]
-                        },
-                        "boundingbox":boundingbox[i]
-                    }
-
-                    #Guardado
-                    with open('Json/'+nombre_j+'_data.json', 'w') as file:
-                        json.dump(data, file, indent=4)
+                    guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], nombre_j)
                     print('mejor cara guardada en '+nombre_j+'.json')
+                    
         if verbose >= 2:
             image = cv2.imread(input_dir+"/"+imagen)
 
@@ -259,7 +263,7 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
                     cv2.circle(image, (int(x), int(y)), 1, (255, 0, 0), 5)
     
             #Boundingbox
-            if 1:
+            if 0:
                 cv2.circle(image, (boundingbox[0][0], boundingbox[0][1]), 1, (0, 255, 0), 5)
                 cv2.circle(image, (boundingbox[0][0]+boundingbox[0][2], boundingbox[0][1]+boundingbox[0][3]), 1, (0, 255, 0), 5)
             
@@ -293,7 +297,3 @@ def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
             print('anglo de ojo izquierdo',math.degrees(angulo_ojo_izquierdo))
     return
 
-verbose = 0
-imagen = 0
-archivos = os.listdir("detected")
-cuerpo([archivos[0]], max_caras = 2, verbose =2)
