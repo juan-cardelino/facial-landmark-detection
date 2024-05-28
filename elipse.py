@@ -2,7 +2,6 @@ import math
 import random
 import numpy as np
 from scipy.optimize import minimize
-#from math import pi, cos, sin
 
 def extraer_x_e_y(a):
     aux = np.array(a).T
@@ -171,7 +170,7 @@ def cart_to_pol(coeffs):
     return x0, y0, ap, bp, e, phi
 
 
-def get_best_ellipse_alt(points):
+def get_best_ellipse_conical(points):
 
     x, y = extraer_x_e_y(points)
     tmp = fit_ellipse(extraer_x_e_y(points))
