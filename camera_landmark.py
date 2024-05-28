@@ -35,8 +35,6 @@ while(True):
     try:
         # Detect landmarks on "gray"
         _, landmarks = landmark_detector.fit(gray, np.array(faces))
-        
-        lista = landmarks[0]
     except:
         landmarks = []
     print(len(landmarks))
@@ -53,7 +51,9 @@ while(True):
         for x,y in landmark[0]:
             # display landmarks on "frame/image,"
             # with blue colour in BGR and thickness 2
-            cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), 2)
+            cv2.circle(frame, (int(x), int(y)), 1, (255, 0, 0), int(frame.shape[1]/256))
+            print(int(frame.size))
+            print(int(frame.size/64))
     
 
     # save last instance of detected image

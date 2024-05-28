@@ -6,3 +6,4 @@ FFHQ*
 __pycache__*
 Json*
 face-detect.jpg
+detected/*
