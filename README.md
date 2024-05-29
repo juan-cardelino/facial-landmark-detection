@@ -20,6 +20,8 @@ Necesary instalation to run the code:
 
 This project uses Python 3.10, openCV 4.9.0.80, numpy 1.26, scipy 1.13.0, json and math
 
+To verify that the models were downloaded, the files haarcascade_frontalface_alt2.xml and LFBmodel.yaml must be in the folder data
+
 The model used for face detection can be found here:
 https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_alt2.xml
 
@@ -31,17 +33,29 @@ https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
 ## Tutorial
 
-To process an image, the following process must be followed
+To process an image, the following process must be followed:
 
-First insert the image in Input folder
+### Preprocess
 
-Then run the following code
+Insert image to process in Input folder
 
-    python.exe facial-landmark-from-file-modificada.py
-    
-    python.exe procesamiento.py
+### Run code
 
-## Ejemplos
+    python.exe facial-feature-from-file.py
+
+### Results
+
+#### Stage 1
+
+If the image has faces with a boundingbox bigger than 100 pixels, a copy of the image in format jpg is made in detected folder, also a json file is made in the Json folder with the format image_name_deteccion.json with the landmarks off all big enough faces.
+
+#### Stage 2
+
+The landmarks found in the previous stage are use to perfomr the fetures calculations. Facial features are save in Json folder with the format image_name_data.json.
+
+
+
+## Examples
 
 ### Eyes centroids
 <p align="center">
