@@ -27,7 +27,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
         
         nombre_j = imagen[:imagen.rfind('.')]
         
-        print("archivo: "+nombre_j)
+        #print("archivo: "+nombre_j)
         
         input_fname = os.path.join(input_dir, str(imagen))
         frame = cv2.imread(input_fname)

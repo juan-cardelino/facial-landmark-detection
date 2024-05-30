@@ -140,7 +140,7 @@ def calculos_alter(ojoder, ojoizq, frente, boca):
     
     return eje_ojos, p_eje_ojos, centrofrente, centroboca
 
-def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j):
+def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json"):
     data = {
         "puntos calculados": {
             "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
@@ -168,9 +168,12 @@ def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos,
     }
 
         #Guardado
-    with open('Json/'+nombre_j+'_data.json', 'w') as file:
+    with open(json_dir+'/'+nombre_j+'_data.json', 'w') as file:
         json.dump(data, file, indent=4)
     return
+
+#Esta funcion es la qe habia usado originalmente para hacer las cosas, no la uso mas, la guardo porque tiene ideas de como hacer las cosas
+#ademas tiene como plotear las distintas cosas calculadas d ela cara, Habia pensado hacer u codigo aparte que pueda agarrar la foto y darla con todos los puntos calculados
 
 def cuerpo(imagenes, max_caras = 1, verbose = 1, input_dir = "detected"):
     

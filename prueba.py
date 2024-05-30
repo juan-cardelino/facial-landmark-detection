@@ -5,11 +5,8 @@ import elipse
 import json
 
 def extraer_x_e_y(a):
-    aux_x = aux_y = []
-    for x, y in a:
-        aux_x = aux_x+[x]
-        aux_y = aux_y+[y]
-    return np.array(aux_x), np.array(aux_y)
+    aux = np.array(a).T
+    return aux[0], aux[1]
 
 def norma(a):
     return np.sqrt(sum(a*a))
@@ -54,17 +51,17 @@ def get_best_ellipse_alt_alt(puntos):
     print("aux7",aux7)
     return aux7, aux7/aux8, aux1
 
-def get_best_ellipse_alt_alter(puntos):
+def get_best_ellipse_radius(puntos):
     aux1 = np.mean(puntos, axis=0)
     aux2 = np.concatenate((puntos[0:1], puntos[3:4], [np.mean(puntos[1:3], axis=0)], [np.mean(puntos[4:6], axis=0)]))
-    aux5 = aux2 - aux1
-    aux6 = []
-    for i in aux5:
-        aux6.append(norma(i))
+    aux3 = aux2 - aux1
+    aux4 = []
+    for i in aux3:
+        aux4.append(norma(i))
     
-    aux7 = np.mean(aux6[0:2])
-    aux8 = np.mean(aux6[2:4])
-    return aux7, aux8/aux7, aux1
+    aux5 = np.mean(aux4[0:2])
+    aux6 = np.mean(aux4[2:4])
+    return aux5, aux6/aux5, aux1
 
 if 0:
     imagen = 2
@@ -115,7 +112,7 @@ if 0:
             cv2.circle(img, (int(x), int(y)), 0, (0, 255, 0), 1)
 
     #valores_elipse_ojoizq = elipse.get_best_ellipse_alt(puntos)
-    valores_elipse_ojoizq = elipse.get_best_ellipse_alt(aux4)
+    valores_elipse_ojoizq = elipse.get_best_ellipse_conical(aux4)
     print(valores_elipse_ojoizq['center'])
     print(valores_elipse_ojoizq['major'])
     print(valores_elipse_ojoizq['major']*valores_elipse_ojoizq["ratio"])
@@ -153,14 +150,8 @@ if 0:
         cv2.waitKey(0)
 
     cv2.destroyAllWindows()
-if 0:
-    algo = [1, 2, 3]
-    for i in algo:
-        print(algo)
-    
-    algo = (-0.024424451081098857+0.053190070790805184j)
-    print(np.abs(algo))
 
+# Probar simultaneamente manejo de errores con try y extraer datos de ventana de comandos
 if 0:
     while True:
         try:
@@ -168,6 +159,8 @@ if 0:
             break
         except ValueError:
             print("Oops!  That was no valid number.  Try again...")
+
+#Prueba de errores y excepciones
 if 0:        
     class B(Exception):
         pass
@@ -178,16 +171,17 @@ if 0:
     class D(C):
         pass
 
-    for cls in [B, C, D]:
+    for cls in [C, D, B]:
         try:
             raise cls()
-        except B:
-            print("B")
         except D:
             print("D")
+        except B:
+            print("B")
         except C:
             print("C")
 
+#Pruebas de errores
 if 0:
     try:
         raise Exception('spam', 'eggs')
@@ -200,6 +194,8 @@ if 0:
         x, y = inst.args     # unpack args
         print('x =', x)
         print('y =', y)
+
+#Prueba para extrer las columnas en dos array
 if 0:
     puntos = [[936.9950561523438,637.3349609375],
                 [942.6434326171875,632.6384887695312],
@@ -210,7 +206,8 @@ if 0:
     puntos = np.array(puntos).T
     print(type(puntos[0]))
     print(puntos[0])
-    
+
+#Compara elipse conica y elipse en base a radio     
 if 0:
     file = 'FFHQ Json'
     datos = os.listdir(file)
@@ -231,7 +228,7 @@ if 0:
     errores = []
     
     for i in ojos:
-        eje_m, ratio, centro = get_best_ellipse_alt_alter(i)
+        eje_m, ratio, centro = get_best_ellipse_radius(i)
         valores_elipse_ojo = elipse.get_best_ellipse_conical(i)
         if 1:
             print("")
@@ -281,7 +278,7 @@ if 0:
         print(eje_mayor)
         
 
-
+#Prueba de promedio de numpy
 if 0:
     aux = []
     aux = [[674.23028564, 179.21231079],[680.81091309, 176.44174194],[687.1696167,  176.87538147],[691.63867188, 180.10926819],[686.73260498, 181.9070282 ],[680.35028076, 181.04837036]]
@@ -290,7 +287,8 @@ if 0:
     print(np.mean(aux[1:3], axis=0))
     #print(np.mean(aux, axis=1))
 
-if 0:
+#Prueba leer de ventna de comando
+if 1:
     # input
     print("inserte primer numero a sumar:")
     num1 = int(input())
