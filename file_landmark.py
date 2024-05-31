@@ -13,11 +13,14 @@ import json
 def guardado(a_guardar, nombre, json_dir = "Json"):
     with open(json_dir+'/'+nombre+'_deteccion.json', 'w') as file:
         json.dump(a_guardar, file, indent=4)
-    print('Marcadores guardados en formato json')       
+    
+    if len(a_guardar['caras']) != 0:
+        print('Marcadores guardados en formato json')       
     return
 
 def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json",model_dir = "data"):
     
+    # Cargar modelos
     detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
     landmark_detector  = cv2.face.createFacemarkLBF()
     landmark_detector.loadModel(model_dir+"/LFBmodel.yaml")
@@ -25,10 +28,13 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
     
     for imagen in imagenes: 
         
+        #Sacr la extencion del tipo de imagen al nombre del archivo
         nombre_j = imagen[:imagen.rfind('.')]
         
-        #print("archivo: "+nombre_j)
+        print('')
+        print("archivo: "+nombre_j)
         
+        #Abrir imagen
         input_fname = os.path.join(input_dir, str(imagen))
         frame = cv2.imread(input_fname)
     

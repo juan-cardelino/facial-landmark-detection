@@ -37,21 +37,18 @@ def rotacion(a, cos, sen):
 
 def get_best_ellipse_radius(puntos, angulo):
     aux1 = np.mean(puntos, axis=0)
+    aux2 = np.concatenate((puntos[0:1], puntos[3:4], [np.mean(puntos[1:3], axis=0)], [np.mean(puntos[4:6], axis=0)]))
+    aux3 = aux2 - aux1
+    aux4 = []
+    for i in aux3:
+        aux4.append(norma(i))
     
-    aux2 = puntos - aux1
-    aux3 = []
-    for i in aux2:
-        aux3.append(norma(i))
-    
-    aux4 = np.concatenate((aux3[:1], aux3[3:4]))
-    aux4 = np.mean(aux4)
-    aux51 = np.mean(puntos[1:3], axis=0)
-    aux52 = np.mean(puntos[4:6], axis=0)
-    aux5 = np.mean([norma(aux51-aux1), norma(aux52-aux1)])
+    aux5 = np.mean(aux4[0:2])
+    aux6 = np.mean(aux4[2:4])
     salida = {
             'center': aux1.tolist(),
-            'major': aux4,
-            'ratio': aux5 / aux4,
+            'major': aux5,
+            'ratio': aux6 / aux5,
             'rotation': angulo
         }
     return salida
