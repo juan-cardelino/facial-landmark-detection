@@ -8,3 +8,5 @@ Json*
 face-detect.jpg
 face-processed.jpg
 detected/*
+video.avi
+video-detect.jpg

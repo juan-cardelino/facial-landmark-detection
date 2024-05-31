@@ -56,13 +56,15 @@ else:
     print("Landmark detection model downloaded")
 
 if (os.path.isdir('input')):
-    print("File input already exists")
+    print("Folder input already exists")
 else:
     os.mkdir('input')
-    print("File input created")
+    print("Folder input created")
         
 if (os.path.isdir('detected')):
-    print("file detected already exists")
+    print("Folder detected already exists")
 else:
     os.mkdir('detected')
-    print("File detected created")
+    print("Folder detected created")
+
+print("All models ready")

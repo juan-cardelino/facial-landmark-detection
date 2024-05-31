@@ -288,7 +288,7 @@ if 0:
     #print(np.mean(aux, axis=1))
 
 #Prueba leer de ventna de comando
-if 1:
+if 0:
     # input
     print("inserte primer numero a sumar:")
     num1 = int(input())
@@ -299,3 +299,21 @@ if 1:
     # printing the sum in intager
     print("el resultado de la suma es:")
     print(num1 + num2)
+
+if 1:
+    cap = cv2.VideoCapture("video.avi")
+
+    print(cap.isOpened())
+    while cap.isOpened():
+    
+        ret, frame = cap.read()
+    
+        print(ret)
+    
+        if ret:
+            cv2.imshow("image", frame)
+            if cv2.waitKey(30) == ord('q'):
+                break
+        else: break
+        
+    cv2.destroyAllWindows() 
