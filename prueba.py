@@ -207,7 +207,7 @@ if 0:
     print(type(puntos[0]))
     print(puntos[0])
 
-#Compara elipse conica y elipse en base a radio     
+#Compara elipse conica y elipse en base a radio utilizando error relativo (tomando  elipse como teorico) 
 if 0:
     file = 'FFHQ Json'
     datos = os.listdir(file)
@@ -288,7 +288,7 @@ if 0:
     #print(np.mean(aux, axis=1))
 
 #Prueba leer de ventna de comando
-if 0:
+if 1:
     # input
     print("inserte primer numero a sumar:")
     num1 = int(input())
@@ -300,20 +300,14 @@ if 0:
     print("el resultado de la suma es:")
     print(num1 + num2)
 
-if 1:
+# Probar correr un video
+if 0:
     cap = cv2.VideoCapture("video.avi")
-
-    print(cap.isOpened())
     while cap.isOpened():
-    
         ret, frame = cap.read()
-    
-        print(ret)
-    
         if ret:
             cv2.imshow("image", frame)
             if cv2.waitKey(30) == ord('q'):
                 break
-        else: break
-        
+        else: break  
     cv2.destroyAllWindows() 
