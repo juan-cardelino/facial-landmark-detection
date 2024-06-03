@@ -3,7 +3,7 @@
 This prorgam calculates facial features from an image. It fist detects faces and facial landmarks on a given image.
 
 <p align="center">
-    <img src=Read1.jpg width = "75%">
+    <img src=Readme_images/Read1.jpg width = "75%">
 </p>
 
 Then uses the landmarks to perform the necesary calculations to obtain facial features
@@ -59,17 +59,17 @@ The landmarks found in the previous stage are use to perfomr the fetures calcula
 
 ### Eyes centroids
 <p align="center">
-    <img src=Read2.jpg width = "50%">
+    <img src=Readme_images/Read2.jpg width = "50%">
 </p>
 
 ### Eyes-forhead distance
 <p align="center">
-    <img src=Read3.jpg width = "50%">
+    <img src=Readme_images/Read3.jpg width = "50%">
 </p>
 
 ### Eyes-mouth distance
 <p align="center">
-    <img src=Read4.jpg width = "50%">
+    <img src=Readme_images/Read4.jpg width = "50%">
 </p>
 
 ## Credits
