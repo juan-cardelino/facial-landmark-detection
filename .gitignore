@@ -5,9 +5,4 @@ json_prueba.py
 FFHQ*
 __pycache__*
 Json*
-face-detect.jpg
-face-processed.jpg
 detected/*
-video.avi
-video-detect.jpg
-video_prueba.avi
