@@ -1,6 +1,4 @@
 import cv2
-import numpy as np
-import procesamiento as pr
 import elipse
 
 def graficar(frame, a, color, thickness):

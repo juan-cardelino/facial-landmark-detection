@@ -43,7 +43,7 @@ while webcam_cap.isOpened():
     
 
         # save last instance of detected image
-        cv2.imwrite('Output/video-detect.jpg', frame)    
+        cv2.imwrite('output/video-detect.jpg', frame)    
     
         # Show image
         cv2.imshow("frame", cv2.resize(frame,(1600,800)))

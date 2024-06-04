@@ -7,7 +7,7 @@ ret, frame = webcam_cap.read()
 h, w = frame.shape[:2]
 
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter('Output/video.avi',fourcc, 60, (w,h))
+out = cv2.VideoWriter('output/video.avi',fourcc, 60, (w,h))
 
 iter = 0
 while webcam_cap.isOpened():

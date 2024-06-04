@@ -16,14 +16,18 @@ print("fin etapa 1")
 print("")
 #Etapa 2 realizar los calculos
 print("Inicio etapa 2")
-imagenes = os.listdir("detected")
+imagenes = []
+for i in os.listdir("Json"):
+    # Se identifica si el json es de deteccion, si es se continua
+    if i[-14:] == "deteccion.json":
+        imagenes.append(i[:-15])
 max_caras = 1
 
 for imagen in imagenes:
         
         if verbose >= 1:
-            nombre_j = imagen[:imagen.rfind('.')]
-            ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(nombre_j, max_caras = max_caras)
+            #nombre_j = imagen[:imagen.rfind('.')]
+            ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras = max_caras)
 
             for i in range(cant_caras):
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(ojoder[i], ojoizq[i], frente[i], boca[i])
@@ -31,8 +35,8 @@ for imagen in imagenes:
 
                 #Almacenamiento estructurado
                 if i == 0:
-                    pr.guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], nombre_j)
-                    print('mejor cara guardada en '+nombre_j+'.json')
+                    pr.guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen)
+                    print('mejor cara guardada en '+imagen+'.json')
 
 print("fin etapa 2")
 print("")

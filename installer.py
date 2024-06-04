@@ -1,6 +1,8 @@
 import os
 import urllib.request as urlreq
 
+print("Downloading models")
+
 # location of the models
 data_dir = "data"
     
@@ -43,7 +45,7 @@ LBFmodel_file = "data/" + LBFmodel
 if (os.path.isdir('data')):
     # check if Landmark detection model is in data directory
     if (LBFmodel in os.listdir('data')):
-        print("Landmark detection model exists")
+        print("Landmark detection model already exists")
     else:
         # download file from url and save locally as haarcascade_frontalface_alt2.xml
         urlreq.urlretrieve(LBFmodel_url, LBFmodel_file)
@@ -55,11 +57,21 @@ else:
     urlreq.urlretrieve(LBFmodel_url, LBFmodel_file)
     print("Landmark detection model downloaded")
 
+print("All models ready \n")
+
+print("Creating folders")
+
 if (os.path.isdir('input')):
     print("Folder input already exists")
 else:
     os.mkdir('input')
     print("Folder input created")
+
+if (os.path.isdir('output')):
+    print("Folder out already exists")
+else:
+    os.mkdir('output')
+    print("Folder output created")
         
 if (os.path.isdir('detected')):
     print("Folder detected already exists")
@@ -67,4 +79,4 @@ else:
     os.mkdir('detected')
     print("Folder detected created")
 
-print("All models ready")
+print("All folders ready")

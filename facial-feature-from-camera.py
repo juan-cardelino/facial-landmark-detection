@@ -23,6 +23,12 @@ landmark_detector.loadModel("data/LFBmodel.yaml")
 print ("checking webcam for connection ...")
 webcam_cap = cv2.VideoCapture(0)
 
+ret, frame = webcam_cap.read()
+
+h, w = frame.shape[:2]
+
+fourcc = cv2.VideoWriter_fourcc(*'MJPG')
+out = cv2.VideoWriter('output/video-from-camera.avi',fourcc, 60, (w,h))
 
 while webcam_cap.isOpened():
     # read webcam
@@ -47,17 +53,21 @@ while webcam_cap.isOpened():
             if 1:
                 centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(landmark[0][36:42], landmark[0][42:48], landmark[0][48:55], landmark[0][17:22])
                 frame = gr.ojos(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0)) 
-            frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
-        
-        # save last instance of detected image
-        cv2.imwrite('Output/face-detect.jpg', frame)    
+            frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))  
     
         # Show image
         cv2.imshow("frame", cv2.resize(frame,(1600,800)))
+        
+        out.write(frame)
 
         # terminate the capture window
         if cv2.waitKey(20) & 0xFF  == ord('q'):
             webcam_cap.release()
+            out.release()
             cv2.destroyAllWindows()
             break
-    else: break
+    else: 
+        webcam_cap.release()
+        out.release()
+        cv2.destroyAllWindows()
+        break
