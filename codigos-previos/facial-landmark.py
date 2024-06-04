@@ -7,7 +7,6 @@ Detection from web cam
 # Import Packages
 import cv2
 import numpy as np
-#import procesamiento as pr
 
 
 # create an instance of the Face Detection Cascade Classifier
@@ -39,14 +38,6 @@ while(True):
         
         lista = landmarks[0]
         print(len(landmarks))
-        if 1:
-            for i in landmarks:
-                centroideder=np.mean(i[0][36:42], axis=0)
-                #centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(i[0][36:42], i[0][42:48], i[0][48:55], i[0][17:22])
-                #cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
-                #cv2.circle(frame, (int(centroideizq[0]), int(centroideizq[1])), 1, (0, 255, 0), 2)
-                #cv2.circle(frame, (int(origen_ojo[0]), int(origen_ojo[1])), 1, (0, 255, 0), 2)
-                #cv2.circle(frame, (int(centroideder[0]), int(centroideder[1])), 1, (0, 255, 0), 2)
 
         for landmark in landmarks:
             for x,y in landmark[0]:
