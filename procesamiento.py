@@ -112,11 +112,11 @@ def calculos(ojoder, ojoizq, frente, boca):
     try:
         valores_elipse_ojoder = elipse.get_best_ellipse_conical(ojoder)
     except:
-        valores_elipse_ojoder = get_best_ellipse_radius(ojoder, angulo_ojo_derecho)
+        valores_elipse_ojoder = get_best_ellipse_radius(ojoder, angulo_cara)
     try:
         valores_elipse_ojoizq = elipse.get_best_ellipse_conical(ojoizq)
     except:
-        valores_elipse_ojoizq = get_best_ellipse_radius(ojoizq, angulo_ojo_izquierdo)
+        valores_elipse_ojoizq = get_best_ellipse_radius(ojoizq, angulo_cara)
         
     return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
 

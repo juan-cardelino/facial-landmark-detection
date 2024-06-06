@@ -4,6 +4,7 @@ import numpy as np
 import procesamiento as pr
 import graficar as gr
 
+verbose = True
 
 # create an instance of the Face Detection Cascade Classifier
 detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
@@ -36,9 +37,9 @@ while webcam_cap.isOpened():
         print(len(landmarks))
         
         for landmark in landmarks:
-            if 1:
-                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(landmark[0][36:42], landmark[0][42:48], landmark[0][48:55], landmark[0][17:22])
-                frame = gr.ojos(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0)) 
+            if verbose:
+                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(landmark[0][36:42], landmark[0][42:48], landmark[0][17:27], landmark[0][48:68])
+                frame = gr.ojos(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0))
             frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
     
 

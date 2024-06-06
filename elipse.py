@@ -132,6 +132,9 @@ def cart_to_pol(coeffs):
     if den > 0:
         raise ValueError('coeffs do not represent an ellipse: b^2 - 4ac must'
                          ' be negative!')
+    if np.imag(den)!=0:
+        raise ValueError('b^2 - 4ac is complex')
+    
 
     # The location of the ellipse centre.
     x0, y0 = (c*d - b*f) / den, (a*f - b*d) / den
@@ -174,16 +177,6 @@ def get_best_ellipse_conical(points):
 
     x, y = extraer_x_e_y(points)
     tmp = fit_ellipse(extraer_x_e_y(points))
-    
-    a = tmp[0]
-    b = tmp[1] / 2
-    c = tmp[2]
-    
-    den = b**2 - a*c
-    #print(den)
-    #if den > 0:
-    #    print("Elipse: Aplicar abrir_ojo")
-    #    tmp = fit_ellipse(extraer_x_e_y(abrir_ojo(points)))
     
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
 
