@@ -9,6 +9,7 @@ import cv2
 import os
 import numpy as np
 import json
+import json_interaction
 
 def guardado(a_guardar, nombre, json_dir = "Json"):
     with open(json_dir+'/'+nombre+'_deteccion.json', 'w') as file:
@@ -51,7 +52,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
         deteccion = {"caras":[], "cantidad de caras":0, "Error":"No se encontraron errores"}
         iter = 0
         for (x,y,w,d) in faces:
-            if verbose >= 4:
+            if verbose >= 5:
                 cv2.rectangle(frame, (x, y), (x+w, y+d), (255,255,255), int(w/64))
             if w>minimo_ancho_de_cara:
                 # Detect landmarks on "gray"
@@ -66,9 +67,9 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
                         cv2.circle(frame, (int(xx), int(yy)), 1, (255, 0, 0), int(w/64))
                         #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)           
    
-                deteccion["caras"] = deteccion["caras"]+[1]
+                #deteccion["caras"] = deteccion["caras"]+[1]
                 deteccion["cantidad de caras"] = deteccion["cantidad de caras"]+1
-                deteccion["caras"][iter] = {
+                deteccion["caras"].append({
                     "boundingbox":[int(x), int(y), int(w), int(d)],
                     "contorno":lista[0:17].tolist(),
                     "ceja derecha":lista[17:22].tolist(),
@@ -79,7 +80,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
                     "ojo izquierdo":lista[42:48].tolist(),
                     "labio superior":lista[48:55].tolist()+lista[61:64].tolist(),
                     "labio inferior":lista[55:61].tolist()+lista[64:68].tolist()
-                }
+                })
                 iter = iter + 1
   
         if len(faces) != 0:
@@ -88,8 +89,9 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
                 deteccion["Error"]="Mejor cara demasiado chica"
                 print("Error: Mejor cara demasiado chica")
             else:
-                cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
-                print(nombre_j+".jpg guardado en "+output_dir)
+                if verbose > 4:
+                    cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
+                    print(nombre_j+".jpg guardado en "+output_dir)
         
             if verbose >= 3:
                 cv2.imshow("frame", cv2.resize(frame,(1000,800)))

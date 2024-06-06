@@ -63,7 +63,7 @@ while webcam_cap.isOpened():
         out.write(frame)
 
         # terminate the capture window
-        if cv2.waitKey(20) & 0xFF  == ord('q'):
+        if cv2.waitKey(30) & 0xFF  == ord('q'):
             webcam_cap.release()
             out.release()
             cv2.destroyAllWindows()

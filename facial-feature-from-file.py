@@ -5,7 +5,7 @@ import procesamiento as pr
 verbose = 1
 minimo_ancho_de_cara = 100
 raw_input = "input"
-archivos = os.listdir(raw_input)[3:5]
+archivos = os.listdir(raw_input)
 detected_output = "detected"
 
 #Etapa 1 encontrar landmarks
@@ -17,7 +17,7 @@ print("")
 #Etapa 2 realizar los calculos
 print("Inicio etapa 2")
 imagenes = []
-for i in os.listdir("Json"):
+for i in os.listdir("Json")[:2]:
     # Se identifica si el json es de deteccion, si es se continua
     if i[-14:] == "deteccion.json":
         imagenes.append(i[:-15])

@@ -50,7 +50,7 @@ while webcam_cap.isOpened():
         cv2.imshow("frame", cv2.resize(frame,(1600,800)))
 
         # terminate the capture window
-        if cv2.waitKey(60) & 0xFF  == ord('q'):
+        if cv2.waitKey(30) & 0xFF  == ord('q'):
             webcam_cap.release()
             cv2.destroyAllWindows()
             break
