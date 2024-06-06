@@ -17,7 +17,7 @@ while webcam_cap.isOpened():
         cv2.imshow('imagen', frame)
         out.write(frame)
     
-        if cv2.waitKey(20) & 0xFF  == ord('q'):
+        if cv2.waitKey(30) & 0xFF  == ord('q'):
             break
     else: 
         break

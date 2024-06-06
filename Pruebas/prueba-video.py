@@ -18,7 +18,7 @@ h, w = frame.shape[:2]
 
 # Formato de video a guardar
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter('video_prueba.avi',fourcc, 60, (w,h))
+out = cv2.VideoWriter('output/video_prueba.avi',fourcc, 60, (w,h))
 
 # Guardar primer frame
 if ret == True:
@@ -57,7 +57,7 @@ out.release()
 cv2.destroyAllWindows()
 
 # Abrir video gaurdado
-cap = cv2.VideoCapture("video_prueba.avi")
+cap = cv2.VideoCapture("output/video_prueba.avi")
 
 # Lista de frame de videos
 video =[]

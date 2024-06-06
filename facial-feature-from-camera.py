@@ -30,6 +30,8 @@ h, w = frame.shape[:2]
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 out = cv2.VideoWriter('output/video-from-camera.avi',fourcc, 60, (w,h))
 
+print("\nPress Q to release\n")
+
 while webcam_cap.isOpened():
     # read webcam
     ret, frame = webcam_cap.read()
@@ -47,7 +49,7 @@ while webcam_cap.isOpened():
             _, landmarks = landmark_detector.fit(gray, np.array(faces))
         except:
             landmarks = []
-        print(len(landmarks))
+        #print(len(landmarks))
 
         for landmark in landmarks:
             if 1:
