@@ -9,7 +9,6 @@ import cv2
 import os
 import numpy as np
 import json
-import json_interaction
 
 def guardado(a_guardar, nombre, json_dir = "Json"):
     with open(json_dir+'/'+nombre+'_deteccion.json', 'w') as file:

@@ -42,4 +42,8 @@ def boundingbox(frame, boundingbox, color):
     m = int(boundingbox[2]/64)
     cv2.rectangle(frame, (boundingbox[0], boundingbox[1]), (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[4]), color, m)
     
-    return frame      
+    return frame
+
+def graficar_letra(frame, letra, coordenada, color, thickness):
+    cv2.putText(frame, letra ,coordenada, cv2.FONT_HERSHEY_SIMPLEX , 1, color, thickness)
+    return frame
