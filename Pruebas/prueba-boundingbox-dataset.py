@@ -21,5 +21,5 @@ print('Primer columna: {}'.format(landmarks.T[0]))
 print('Maximo de la columna: {}'.format(max(landmarks.T[0])))
 print('Minimo de la columna: {}'.format(min(landmarks.T[0])))
 
-# Mostrar boundingbox, formato [(min(x), min(y)), (max(x), max(y))]
-print('\nBoundingbox: {}\n'.format([(min(landmarks.T[0]), min(landmarks.T[0])), (min(landmarks.T[1]), min(landmarks.T[1]))]))
+# Mostrar boundingbox, formato [min(x), min(y), max(x)-min(x), max(y)-min(y)]
+print('\nBoundingbox: {}\n'.format([int(min(landmarks.T[0])), int(min(landmarks.T[1])), int(max(landmarks.T[0])-min(landmarks.T[0])), int(max(landmarks.T[1])-min(landmarks.T[1]))]))
