@@ -59,5 +59,3 @@ cv2.waitKey(0)
 cv2.imshow("color cv2", cv2.resize(np.array([[color_cara_cv2]]), (200, 200)))
 cv2.waitKey(0)
 cv2.destroyAllWindows()
-        
-
