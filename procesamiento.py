@@ -137,7 +137,7 @@ def calculos_alter(ojoder, ojoizq, frente, boca):
     
     return eje_ojos, p_eje_ojos, centrofrente, centroboca
 
-def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json"):
+def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json", json_suffix = 'data'):
     data = {
         "puntos calculados": {
             "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
@@ -165,7 +165,7 @@ def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos,
     }
 
         #Guardado
-    with open(json_dir+'/'+nombre_j+'_data.json', 'w') as file:
+    with open(json_dir+'/'+nombre_j+'_'+json_suffix+'.json', 'w') as file:
         json.dump(data, file, indent=4)
     return
 

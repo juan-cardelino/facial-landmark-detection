@@ -1,0 +1,27 @@
+{
+    "path": {
+        "input_dir": "input",
+        "output_dir": "output",
+        "detect_dir": "detected",
+        "json_dir": "Json",
+        "json_suffix_detect": "deteccion",
+        "json_suffix_data": "data"
+    },
+    "pipeline": {
+        "from_video": {
+            "calculate_feature": 2,
+            "video_file": "output/video.avi",
+            "video_output": "feature-from-video.avi",
+            "video_detect": "video_detect",
+            "saving_format": 1
+        },
+        "from_file": {
+            "etapas": 3,
+            "verbose": 1,
+            "minimo_ancho_de_cara": 100
+        },
+        "camera_to_video":{
+            "video_output": "video.avi"
+        }
+    }
+}

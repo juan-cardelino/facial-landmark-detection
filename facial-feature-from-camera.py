@@ -1,30 +1,24 @@
-''' 
-Facial Landmark Detection in Python with OpenCV
-
-Detection from web cam
-'''
-
 # Import Packages
 import cv2
 import numpy as np
 import procesamiento as pr
-import elipse
 import graficar as gr
 
 guardado = 2
 
-# create an instance of the Face Detection Cascade Classifier
+# Create an instance of the Face Detection Cascade Classifier
 detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
 
-# create an instance of the Facial landmark Detector with the model
+# Create an instance of the Facial landmark Detector with the model
 landmark_detector  = cv2.face.createFacemarkLBF()
 landmark_detector.loadModel("data/LFBmodel.yaml")
 
-# get image from webcam
-print ("checking webcam for connection ...")
-webcam_cap = cv2.VideoCapture(0)
 
-ret, frame = webcam_cap.read()
+print ("checking webcam for connection ...")
+# Get image from video
+video_cap = cv2.VideoCapture("Output/video.avi")
+
+ret, frame = video_cap.read()
 
 h, w = frame.shape[:2]
 
@@ -36,13 +30,13 @@ print("\nPress Q to release\n")
 
 iter = 0
 coordenada = (int(w*.87), int(h*.95))
-while webcam_cap.isOpened():
+while video_cap.isOpened():
     # read webcam
-    ret, frame = webcam_cap.read()
+    ret, frame = video_cap.read()
     
     if ret:
 
-        # convert frame to grayscale
+        # Convert frame to grayscale
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         # Detect faces using the haarcascade classifier on the "grayscale image"
@@ -63,20 +57,22 @@ while webcam_cap.isOpened():
         frame = gr.graficar_letra(frame, str(iter), coordenada, (255, 255, 255), 3)
 
         if guardado > 1:
+            # Save frame on image
             cv2.imwrite('output/camera-detect'+str(iter)+'.jpg', frame)
         if guardado < 3:
+            # Save frame on video
             out.write(frame) 
         
         # Show image
         cv2.imshow("frame", cv2.resize(frame,(1600,800)))
 
-        # terminate the capture window
+        # Terminate the capture window
         if cv2.waitKey(30) & 0xFF  == ord('q'):
             break
     else:break
     iter += 1
 
-webcam_cap.release()
+video_cap.release()
 if guardado < 3:
     out.release()
 cv2.destroyAllWindows()

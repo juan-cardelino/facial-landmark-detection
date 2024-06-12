@@ -10,15 +10,15 @@ import os
 import numpy as np
 import json
 
-def guardado(a_guardar, nombre, json_dir = "Json"):
-    with open(json_dir+'/'+nombre+'_deteccion.json', 'w') as file:
+def guardado(a_guardar, nombre, json_dir = "Json", json_suffix = 'deteccion'):
+    with open(json_dir+'/'+nombre+'_'+json_suffix+'.json', 'w') as file:
         json.dump(a_guardar, file, indent=4)
     
     if len(a_guardar['caras']) != 0:
         print('Marcadores guardados en formato json')       
     return
 
-def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json",model_dir = "data"):
+def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion' ,model_dir = "data"):
     
     # Cargar modelos
     detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
@@ -66,7 +66,6 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
                         cv2.circle(frame, (int(xx), int(yy)), 1, (255, 0, 0), int(w/64))
                         #cv2.putText(frame, str(k) ,(int(x)+10, int(y)), cv2.FONT_HERSHEY_SIMPLEX , 1, (255,0,0), 1)           
    
-                #deteccion["caras"] = deteccion["caras"]+[1]
                 deteccion["cantidad de caras"] = deteccion["cantidad de caras"]+1
                 deteccion["caras"].append({
                     "boundingbox":[int(x), int(y), int(w), int(d)],
@@ -100,7 +99,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
             deteccion["Error"] = "No se detecto ninguna cara"
             print('Error: No se detecto cara')
         deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
-        guardado(deteccion, nombre_j, json_dir=json_dir)
+        guardado(deteccion, nombre_j, json_dir=json_dir, json_suffix=json_suffix)
         #print("")
     #print('Extraccion de landmarks finalizada')
     
