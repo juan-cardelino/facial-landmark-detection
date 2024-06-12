@@ -18,12 +18,12 @@ def guardado(a_guardar, nombre, json_dir = "Json", json_suffix = 'deteccion'):
         print('Marcadores guardados en formato json')       
     return
 
-def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion' ,model_dir = "data"):
+def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion' ,model_dir = "data", resize = (1920,1080)):
     
     # Cargar modelos
-    detector = cv2.CascadeClassifier(model_dir+"/haarcascade_frontalface_alt2.xml")
+    detector = cv2.CascadeClassifier("{}/haarcascade_frontalface_alt2.xml".format(model_dir))
     landmark_detector  = cv2.face.createFacemarkLBF()
-    landmark_detector.loadModel(model_dir+"/LFBmodel.yaml")
+    landmark_detector.loadModel("{}/LFBmodel.yaml".format(model_dir))
     print('modelos cargados')
     
     for imagen in imagenes: 
@@ -31,8 +31,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
         #Sacr la extencion del tipo de imagen al nombre del archivo
         nombre_j = imagen[:imagen.rfind('.')]
         
-        print('')
-        print("archivo: "+nombre_j)
+        print("\narchivo: {}".format(nombre_j))
         
         #Abrir imagen
         input_fname = os.path.join(input_dir, str(imagen))
@@ -46,7 +45,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
         # Detect faces using the haarcascade classifier on the "grayscale image"
         faces = detector.detectMultiScale(gray)
         
-        print("caras detectadas: ",len(faces))
+        print("caras detectadas: {}".format(len(faces)))
 
         deteccion = {"caras":[], "cantidad de caras":0, "Error":"No se encontraron errores"}
         iter = 0
@@ -82,17 +81,17 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
                 iter = iter + 1
   
         if len(faces) != 0:
-            print("cantidad de caras suficientemente grandes: "+str(len(deteccion["caras"])))
+            print("cantidad de caras suficientemente grandes: {}".format(str(len(deteccion["caras"]))))
             if len(deteccion["caras"])==0:
                 deteccion["Error"]="Mejor cara demasiado chica"
                 print("Error: Mejor cara demasiado chica")
             else:
                 if verbose > 4:
-                    cv2.imwrite(output_dir+'/'+nombre_j+'.jpg', frame)
-                    print(nombre_j+".jpg guardado en "+output_dir)
+                    cv2.imwrite('{}/{}.jpg'.format(output_dir, nombre_j), frame)
+                    print("{}.jpg guardado en {}".format(nombre_j ,output_dir))
         
             if verbose >= 3:
-                cv2.imshow("frame", cv2.resize(frame,(1000,800)))
+                cv2.imshow("frame", cv2.resize(frame, resize))
                 cv2.waitKey()
                 cv2.destroyAllWindows()
         else:
@@ -100,7 +99,4 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
             print('Error: No se detecto cara')
         deteccion['caras'] = sorted(deteccion['caras'], key=lambda aux:aux['boundingbox'][2], reverse=True)
         guardado(deteccion, nombre_j, json_dir=json_dir, json_suffix=json_suffix)
-        #print("")
-    #print('Extraccion de landmarks finalizada')
-    
     return
