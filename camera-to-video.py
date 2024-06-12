@@ -7,6 +7,8 @@ with open('configuracion.json') as file:
 
 output_dir = configuracion['path']['output_dir']
 video_output = configuracion['pipeline']['camera_to_video']['video_output']
+video_length = configuracion['pipeline']['camera_to_video']['video_length']
+resize = (configuracion['general']['resize'][0], configuracion['general']['resize'][1])
 
 # Get image from webcam
 webcam_cap = cv2.VideoCapture(0)
@@ -27,7 +29,7 @@ while webcam_cap.isOpened():
     
     if ret == True:
         # Show frame
-        cv2.imshow('imagen', frame)
+        cv2.imshow('imagen', cv2.resize(frame, resize))
         # Save frame in video
         out.write(frame)
 
@@ -37,7 +39,7 @@ while webcam_cap.isOpened():
     else: 
         break
     
-    if iter > 100:
+    if iter > video_length:
         break
     
     iter = iter+1

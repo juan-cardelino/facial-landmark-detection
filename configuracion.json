@@ -1,9 +1,11 @@
 {
     "path": {
+        "model_dir": "data",
         "input_dir": "input",
         "output_dir": "output",
         "detect_dir": "detected",
-        "json_dir": "Json",
+        "aligned_dir": "aligned",
+        "json_dir": "json",
         "json_suffix_detect": "deteccion",
         "json_suffix_data": "data"
     },
@@ -21,7 +23,11 @@
             "minimo_ancho_de_cara": 100
         },
         "camera_to_video":{
-            "video_output": "video.avi"
+            "video_output": "video.avi",
+            "video_length": 100
         }
+    },
+    "general":{
+        "resize": [1920, 1080]
     }
 }
