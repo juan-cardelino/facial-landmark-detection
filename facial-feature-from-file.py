@@ -45,7 +45,7 @@ if etapas > 1:
 
     for imagen in imagenes:
         # Get landmark from json
-        ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras = max_caras)
+        ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras, json_dir)
 
         for i in range(cant_caras):
             # Calculate facial features

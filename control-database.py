@@ -1,6 +1,5 @@
 import os
 import json
-import cv2
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -48,55 +47,75 @@ def plotBGR(a, b, title = ''):
 # Direccion de jsons
 dir_json = 'FFHQ Json'
 
+# Lista de jsons
 archivos_json = os.listdir(dir_json)
 
+# Lista de imagenes procesadas
 detection = []
+# Lista de imagenes con caras
 data = []
 
+# Identificar json procesados y caras detectadas
 for i in archivos_json:
-    # Se identifica si el json es de deteccion, si es se continua
+    # Se identifica si el json es de deteccion
     if i[-14:] == "deteccion.json":
         detection.append(i[:-15])
+    # Se identifica si el json es de data
     elif i[-9:] == "data.json":
         data.append(i[:-10])
 
+# Se muestra la cantidad de jsons
 print("total json: {}".format(len(archivos_json)))
+# Se muestra la cantidad de imagenes procesadas
 print("deteccion: {}".format(len(detection)))
+# Se muestra la cantidad de imagenes con caras detectadas
 print("data: {}".format(len(data)))
+# Se muestra la cantidad de caras no detectadas y el porcentaje sobre el total
 print("{} caras no detectadas, {}%".format((len(detection)-len(data)), round(100*(len(detection)-len(data))/len(detection), 2)))
 
+# Inicio bloque identificar archivos con caras no detectadas
 iter_detected = 0
 iter_data = 0
-no_detected = []
+no_data = []
 
-while iter_detected < len(detection):
+# Se corre un bucle while hasta que el iterador sea mayor o igual al largo de deteccioes
+while iter_detected < len(detection) and iter_data < len(data):
+    # Si el archivo existe en deteccion y data simultaneamente, se sigue con el siguiente
     if detection[iter_detected] == data[iter_data]:
         iter_data = iter_data+1
+    # si no, se guarda la deteccion en no data
     else:
-        no_detected.append(detection[iter_detected])
+        no_data.append(detection[iter_detected])
     iter_detected = iter_detected+1
-        
+    
+# Fin bloque identificar archivos con caras no detectadas
+   
 #print(len(no_detected))
-
-no_detected_filtrada = filtado(no_detected)
-data_filtrada = filtado(data)
 
 # Abrir data set
 with open('ffhq-dataset-v3.json') as archivo:
         ffhq_data = json.load(archivo)
 
-face_color_no_detected = color(no_detected_filtrada, ffhq_data)
+# Buscar indices para el data set    
+no_data_filtrada = filtado(no_data)
+data_filtrada = filtado(data)
+
+# Extraer color cara
+face_color_no_data = color(no_data_filtrada, ffhq_data)
 face_color_data = color(data_filtrada, ffhq_data)
 
-frame_color_no_detected = color(no_detected_filtrada, ffhq_data, 'image color')
+# Extraer color frame
+frame_color_no_data = color(no_data_filtrada, ffhq_data, 'image color')
 frame_color_data = color(data_filtrada, ffhq_data, 'image color')
 
-plotBGR(face_color_data, face_color_no_detected, "face color")
+if 0:
+    # Plotear color cara
+    plotBGR(face_color_data, face_color_no_data, "face color")
+    # Plotear color frame
+    plotBGR(frame_color_data, frame_color_no_data, "frame color")
+    # Plotear color frame - color cara
+    plotBGR(frame_color_data-face_color_data, frame_color_no_data-face_color_no_data, "frame-face color")
 
-plotBGR(frame_color_data, frame_color_no_detected, "frame color")
-
-plotBGR(frame_color_data-face_color_data, frame_color_no_detected-face_color_no_detected, "frame-face color")
-
-plt.show()
+    plt.show()
 
 # No se encontro una forma de predecir si la cara va a ser bien o mal detectada en base al color
