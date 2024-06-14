@@ -64,6 +64,14 @@ for i in archivos_json:
     elif i[-9:] == "data.json":
         data.append(i[:-10])
 
+# Inicio bloque identificar archivos con caras no detectadas
+no_data = []
+
+for i in detection:
+    if not i in data:
+        no_data.append(i)
+# Fin bloque identificar archivos con caras no detectadas
+
 # Se muestra la cantidad de jsons
 print("total json: {}".format(len(archivos_json)))
 # Se muestra la cantidad de imagenes procesadas
@@ -71,26 +79,7 @@ print("deteccion: {}".format(len(detection)))
 # Se muestra la cantidad de imagenes con caras detectadas
 print("data: {}".format(len(data)))
 # Se muestra la cantidad de caras no detectadas y el porcentaje sobre el total
-print("{} caras no detectadas, {}%".format((len(detection)-len(data)), round(100*(len(detection)-len(data))/len(detection), 2)))
-
-# Inicio bloque identificar archivos con caras no detectadas
-iter_detected = 0
-iter_data = 0
-no_data = []
-
-# Se corre un bucle while hasta que el iterador sea mayor o igual al largo de deteccioes
-while iter_detected < len(detection) and iter_data < len(data):
-    # Si el archivo existe en deteccion y data simultaneamente, se sigue con el siguiente
-    if detection[iter_detected] == data[iter_data]:
-        iter_data = iter_data+1
-    # si no, se guarda la deteccion en no data
-    else:
-        no_data.append(detection[iter_detected])
-    iter_detected = iter_detected+1
-    
-# Fin bloque identificar archivos con caras no detectadas
-   
-#print(len(no_detected))
+print("{} caras no detectadas, {}%".format((len(no_data)), round(100*(len(no_data))/len(detection), 2)))
 
 # Abrir data set
 with open('ffhq-dataset-v3.json') as archivo:

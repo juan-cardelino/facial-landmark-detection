@@ -2,27 +2,28 @@ import os
 import json
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn import metrics
 
-def probar_caracteristica(ffhq_data, data_with_feature, no_data_with_feature, caracteristica):
+def probar_caracteristica(ffhq_data, detection_with_feature, data_with_feature, caracteristica, verbose = False):
+    
+    actual = []
+    predicted = []
+    
+    print(len(data_with_feature))
+    
+    for i in detection_with_feature:
+        actual.append(not i in data_with_feature)
+        predicted.append(not ffhq_data[i]['data'][caracteristica])
+    
+    confusion_matrix = metrics.confusion_matrix(predicted, actual)
 
-    tp = 0 # True positive
-    fp = 0 # False positive
-    fn = 0 # False negative
-    tn = 0 # True negative
+    if verbose:
+        cm_display = metrics.ConfusionMatrixDisplay(confusion_matrix = confusion_matrix, display_labels = ["True", "False"])
 
-    for i in data_with_feature:
-        if ffhq_data[i]['data'][caracteristica]:
-            tp += 1
-        else:
-            fp += 1
-
-    for i in no_data_with_feature:
-        if ffhq_data[i]['data'][caracteristica]:
-            fn += 1
-        else:
-            tn += 1
-
-    print("\nVALORES {}:\nTrue positive: {}\nFalse positive: {}\nFalse negative: {}\nTrue negative: {}".format(caracteristica.upper(), tp, fp, fn, tn))
+        cm_display.plot()
+        plt.ylabel(caracteristica)
+        plt.xlabel("Cara detectada")
+        plt.show()
     
     return
 
@@ -56,8 +57,6 @@ print("data: {}".format(len(data)))
 print("{} caras no detectadas, {}%\n".format((len(detection)-len(data)), round(100*(len(detection)-len(data))/len(detection), 2)))
 
 # Inicio bloque identificar archivos con caras no detectadas
-iter_detected = 0
-iter_data = 0
 no_data = []
 
 for i in detection:
@@ -65,7 +64,7 @@ for i in detection:
         no_data.append(i)
 # Fin bloque identificar archivos con caras no detectadas
 
-with open('ffhq-dataset-v4.json') as archivo:
+with open('ffhq-feature-dataset-binarizado.json') as archivo:
         ffhq_data = json.load(archivo)
 
 no_existe_feature = ffhq_data['feature']['no existe']
@@ -89,37 +88,10 @@ for i in no_data:
         
 print('no_data without features: {}, {}%'.format(len(no_data)-len(no_data_with_feature), round(100*(len(no_data)-len(no_data_with_feature))/len(no_data), 2)))
 
+claves = list(ffhq_data["00055"]["data"].keys())
+print(claves)
+caracteristica = claves[6]
 
-caracteristica = 'foreheadOccluded'
+probar_caracteristica(ffhq_data, detection_with_feature, data_with_feature, caracteristica, True)
 
-tp = 0 # True positive
-fp = 0 # False positive
-fn = 0 # False negative
-tn = 0 # True negative
-
-for i in data_with_feature:
-    if ffhq_data[i]['data'][caracteristica]:
-        tp += 1
-    else:
-        fp += 1
-
-for i in no_data_with_feature:
-    if ffhq_data[i]['data'][caracteristica]:
-        fn += 1
-    else:
-        tn += 1
-
-print("\nTrue positive: {}\nFalse positive: {}\nFalse negative: {}\nTrue negative: {}".format(tp, fp, fn, tn))
-
-
-probar_caracteristica(ffhq_data, data_with_feature, no_data_with_feature, caracteristica)
-        
-
-
-
-
-
-
-
-
-
+# sklearn o scipy-learn matriz de conjuncion 

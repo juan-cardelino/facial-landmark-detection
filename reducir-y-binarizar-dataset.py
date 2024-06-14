@@ -28,16 +28,16 @@ for i in detection:
     if len(ffhq_data)>0:
         new_ffhq_data[i]['error'] = 'no'
         new_ffhq_data[i]['data'] = {}
-        new_ffhq_data[i]['data']['headpitch'] = ffhq_data[0]['faceAttributes']['headPose']['pitch']
-        new_ffhq_data[i]['data']['headroll'] = ffhq_data[0]['faceAttributes']['headPose']['roll']
-        new_ffhq_data[i]['data']['headyaw'] = ffhq_data[0]['faceAttributes']['headPose']['yaw']
-        new_ffhq_data[i]['data']['gender'] = ffhq_data[0]['faceAttributes']['gender']
-        new_ffhq_data[i]['data']['glasses'] = ffhq_data[0]['faceAttributes']['glasses']
-        new_ffhq_data[i]['data']['blur'] = ffhq_data[0]['faceAttributes']['blur']['blurLevel']
-        new_ffhq_data[i]['data']['noise'] = ffhq_data[0]['faceAttributes']['noise']['noiseLevel']
-        new_ffhq_data[i]['data']['foreheadOccluded'] = ffhq_data[0]['faceAttributes']['occlusion']['foreheadOccluded']
-        new_ffhq_data[i]['data']['eyeOccluded'] = ffhq_data[0]['faceAttributes']['occlusion']['eyeOccluded']
-        new_ffhq_data[i]['data']['mouthOccluded'] = ffhq_data[0]['faceAttributes']['occlusion']['mouthOccluded']
+        new_ffhq_data[i]['data']['positove headpitch'] = ffhq_data[0]['faceAttributes']['headPose']['pitch'] > 0
+        new_ffhq_data[i]['data']['positive headroll'] = ffhq_data[0]['faceAttributes']['headPose']['roll'] > 0
+        new_ffhq_data[i]['data']['positive headyaw'] = ffhq_data[0]['faceAttributes']['headPose']['yaw'] > 0
+        new_ffhq_data[i]['data']['gender_male'] = ffhq_data[0]['faceAttributes']['gender'] == 'male'
+        new_ffhq_data[i]['data']['not glasses'] = not ffhq_data[0]['faceAttributes']['glasses'] == 'Glasses'
+        new_ffhq_data[i]['data']['not blur'] = ffhq_data[0]['faceAttributes']['blur']['blurLevel'] == "low"
+        new_ffhq_data[i]['data']['not noise'] = ffhq_data[0]['faceAttributes']['noise']['noiseLevel'] == "low"
+        new_ffhq_data[i]['data']['forehead not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['foreheadOccluded']
+        new_ffhq_data[i]['data']['eye not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['eyeOccluded']
+        new_ffhq_data[i]['data']['mouth not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['mouthOccluded']
         existe_json.append(i)
     else:
         new_ffhq_data[i]['error'] = 'si'
@@ -48,6 +48,6 @@ new_ffhq_data['feature'] = {'existe':existe_json, 'no existe': no_existe_json}
 print(len(detection))
 print(len(new_ffhq_data)-1)
 
-with open('ffhq-dataset-v4.json', 'w') as file:
+with open('ffhq-feature-dataset-binarizado.json', 'w') as file:
     json.dump(new_ffhq_data, file, indent=4)
 
