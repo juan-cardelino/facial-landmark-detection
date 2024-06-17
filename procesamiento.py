@@ -69,7 +69,7 @@ def carga_marcadores(archivo, max_caras, json_dir = 'json'):
         labioinf = deteccion["caras"][i]["labio inferior"]
         boca.append(np.array(labiosup+labioinf))
         boundingbox.append(deteccion["caras"][i]["boundingbox"])
-    return ojoder, ojoizq, frente, boca, boundingbox, cant_caras
+    return deteccion['image file'], ojoder, ojoizq, frente, boca, boundingbox, cant_caras
 
 def extraer_x_e_y(a):
     aux = np.array(a).T
@@ -134,8 +134,9 @@ def calculos_alter(ojoder, ojoizq, frente, boca):
     
     return eje_ojos, p_eje_ojos, centrofrente, centroboca
 
-def guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json", json_suffix = 'data'):
+def guardar_marcadores(image_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json", json_suffix = 'data'):
     data = {
+        "image file":image_file,
         "puntos calculados": {
             "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
             "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()

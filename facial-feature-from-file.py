@@ -45,7 +45,7 @@ if etapas > 1:
 
     for imagen in imagenes:
         # Get landmark from json
-        ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras, json_dir)
+        imagen_file, ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras, json_dir)
 
         for i in range(cant_caras):
             # Calculate facial features
@@ -53,7 +53,7 @@ if etapas > 1:
 
             # Structured storage
             if i == 0:
-                pr.guardar_marcadores(centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen, json_dir, json_suffix_data)
+                pr.guardar_marcadores(imagen_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen, json_dir, json_suffix_data)
                 print('mejor cara guardada en {}_{}.json'.format(imagen, json_suffix_data))
 
     print("Fin etapa 2\n")
@@ -72,35 +72,20 @@ if etapas > 2:
             # Append image without suffix
             datas.append(i[:-l_suffix-1])
     
-    # Iter image extension
-    iter_archivos = 0
-    # Iter image, without extension
-    iter_data = 0
-    # Image extension list
-    imagenes = []
-    # While loop to find image extension
-    while iter_archivos < len(archivos) and iter_data < len(datas):
-        if archivos[iter_archivos][:archivos[iter_archivos].rfind('.')] == datas[iter_data]:
-            # Append image extension to list
-            imagenes.append(archivos[iter_archivos])
-            iter_data += 1    
-        iter_archivos += 1
-    
     # Cycle through image extension
-    for imagen in imagenes:
-        # Get frame
-        frame = cv2.imread('{}/{}'.format(raw_input, imagen))
-        # Get image without extension
-        imagen_alter = imagen[:imagen.rfind('.')]
+    for data in datas:
         # Boundingbox and angle from data.json
-        boundingbox, angulo = alinear.extraer_datos_json(imagen_alter, json_dir, json_suffix_data)
+        image_file, boundingbox, angulo = alinear.extraer_datos_json(data, json_dir, json_suffix_data)
+        print(image_file)
+        # Get frame
+        frame = cv2.imread('{}/{}'.format(raw_input, image_file))
         # Rotate frame using boundingbox
         frame_rotated = alinear.rotate(frame, boundingbox, angulo)
         # Cropp frame using boundingbox
         frame_cropped = alinear.cropp(frame_rotated, boundingbox)
         # Save frame in aligned folder
-        cv2.imwrite('{}/{}.jpg'.format(aligned_output, imagen_alter), frame_cropped)
-        print('{} guardada en {} folder'.format(imagen_alter+'jpg', aligned_output))
+        cv2.imwrite('{}/{}.jpg'.format(aligned_output, data), frame_cropped)
+        print('{}.jpg guardada en {} folder'.format(data, aligned_output))
     print("\nFin etapa 3\n")
 
 print("Fin ejecucion")

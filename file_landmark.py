@@ -47,7 +47,7 @@ def find_landmarks(imagenes, minimo_ancho_de_cara = 100, verbose = 1, input_dir=
         
         print("caras detectadas: {}".format(len(faces)))
 
-        deteccion = {"caras":[], "cantidad de caras":0, "Error":"No se encontraron errores"}
+        deteccion = {"image file":imagen, "caras":[], "cantidad de caras":0, "Error":"No se encontraron errores"}
         iter = 0
         for (x,y,w,d) in faces:
             if verbose >= 5:

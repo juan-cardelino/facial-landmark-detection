@@ -4,7 +4,7 @@ import cv2
 def extraer_datos_json(imagen, json_dir, json_suffix):
     with open(json_dir+'/'+imagen+'_'+json_suffix+'.json') as file:
         data = json.load(file)
-    return data['boundingbox'], data['angulos']['cara']
+    return data['image file'], data['boundingbox'], data['angulos']['cara']
 
 def cropp(frame, boundingbox, porcentaje = 0):
         x = boundingbox[0]
