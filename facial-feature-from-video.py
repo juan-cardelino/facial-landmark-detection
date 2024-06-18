@@ -34,7 +34,7 @@ h, w = frame.shape[:2]
 if saving_format < 3:
     # Initialize video format
     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    out = cv2.VideoWriter(output_dir+'/'+video_output, fourcc, 60, (w,h))
+    out = cv2.VideoWriter(output_dir+'/'+video_output, fourcc, 10, (w,h))
     
 print("\nPress Q to release\n")
 
