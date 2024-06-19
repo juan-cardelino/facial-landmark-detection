@@ -25,6 +25,11 @@
         "camera_to_video":{
             "video_output": "video.avi",
             "video_length": 100
+        },
+        "binarizar dataset": {
+            "dataset_dir": "FFHQ_json_features",
+            "dataset_binarizada": "ffhq-feature-dataset-binarizado",
+            "verbose": 1
         }
     },
     "general":{
