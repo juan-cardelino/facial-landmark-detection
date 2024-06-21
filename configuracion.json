@@ -29,7 +29,12 @@
         "binarizar dataset": {
             "dataset_dir": "FFHQ_json_features",
             "dataset_binarizada": "ffhq-feature-dataset-binarizado",
-            "verbose": 1
+            "verbose": 0
+        },
+        "color dataset":{
+            "dataset_input": "ffhq-dataset-v2",
+            "dataset_output": "ffhq-dataset-color",
+            "verbose": 0
         }
     },
     "general":{

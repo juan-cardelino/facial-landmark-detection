@@ -2,6 +2,8 @@ import os
 import json
 import numpy as np
 
+print('\nCargando configuracion\n')
+
 # Initial setup
 with open('configuracion.json') as file:
     configuracion = json.load(file)
@@ -11,53 +13,59 @@ json_dir = configuracion['path']['json_dir']
 json_suffix_detect = configuracion['path']['json_suffix_detect']
 dataset_dir = configuracion['pipeline']['binarizar dataset']['dataset_dir']
 dataset_binarizada_output = configuracion['pipeline']['binarizar dataset']['dataset_binarizada']
+verbose = configuracion['pipeline']['binarizar dataset']['verbose']
 
 # Aca reescribo porque si, en la version final borrarlo
 FFHQ_path = 'FFHQ small'
 json_dir = 'FFHQ Json'
 
-# Lista de json generados de FFHQ
+print('Inicio ejecucion\n')
+
+# List of FFHQ jsons
 archivos = os.listdir(json_dir)
 
-# Lista de las imagenes que fueron procesadas de FFHQ
+# List of processed images
 detection = []
 
-# Separar detecciones del resto de los archivos
+# Length of json soffix
 l_json_suffix_detect = len(json_suffix_detect)+5
+
+# Load processed images
 for i in archivos:
-    # Se identifica si el json es de deteccion, si es se continua
+    # Check if json is from detection list
     if i[-l_json_suffix_detect:] == '{}.json'.format(json_suffix_detect):
         detection.append(i[:-l_json_suffix_detect-1])
 
-# Generar nuevo dataset con direccion de folder de fotos
+# Generate new dataset with images folder direction
 new_ffhq_data = {"FFHQ_path": FFHQ_path}
-# Lista de imagenes con feature
+# List of images with features
 existe_json = []
-# Lista de imagenes sin feature
+# List of images without features
 no_existe_json = []
 
-# Condiciones de pitch, roll y yaw
+# Conditions of pitch, roll and yaw
 pitch_condition = 20
 roll_condition = 12
 yaw_condition = 75
 
-# Control de atributos
-control_atributo = []
+# Key control
+control_clave = []
 
 for i in detection:
-    # Abrir el feature.json correspondiente a la imagen
+    # Open the feature.json of image
     with open('{}/{}.json'.format(dataset_dir, i)) as dataset:
         ffhq_data = json.load(dataset)
-    # Crear un atributo en el diccionario para guardar caracteristicas de la imagen
+    # Create image key
     new_ffhq_data[i] = {}
-    # Verificar si feature.json tiene informacion o no. Los feature.json so listas con diccionarios adentro
+    # Check if feature.json has information or not. The feature.json are lists with dictionaries inside
     if len(ffhq_data)>0:
-        # Guardar que feature.json tiene informacion
+        # Load that feature.json has information
         new_ffhq_data[i]['error'] = False
-        # Generar atributo data para guardar la informacion relevante
+        # Create data key
         new_ffhq_data[i]['data'] = {}
         
-        # Este bloque extrae las caracteristicas que son relevantes y la binariza
+        # This block extracts the features that are relevant and binarizes them
+        # Begin block
         new_ffhq_data[i]['data']['positove headpitch'] = ffhq_data[0]['faceAttributes']['headPose']['pitch'] > 0
         new_ffhq_data[i]['data']['positive headroll'] = ffhq_data[0]['faceAttributes']['headPose']['roll'] > 0
         new_ffhq_data[i]['data']['positive headyaw'] = ffhq_data[0]['faceAttributes']['headPose']['yaw'] > 0
@@ -72,32 +80,34 @@ for i in detection:
         new_ffhq_data[i]['data']['forehead not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['foreheadOccluded']
         new_ffhq_data[i]['data']['eye not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['eyeOccluded']
         new_ffhq_data[i]['data']['mouth not occluded'] = not ffhq_data[0]['faceAttributes']['occlusion']['mouthOccluded']
-        # Fin bloque
+        # End block
         
-        # Guardar imagen en lista de archivos con feature
+        # Load image in images with features list
         existe_json.append(i)
         
-        # Este bloque existe con el fin de hacer pruebas
-        # Devuelve una lista con lo los posibles valores de un tributo en especifico de feature.json
-        atributo = ffhq_data[0]['faceAttributes']['headPose']['yaw']
-        if not atributo in control_atributo:
-            control_atributo.append(atributo)
-        # Fin bloque
+        # Begin test block
+        # Makes a list of the possible values ​​of a specific key from feature.json
+        # Select key
+        clave = ffhq_data[0]['faceAttributes']['headPose']['yaw']
+        if not clave in control_clave:
+            control_clave.append(clave)
+        # End test block
     else:
-        # Se guarda que feature.json no tiene informacion
+        # Load that feature.json dont has information
         new_ffhq_data[i]['error'] = True
-        # Guardar imagen en lista de archivos sin feature
+        # Load image in images without features list
         no_existe_json.append(i)
 
-# Se guarla la lista de archivos con y sin feature en el nuevo json
+# Load images with and without features lists
 new_ffhq_data['feature'] = {'existe':existe_json, 'no existe': no_existe_json}
 
-# Guardar dataset reducido y binarizado
+# Save reduced and binarized dataset
 print('Generando dataset reducido y binarizado')
 with open('{}.json'.format(dataset_binarizada_output), 'w') as file:
     json.dump(new_ffhq_data, file, indent=4)
 
-if 0:
-    print(min(control_atributo), max(control_atributo))
+# Show key control
+if verbose:
+    print(min(control_clave), max(control_clave))
     
-print('Fin ejecucion')
+print('\nFin ejecucion\n')
