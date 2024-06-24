@@ -5,11 +5,11 @@ import procesamiento as pr
 import graficar as gr
 import json
 
-def graph_eje(frame, centroid, axis):
+def graph_eje(frame, centroid, axis, length, color = (255, 255, 255)):
     aux = np.array(axis)
     aux = aux/pr.norma(aux)
-    frame = gr.proyecciones(frame, centroid, aux, int(frame.shape[1]/4), color = (255, 255, 255))
-    frame = gr.proyecciones(frame, centroid, -aux, int(frame.shape[1]/4), color = (255, 255, 255))
+    frame = gr.proyecciones(frame, centroid, aux, length, color = color)
+    frame = gr.proyecciones(frame, centroid, -aux, length, color = color)
     return frame
     
 
@@ -73,12 +73,14 @@ while video_cap.isOpened():
             centroid = np.mean(landmark[0], axis=0)
             # Graph landmars
             frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
+            # Length axis
+            l_axis = int(frame.shape[1]/4)
             # Graph axis 90
-            frame = graph_eje(frame, centroid, [0, 1])
+            frame = graph_eje(frame, centroid, [0, 1], l_axis)
             # Graph axis 30
-            frame = graph_eje(frame, centroid, [1, 2])
+            frame = graph_eje(frame, centroid, [1, 2], l_axis)
             # Graph axis 30
-            frame = graph_eje(frame, centroid, [1, -2])
+            frame = graph_eje(frame, centroid, [1, -2], l_axis)
             # Graph face centroid
             frame = gr.graficar(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
             
