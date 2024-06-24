@@ -12,10 +12,10 @@
     "pipeline": {
         "from_video": {
             "calculate_feature": 2,
-            "video_file": "output/video.avi",
-            "video_output": "feature-from-video.avi",
+            "video_file": "output/video",
+            "video_output": "feature-from-video",
             "video_detect": "video_detect",
-            "saving_format": 1
+            "saving_format": 2
         },
         "from_file": {
             "etapas": 3,
@@ -23,8 +23,12 @@
             "minimo_ancho_de_cara": 100
         },
         "camera_to_video":{
-            "video_output": "video.avi",
+            "video_output": "video",
             "video_length": 100
+        },
+        "camera control":{
+            "roll output": "camera roll",
+            "pitch output": "camera pitch"
         }
     },
     "general":{

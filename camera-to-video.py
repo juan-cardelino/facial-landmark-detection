@@ -19,7 +19,7 @@ h, w = frame.shape[:2]
 
 # Initialize video format
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-out = cv2.VideoWriter(output_dir+'/'+video_output, fourcc, 10, (w,h))
+out = cv2.VideoWriter('{}/{}.avi'.format(output_dir, video_output), fourcc, 10, (w,h))
 
 # Frame number
 iter = 0

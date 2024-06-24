@@ -23,18 +23,21 @@ detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
 landmark_detector  = cv2.face.createFacemarkLBF()
 landmark_detector.loadModel("data/LFBmodel.yaml")
 
-# Get image from video
-video_cap = cv2.VideoCapture(video_file)
+# Get image from video or camera
+if video_file == 0:
+    cap = cv2.VideoCapture(video_file)
+else:
+    cap = cv2.VideoCapture('{}.avi'.format(video_file))
 
 # First frame
-ret, frame = video_cap.read()
+ret, frame = cap.read()
 # Frame shape
 h, w = frame.shape[:2]
 
 if saving_format < 3:
     # Initialize video format
     fourcc = cv2.VideoWriter_fourcc(*'MJPG')
-    out = cv2.VideoWriter(output_dir+'/'+video_output, fourcc, 10, (w,h))
+    out = cv2.VideoWriter('{}/{}.avi'.format(output_dir, video_output), fourcc, 10, (w,h))
     
 print("\nPress Q to release\n")
 
@@ -42,9 +45,9 @@ print("\nPress Q to release\n")
 iter = 0
 # Frame number coordenate
 coordinate = (int(w*.87), int(h*.95))
-while video_cap.isOpened():
+while cap.isOpened():
     # Get frame
-    ret, frame = video_cap.read()
+    ret, frame = cap.read()
     
     if ret:
 
@@ -75,7 +78,7 @@ while video_cap.isOpened():
         # Save frame
         if saving_format > 1:
             # Save frame on image
-            cv2.imwrite(output_dir+'/'+video_detect+str(iter)+'.jpg', frame)
+            cv2.imwrite('{}/{}_{}.jpg'.format(output_dir, video_detect, str(iter)), frame)
         if saving_format < 3:
             # Save frame on video
             out.write(frame) 
@@ -90,7 +93,7 @@ while video_cap.isOpened():
     iter += 1
 
 # Release capture
-video_cap.release()
+cap.release()
 if saving_format < 3:
     out.release()
 cv2.destroyAllWindows()
