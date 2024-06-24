@@ -3,15 +3,16 @@ import json
 import elipse
 import math
 
-def norma(a):
-    return np.sqrt(sum(a*a))
+def norma(v):
+    return np.sqrt(sum(v*v))
 
-def producto_escalar(a, b):
-    return sum(a*b)
+def producto_escalar(u, v):
+    return sum(u*v)
 
-def cambio(vector, eje_u):
-    aux = np.array([eje_u[1], -eje_u[0]])
-    return np.array([sum(vector*eje_u), sum(vector*aux)])
+# Cambio de base, renombrar como: change base
+def cambio(vector, axis):
+    perpendicular_axis = np.array([axis[1], -axis[0]])
+    return np.array([producto_escalar(vector, axis), producto_escalar(vector, perpendicular_axis)])
 
 def proyeccion(u,v):
     return producto_escalar(u,v)/norma(u)
@@ -19,6 +20,7 @@ def proyeccion(u,v):
 def seno(alpha):
     return np.sin(np.arccos(alpha))
 
+# Este no se si fletarlo, no se usa
 def homo_rotacion(v, cos, sen):
     v = np.array([[v[0], v[1], 1],]).T
     t = np.matrix([[cos, -sen, 0], [sen, cos, 0], [0, 0, 1]])
@@ -26,144 +28,169 @@ def homo_rotacion(v, cos, sen):
     w = np.array([w[0][0], w[1][0]])
     return w
 
+# Este tambien se podria fletar
 def rotacion(a, cos, sen):
     aux = []
     for i in a:
         aux.append(homo_rotacion(i, cos, sen))
     return np.array(aux)
 
-def get_best_ellipse_radius(puntos, angulo):
-    aux1 = np.mean(puntos, axis=0)
-    aux2 = np.concatenate((puntos[0:1], puntos[3:4], [np.mean(puntos[1:3], axis=0)], [np.mean(puntos[4:6], axis=0)]))
-    aux3 = aux2 - aux1
-    aux4 = []
-    for i in aux3:
-        aux4.append(norma(i))
+def get_best_ellipse_radius(points, angle):
+    # Get points centroid
+    centroid = np.mean(points, axis=0)
+    # Reorganize point
+    reorganized_points = np.concatenate((points[0:1], points[3:4], [np.mean(points[1:3], axis=0)], [np.mean(points[4:6], axis=0)]))
+    # Get point-centroid distance
+    distance = reorganized_points - centroid
+    # Create norm list
+    norms = []
+    for i in distance:
+        # Load norm list
+        norms.append(norma(i))
     
-    aux5 = np.mean(aux4[0:2])
-    aux6 = np.mean(aux4[2:4])
-    salida = {
-            'center': aux1.tolist(),
-            'major': aux5,
-            'ratio': aux6 / aux5,
-            'rotation': angulo
+    # Calculate mayor axis
+    mayor_axis = np.mean(norms[0:2])
+    # Calculate minor axis
+    minor_axis = np.mean(norms[2:4])
+    # Create output dict
+    output = {
+            'center': centroid.tolist(),
+            'major': mayor_axis,
+            'ratio': minor_axis / mayor_axis,
+            'rotation': angle
         }
-    return salida
+    return output
 
-def carga_marcadores(archivo, max_caras, json_dir = 'json'):
-    with open('{}/{}_deteccion.json'.format(json_dir, archivo)) as archivo:
-        deteccion = json.load(archivo)
-    cant_caras = min(deteccion["cantidad de caras"], max_caras)
-    ojoder = []
-    ojoizq = []
-    frente = []
-    boca = []
+def carga_marcadores(json_file, max_faces, json_dir = 'json'):
+    with open('{}/{}_deteccion.json'.format(json_dir, json_file)) as file:
+        detection = json.load(file)
+    # Calculate faces to get landmarks
+    face_amount = min(detection["cantidad de caras"], max_faces)
+    # Create output lists
+    right_eye = []
+    left_eye = []
+    forehead = []
+    mouth = []
     boundingbox = []
-    for i in range(cant_caras):
-        ojoder.append(np.array(deteccion["caras"][i]["ojo derecho"]))
-        ojoizq.append(np.array(deteccion["caras"][i]["ojo izquierdo"]))
-        cejader = deteccion["caras"][i]["ceja derecha"][2:-1]
-        cejaizq = deteccion["caras"][i]["ceja izquierda"][1:-2]
-        frente.append(np.array(cejader + cejaizq))
-        labiosup = deteccion["caras"][i]["labio superior"]
-        labioinf = deteccion["caras"][i]["labio inferior"]
-        boca.append(np.array(labiosup+labioinf))
-        boundingbox.append(deteccion["caras"][i]["boundingbox"])
-    return deteccion['image file'], ojoder, ojoizq, frente, boca, boundingbox, cant_caras
+    for i in range(face_amount):
+        # Load output lists
+        right_eye.append(np.array(detection["caras"][i]["ojo derecho"]))
+        left_eye.append(np.array(detection["caras"][i]["ojo izquierdo"]))
+        right_eyebrow = detection["caras"][i]["ceja derecha"][2:-1]
+        left_eyebrow = detection["caras"][i]["ceja izquierda"][1:-2]
+        forehead.append(np.array(right_eyebrow + left_eyebrow))
+        labiosup = detection["caras"][i]["labio superior"]
+        labioinf = detection["caras"][i]["labio inferior"]
+        mouth.append(np.array(labiosup+labioinf))
+        boundingbox.append(detection["caras"][i]["boundingbox"])
+    return detection['image file'], right_eye, left_eye, forehead, mouth, boundingbox, face_amount
 
 def extraer_x_e_y(a):
+    # Get transposed array
     aux = np.array(a).T
+    # Return first two columns
     return aux[0], aux[1]
 
-def calculos(ojoder, ojoizq, frente, boca):
-    #centoride ojos
-    centroideder = np.mean(ojoder, axis= 0)
-    centroideizq = np.mean(ojoizq, axis= 0)
+def calculos(right_eye, left_eye, forehead, mouth):
+    # Calculate eye centroids
+    right_eye_centroid = np.mean(right_eye, axis= 0)
+    left_eye_centroid = np.mean(left_eye, axis= 0)
     
-    distojos = norma(centroideder-centroideizq)
-    unidad = (norma(ojoder[0]-ojoder[3])+norma(ojoizq[0]-ojoizq[3]))/2  # FIXME: usa nombres coherentes con la documentación
+    # Calculate eyes centorids distance
+    eye_distance = norma(right_eye_centroid-left_eye_centroid)
+    # Calculate face unit from eyes
+    unit = (norma(right_eye[0]-right_eye[3])+norma(left_eye[0]-left_eye[3]))/2
     
-    #origen y ejes
-    origen_ojo = (centroideder+centroideizq)/2
-    eje_ojos = np.abs(centroideder-centroideizq)
-    eje_ojos = eje_ojos/norma(eje_ojos)
-    p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
+    # Calculate eyes origin from centroids
+    eyes_origin = (right_eye_centroid+left_eye_centroid)/2
+    # Calculate eyes axis
+    eyes_axis = np.abs(right_eye_centroid-left_eye_centroid)
+    # Normalize eyes axis
+    eyes_axis = eyes_axis/norma(eyes_axis)
+    # Calculate eyes perpendicular axis
+    p_eyes_axis = np.array([eyes_axis[1], -eyes_axis[0]])
     
-    #Angulo cara
-    angulo_cara = math.degrees(math.atan2(eje_ojos[1],eje_ojos[0]))
+    # Calculate face angle
+    face_angle = math.degrees(math.atan2(eyes_axis[1], eyes_axis[0]))
     
-    #Proporciones
-    centrofrente = np.mean(frente, axis=0)
-    centroboca = np.mean(boca, axis=0)
+    # Calculate forehead and mouth centroids
+    forehead_centroid = np.mean(forehead, axis=0)
+    mouth_centroid = np.mean(mouth, axis=0)
 
-    distfrente_ojo = np.abs(producto_escalar(centrofrente-origen_ojo, p_eje_ojos))
-    distfrente_ojo_u = np.abs(producto_escalar(centrofrente-origen_ojo, eje_ojos))
-    distboca_ojo = np.abs(producto_escalar(centroboca-origen_ojo, p_eje_ojos))
-    distboca_ojo_u = np.abs(producto_escalar(centroboca-origen_ojo, eje_ojos))
+    # Calculate forehead eyes distance
+    forhead_eyes_distance = np.abs(producto_escalar(forehead_centroid-eyes_origin, p_eyes_axis))
+    forhead_eyes_distance_u = np.abs(producto_escalar(forehead_centroid-eyes_origin, eyes_axis))
+    # Calculate mouth eyes distance
+    mouth_eyes_distance = np.abs(producto_escalar(mouth_centroid-eyes_origin, p_eyes_axis))
+    mouth_eyes_distance_u = np.abs(producto_escalar(mouth_centroid-eyes_origin, eyes_axis))
     
-    #angulos ojos
-    angulo_ojo_derecho = np.arcsin(proyeccion(ojoder[3]-ojoder[0], p_eje_ojos))
-    angulo_ojo_izquierdo = np.arcsin(proyeccion(ojoizq[3]-ojoizq[0], p_eje_ojos))
+    # Eyes angle
+    right_eye_angle = np.arcsin(proyeccion(right_eye[3]-right_eye[0], p_eyes_axis))
+    left_eye_angle = np.arcsin(proyeccion(left_eye[3]-left_eye[0], p_eyes_axis))
     
-    #Forma ojos
+    # Eyes shape
     try:
-        valores_elipse_ojoder = elipse.get_best_ellipse_conical(ojoder)
+        ellipse_values_right_eye = elipse.get_best_ellipse_conical(right_eye)
     except:
-        valores_elipse_ojoder = get_best_ellipse_radius(ojoder, angulo_cara)
+        ellipse_values_right_eye = get_best_ellipse_radius(right_eye, face_angle)
     try:
-        valores_elipse_ojoizq = elipse.get_best_ellipse_conical(ojoizq)
+        ellipse_values_left_eye = elipse.get_best_ellipse_conical(left_eye)
     except:
-        valores_elipse_ojoizq = get_best_ellipse_radius(ojoizq, angulo_cara)
+        ellipse_values_left_eye = get_best_ellipse_radius(left_eye, face_angle)
         
-    return centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq
+    return right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye
 
-def calculos_alter(ojoder, ojoizq, frente, boca):
-    #centoride ojos
-    centroideder = np.mean(ojoder, axis= 0)
-    centroideizq = np.mean(ojoizq, axis= 0)
+def calculos_alter(right_eye, left_eye, forehead, mouth):
+    # Calculate eyes centroids
+    right_eye_centroid = np.mean(right_eye, axis= 0)
+    left_eye_centroid = np.mean(left_eye, axis= 0)
     
-    #origen y ejes
-    origen_ojo = (centroideder+centroideizq)/2
-    eje_ojos = np.abs(centroideder-centroideizq)
-    eje_ojos = eje_ojos/norma(eje_ojos)
-    p_eje_ojos = np.array([eje_ojos[1], -eje_ojos[0]])
+    # Calculate eyes origin from centroids
+    eyes_origin = (right_eye_centroid+left_eye_centroid)/2
+    # Calculate eyes axis
+    eyes_axis = np.abs(right_eye_centroid-left_eye_centroid)
+    # Normalize eyes axis
+    eyes_axis = eyes_axis/norma(eyes_axis)
+    # Calculate eyes perpendicular axis
+    p_eyes_axis = np.array([eyes_axis[1], -eyes_axis[0]])
     
-    #Proporciones
-    centrofrente = np.mean(frente, axis=0)
-    centroboca = np.mean(boca, axis=0)
+    # Calculate forehead and mouth centroids
+    forehead_centroid = np.mean(forehead, axis=0)
+    mouth_centroid = np.mean(mouth, axis=0)
     
-    return eje_ojos, p_eje_ojos, centrofrente, centroboca
+    return eyes_axis, p_eyes_axis, forehead_centroid, mouth_centroid
 
-def guardar_marcadores(image_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox, nombre_j, json_dir = "Json", json_suffix = 'data'):
+def guardar_marcadores(image_file, right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye, boundingbox, json_name, json_dir = "Json", json_suffix = 'data'):
+    # Create data dict
     data = {
         "image file":image_file,
         "puntos calculados": {
-            "ojo derecho":((centroideder-origen_ojo)/unidad).tolist(),
-            "ojo izquierdo":((centroideizq-origen_ojo)/unidad).tolist()
+            "ojo derecho":((right_eye_centroid-eyes_origin)/unit).tolist(),
+            "ojo izquierdo":((left_eye_centroid-eyes_origin)/unit).tolist()
         },
         "medidas":{
-            "unidad":unidad,
-            "distancia ojos":distojos/unidad,
-            "distancia ojo-frente":distfrente_ojo/unidad,
-            "distancia ojo-boca":distboca_ojo/unidad
+            "unidad":unit,
+            "distancia ojos":eye_distance/unit,
+            "distancia ojo-frente":forhead_eyes_distance/unit,
+            "distancia ojo-boca":mouth_eyes_distance/unit
         },
         "proporcion":{
-            "frente-boca": (distboca_ojo+distfrente_ojo)/distboca_ojo
+            "frente-boca": (mouth_eyes_distance+forhead_eyes_distance)/mouth_eyes_distance
         },
         "angulos":{
-            "cara":angulo_cara,
-            "ojo derecho": angulo_ojo_derecho,
-            "ojo izquierdo": angulo_ojo_izquierdo
+            "cara":face_angle,
+            "ojo derecho": right_eye_angle,
+            "ojo izquierdo": left_eye_angle
         },
         "forma ojos":{
-            "ratio ojo derecho":valores_elipse_ojoder["ratio"],
-            "ratio ojo izquierdo":valores_elipse_ojoizq["ratio"]
+            "ratio ojo derecho":ellipse_values_right_eye["ratio"],
+            "ratio ojo izquierdo":ellipse_values_left_eye["ratio"]
         },
         "boundingbox":boundingbox
     }
 
-        #Guardado
-    with open(json_dir+'/'+nombre_j+'_'+json_suffix+'.json', 'w') as file:
+    # Save data dict in json
+    with open('{}/{}_{}.json'.format(json_dir, json_name, json_suffix), 'w') as file:
         json.dump(data, file, indent=4)
     return
 

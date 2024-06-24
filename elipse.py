@@ -4,13 +4,20 @@ import numpy as np
 from scipy.optimize import minimize
 
 def extraer_x_e_y(a):
+    # Get transposed array
     aux = np.array(a).T
+    # Return first two columns
     return aux[0], aux[1]
 
+# renombarar a open eyes
 def abrir_ojo(puntos):
+    # Get centroid
     aux1 = np.mean(puntos, axis=0)
+    # Take out eye corner
     aux2 = np.concatenate((puntos[1:3],puntos[4:6]))
+    # Increase landmark-centroid distance by 0.5
     aux3 = (aux2-aux1)*1.5+aux1
+    # Regroup landmarks
     aux4 = np.concatenate((puntos[0:1],aux3,puntos[3:4]))
     return aux4
 
@@ -24,7 +31,6 @@ def get_ellipse(center, major, ratio, rotation, n_points):
     xy = [(x + center[0], y + center[1]) for x, y in xy]
     return xy
 
-
 def get_random_ellipse(center, n_points):
 
     major = random.uniform(40, 300)
@@ -33,7 +39,6 @@ def get_random_ellipse(center, n_points):
 
     xy = get_ellipse(center, major, ratio, rotation, n_points)
     return xy
-
 
 def get_best_ellipse(points):
 
@@ -73,7 +78,6 @@ def get_best_ellipse(points):
     }
     return out
 
-
 # taken from https://scipython.com/blog/direct-linear-least-squares-fitting-of-an-ellipse/
 
 def fit_ellipse(points):
@@ -103,7 +107,6 @@ def fit_ellipse(points):
     con = 4 * eigvec[0]* eigvec[2] - eigvec[1]**2
     ak = eigvec[:, np.nonzero(con > 0)[0]]
     return np.concatenate((ak, T @ ak)).ravel()
-
 
 def cart_to_pol(coeffs):
     """
@@ -172,10 +175,8 @@ def cart_to_pol(coeffs):
 
     return x0, y0, ap, bp, e, phi
 
-
 def get_best_ellipse_conical(points):
 
-    x, y = extraer_x_e_y(points)
     tmp = fit_ellipse(extraer_x_e_y(points))
     
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
