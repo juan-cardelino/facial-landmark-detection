@@ -29,6 +29,16 @@
         "camera control":{
             "roll output": "camera roll",
             "pitch output": "camera pitch"
+        },
+        "binarizar dataset": {
+            "dataset_dir": "FFHQ_json_features",
+            "dataset_binarizada": "ffhq-feature-dataset-binarizado",
+            "verbose": 0
+        },
+        "color dataset":{
+            "dataset_input": "ffhq-dataset-v2",
+            "dataset_output": "ffhq-dataset-color",
+            "verbose": 0
         }
     },
     "general":{
