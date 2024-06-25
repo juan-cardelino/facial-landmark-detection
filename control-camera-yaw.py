@@ -91,7 +91,8 @@ while video_cap.isOpened():
             graph_eje(frame, [centroid[0], 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
             
             # Calculate angle
-            angles.append(max_x+min_x-2*centroid[0])
+            # se utiliza tangete suponiendo adyacente la mitad de largo total de la cara
+            angles.append(round(np.arctan((max_x+min_x-2*centroid[0])/((max_x-min_x)/2))*180/np.pi, 1))
         
         # Graph frame number
         frame = gr.graficar_letra(frame, str(iter), coordinate, (255, 255, 255), 3)
