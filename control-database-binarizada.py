@@ -129,13 +129,26 @@ for prueba in pruebas:
     fp = prueba[1][1]
     fn = prueba[1][2]
     tn = prueba[1][3]
+    
+    # Calculate positive precision
+    positive_precision = tp/(tp+fp)
+    # Calculate negative precision
+    negative_precision = tn/(tn+fn)
+    # Calculate sensitivity
+    sensitivity = tp/(tp+fn)
     # Calculate accuracy
     accuracy = (tp+tn)/(tp+fp+fn+tn)
+    # calculate true acurracy
+    true_accuracy = positive_precision
+    # Calculate false accuracy
+    false_accuracy = fn/(tn+fn)
     # Show attribute
     print('\n{}'.format(atributo.upper()))
     # Show confusion matrix
     print('True Positive: {}\nFalse Positive: {}\nFalse Negative: {}\nTrue Negative: {}'.format(tp, fp, fn, tn))
-    # Show accuracy
-    print("Accuracy: {}%".format(round(accuracy*100, 1)))
+    # Show accuracys
+    print('Global accuracy: {}%\nTrue acurracy: {}%\nFalse accurracy {}%'.format(round(accuracy*100, 1), round(true_accuracy*100, 1), round(false_accuracy*100, 1)))
+    # Show positive precision and sensitivity
+    print('Positive precision: {}%\nSensitivity: {}%'.format(round(positive_precision*100, 1), round(sensitivity*100, 1)))
 
 print('\nFin ejecucion\n')
