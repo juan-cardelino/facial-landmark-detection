@@ -1,5 +1,7 @@
 import cv2
+import numpy as np
 import elipse
+import procesamiento as pr
 
 def graficar(frame, a, color, thickness):
     for x, y in a:
@@ -44,6 +46,13 @@ def boundingbox(frame, boundingbox, color):
     
     return frame
 
-def graficar_letra(frame, letra, coordenada, color, thickness):
+def graph_letter(frame, letra, coordenada, color, thickness):
     cv2.putText(frame, letra ,coordenada, cv2.FONT_HERSHEY_SIMPLEX , 1, color, thickness)
+    return frame
+
+def graph_axis(frame, origin, axis, length, color = (255, 255, 255)):
+    aux = np.array(axis)
+    aux = aux/pr.norma(aux)
+    frame = proyecciones(frame, origin, aux, length, color = color)
+    frame = proyecciones(frame, origin, -aux, length, color = color)
     return frame

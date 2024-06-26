@@ -8,12 +8,12 @@ with open('configuracion.json') as file:
 output_dir = configuracion['path']['output_dir']
 video_output = configuracion['pipeline']['camera_to_video']['video_output']
 video_length = configuracion['pipeline']['camera_to_video']['video_length']
-resize = (configuracion['general']['resize'][0], configuracion['general']['resize'][1])
+resize = configuracion['general']['resize']
 
 # Get image from webcam
-webcam_cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 # First frame
-ret, frame = webcam_cap.read()
+ret, frame = cap.read()
 # Frame shape
 h, w = frame.shape[:2]
 
@@ -21,11 +21,14 @@ h, w = frame.shape[:2]
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 out = cv2.VideoWriter('{}/{}.avi'.format(output_dir, video_output), fourcc, 10, (w,h))
 
+# Show break key
+print("\nPress Q to release\n")
+
 # Frame number
 iter = 0
-while webcam_cap.isOpened():
+while cap.isOpened():
     # Get frame
-    ret, frame = webcam_cap.read()
+    ret, frame = cap.read()
     
     if ret == True:
         # Show frame
@@ -43,10 +46,8 @@ while webcam_cap.isOpened():
         break
     
     iter = iter+1
-    # Show frame number
-    print(iter)
 
 # Release capture
-webcam_cap.release()
+cap.release()
 out.release()
 cv2.destroyAllWindows()

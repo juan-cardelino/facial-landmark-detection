@@ -23,10 +23,12 @@
             "minimo_ancho_de_cara": 100
         },
         "camera_to_video":{
+            "cap_input": 0,
             "video_output": "video",
             "video_length": 100
         },
         "camera control":{
+            "cap_input": 0,
             "roll output": "camera roll",
             "pitch output": "camera pitch"
         },
@@ -42,6 +44,8 @@
         }
     },
     "general":{
-        "resize": [1920, 1080]
+        "resize": [1920, 1080],
+        "face detection model": "haarcascade_frontalface_alt2.xml",
+        "landmark detection model": "LFBmodel.yaml"
     }
 }

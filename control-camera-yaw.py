@@ -4,38 +4,34 @@ import numpy as np
 import procesamiento as pr
 import graficar as gr
 import json
-
-def graph_eje(frame, origin, axis, length, color = (255, 255, 255)):
-    aux = np.array(axis)
-    aux = aux/pr.norma(aux)
-    frame = gr.proyecciones(frame, origin, aux, length, color = color)
-    frame = gr.proyecciones(frame, origin, -aux, length, color = color)
-    return frame
     
-
 # Initial setup
 with open('configuracion.json') as file:
     configuracion = json.load(file)
     
 calculate_feature = configuracion['pipeline']['from_video']['calculate_feature']
 saving_format = configuracion['pipeline']['from_video']['saving_format']
-video_file = 0
+cap_input = configuracion['pipeline']['camera control']['cap_input']
 video_output = configuracion['pipeline']['camera control']['pitch output']
 video_detect = configuracion['pipeline']['from_video']['video_detect']
 output_dir = configuracion['path']['output_dir']
+model_dir = configuracion['path']['model_dir']
+face_detection_model = configuracion['general']['face detection model']
+landmark_detection_model = configuracion['general']['landmark detection model']
+resize = configuracion['general']["resize"]
 
-# Create an instance of the Face Detection Cascade Classifier
-detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
+# Create an instance of the face detection Cascade Classifier
+detector = cv2.CascadeClassifier('{}/{}'.format(model_dir, face_detection_model))
 
-# Create an instance of the Facial landmark Detector with the model
+# Create an instance of the facial landmark detector with the model
 landmark_detector  = cv2.face.createFacemarkLBF()
-landmark_detector.loadModel("data/LFBmodel.yaml")
+landmark_detector.loadModel('{}/{}'.format(model_dir, landmark_detection_model))
 
 # Get image from video
-video_cap = cv2.VideoCapture(video_file)
+cap = cv2.VideoCapture(cap_input)
 
 # First frame
-ret, frame = video_cap.read()
+ret, frame = cap.read()
 # Frame shape
 h, w = frame.shape[:2]
 
@@ -51,9 +47,9 @@ iter = 0
 coordinate = (int(w*.87), int(h*.95))
 # Create list of angles
 angles = []
-while video_cap.isOpened():
+while cap.isOpened():
     # Get frame
-    ret, frame = video_cap.read()
+    ret, frame = cap.read()
     
     if ret:
 
@@ -86,13 +82,18 @@ while video_cap.isOpened():
             # Min x
             min_x = min(x)
             # Graph max x, min x and centroid
-            graph_eje(frame, [max_x, 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
-            graph_eje(frame, [min_x, 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
-            graph_eje(frame, [centroid[0], 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
+            frame = gr.graph_axis(frame, [max_x, 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
+            frame = gr.graph_axis(frame, [min_x, 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
+            frame = gr.graph_axis(frame, [centroid[0], 0], [0, 1], int(frame.shape[1]), color = (255, 255, 255))
             
-            # Calculate angle
-            # se utiliza tangete suponiendo adyacente la mitad de largo total de la cara
-            angles.append(round(np.arctan((max_x+min_x-2*centroid[0])/((max_x-min_x)/2))*180/np.pi, 1))
+            # Calculate angle from arctangent
+            opuesto = max_x+min_x-2*centroid[0] # Calclate opposite side
+            adyacente = (max_x-min_x)/2 # Calculate adjacent
+            angle = round(np.arctan(opuesto/adyacente)*180/np.pi, 1)
+            # Show angle
+            print(angle)
+            # Save angle in angles list
+            angles.append(angle)
         
         # Graph frame number
         frame = gr.graficar_letra(frame, str(iter), coordinate, (255, 255, 255), 3)
@@ -101,7 +102,7 @@ while video_cap.isOpened():
         out.write(frame) 
     
         # Show frame
-        cv2.imshow("frame", cv2.resize(frame,(1600,800)))
+        cv2.imshow("frame", cv2.resize(frame, resize))
 
         # Terminate the capture window
         if cv2.waitKey(30) & 0xFF  == ord('q'):
@@ -110,7 +111,7 @@ while video_cap.isOpened():
     iter += 1
 
 # Release capture
-video_cap.release()
+cap.release()
 out.release()
 cv2.destroyAllWindows()
 

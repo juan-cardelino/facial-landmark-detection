@@ -73,7 +73,7 @@ while cap.isOpened():
             # Graph landmars
             frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
         # Graph frame number
-        frame = gr.graficar_letra(frame, str(iter), coordinate, (255, 255, 255), 3)
+        frame = gr.graph_letter(frame, str(iter), coordinate, (255, 255, 255), 3)
 
         # Save frame
         if saving_format > 1:
