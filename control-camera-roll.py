@@ -39,6 +39,7 @@ h, w = frame.shape[:2]
 fourcc = cv2.VideoWriter_fourcc(*'MJPG')
 out = cv2.VideoWriter('{}/{}.avi'.format(output_dir, video_output), fourcc, 10, (w,h))
 
+# Show break key
 print("\nPress Q to release\n")
 
 # Frame number
@@ -82,7 +83,7 @@ while cap.isOpened():
             
             
         # Graph frame number
-        frame = gr.graficar_letra(frame, str(iter), coordinate, (255, 255, 255), 3)
+        frame = gr.graph_letter(frame, str(iter), coordinate, (255, 255, 255), 3)
         
         # Save frame on video
         out.write(frame) 

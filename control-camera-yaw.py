@@ -96,7 +96,7 @@ while cap.isOpened():
             angles.append(angle)
         
         # Graph frame number
-        frame = gr.graficar_letra(frame, str(iter), coordinate, (255, 255, 255), 3)
+        frame = gr.graph_letter(frame, str(iter), coordinate, (255, 255, 255), 3)
         
         # Save frame on video
         out.write(frame) 
