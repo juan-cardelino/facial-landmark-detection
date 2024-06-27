@@ -134,21 +134,33 @@ for prueba in pruebas:
     positive_precision = tp/(tp+fp)
     # Calculate negative precision
     negative_precision = tn/(tn+fn)
-    # Calculate sensitivity
+    # Calculate sensitivity (positive recall)
     sensitivity = tp/(tp+fn)
+    # Calculate especificity (negative recall)
+    especificity = tn/(tn+fp)
     # Calculate accuracy
     accuracy = (tp+tn)/(tp+fp+fn+tn)
     # calculate true acurracy
     true_accuracy = positive_precision
     # Calculate false accuracy
     false_accuracy = fn/(tn+fn)
+    # Calculate F1:
+    F1 = (2*positive_precision*sensitivity)/(positive_precision+sensitivity)
+    # Calculate F2:
+    F2 = (2*negative_precision*especificity)/(negative_precision+especificity)
+    
     # Show attribute
     print('\n{}'.format(atributo.upper()))
     # Show confusion matrix
     print('True Positive: {}\nFalse Positive: {}\nFalse Negative: {}\nTrue Negative: {}'.format(tp, fp, fn, tn))
     # Show accuracys
     print('Global accuracy: {}%\nTrue acurracy: {}%\nFalse accurracy {}%'.format(round(accuracy*100, 1), round(true_accuracy*100, 1), round(false_accuracy*100, 1)))
-    # Show positive precision and sensitivity
-    print('Positive precision: {}%\nSensitivity: {}%'.format(round(positive_precision*100, 1), round(sensitivity*100, 1)))
+    # Show precisions
+    print('Positive precision: {}%\nNegative precision: {}%'.format(round(positive_precision*100, 1), round(negative_precision*100, 1)))
+    # Show recalls
+    print('Sensitivity: {}%\nEspecificity: {}%'.format(round(sensitivity*100, 1), round(especificity*100, 1)))
+    # Show F1 and F2
+    print('F1 score: {}%\nF2 score: {}%'.format(round(F1*100, 1), round(F2*100, 1)))
+
 
 print('\nFin ejecucion\n')
