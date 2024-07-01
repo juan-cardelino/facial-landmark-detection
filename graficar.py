@@ -8,27 +8,27 @@ def graph_circle(frame, a, color, thickness):
        cv2.circle(frame, (int(x), int(y)), 1, color, thickness)
     return frame
 
-def graph_ellipse(frame, valores_elipse, color, thickness):
-    x_y_elipse = elipse.get_ellipse(valores_elipse['center'], valores_elipse['major'], valores_elipse["ratio"], valores_elipse['rotation'], 100)
+def graph_ellipse(frame, ellipse_values, color, thickness):
+    x_y_elipse = elipse.get_ellipse(ellipse_values['center'], ellipse_values['major'], ellipse_values["ratio"], ellipse_values['rotation'], 100)
     frame = graph_circle(frame, x_y_elipse, color, thickness)
     return frame
    
-def graph_face_section(frame, ojoder=[], ojoizq=[], boca=[], frente=[], color = (255, 0, 0)):
+def graph_face_section(frame, right_eye=[], left_eye=[], mouth=[], forehead=[], color = (255, 0, 0)):
     m = int(frame.shape[1]/256)
 
-    frame = graph_circle(frame, frente, color, m)
-    frame = graph_circle(frame, boca, color, m)
-    frame = graph_circle(frame, ojoder, color, m)
-    frame = graph_circle(frame, ojoizq, color, m)
+    frame = graph_circle(frame, forehead, color, m)
+    frame = graph_circle(frame, mouth, color, m)
+    frame = graph_circle(frame, right_eye, color, m)
+    frame = graph_circle(frame, left_eye, color, m)
     
     return frame
     
-def eyes(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0)):
+def graph_eyes(frame, right_eye_centroid, left_eye_centroid, rigth_eye_ellipse_values, left_eye_ellipse_values, color = (0, 255, 0)):
     m = int(frame.shape[1]/256)
-    frame = graph_ellipse(frame, valores_elipse_ojoder, color, m)
-    frame = graph_ellipse(frame, valores_elipse_ojoizq, color, m)
-    frame = graph_circle(frame, [centroideder], color, m)
-    frame = graph_circle(frame, [centroideizq], color, m)
+    frame = graph_ellipse(frame, rigth_eye_ellipse_values, color, m)
+    frame = graph_ellipse(frame, left_eye_ellipse_values, color, m)
+    frame = graph_circle(frame, [right_eye_centroid], color, m)
+    frame = graph_circle(frame, [left_eye_centroid], color, m)
     
     return frame
 
@@ -46,8 +46,8 @@ def boundingbox(frame, boundingbox, color):
     
     return frame
 
-def graph_letter(frame, letra, coordenada, color, thickness):
-    cv2.putText(frame, letra ,coordenada, cv2.FONT_HERSHEY_SIMPLEX , 1, color, thickness)
+def graph_letter(frame, letter, coordenate, color, thickness):
+    cv2.putText(frame, letter ,coordenate, cv2.FONT_HERSHEY_SIMPLEX , 1, color, thickness)
     return frame
 
 def graph_axis(frame, origin, axis, length, color = (255, 255, 255)):
