@@ -6,11 +6,11 @@ import math
 def norm(v):
     return np.sqrt(sum(v*v))
 
-def dot_product(u, v):
-    return sum(u*v)
+def dot_product(v, u):
+    return sum(v*u)
 
-def proyection(u,v):
-    return dot_product(u,v)/norm(u)
+def proyection(v, u):
+    return dot_product(v, u)/norm(u)
 
 # Cambio de base, renombrar como: change base
 def change_base(vector, axis):
@@ -118,15 +118,15 @@ def calculate_facial_feature(right_eye, left_eye, forehead, mouth):
     mouth_centroid = np.mean(mouth, axis=0)
 
     # Calculate forehead eyes distance
-    forhead_eyes_distance = np.abs(dot_product(forehead_centroid-eyes_origin, p_eyes_axis))
-    forhead_eyes_distance_u = np.abs(dot_product(forehead_centroid-eyes_origin, eyes_axis))
+    forhead_eyes_distance = np.abs(proyection(forehead_centroid-eyes_origin, p_eyes_axis))
+    forhead_eyes_distance_u = np.abs(proyection(forehead_centroid-eyes_origin, eyes_axis))
     # Calculate mouth eyes distance
-    mouth_eyes_distance = np.abs(dot_product(mouth_centroid-eyes_origin, p_eyes_axis))
-    mouth_eyes_distance_u = np.abs(dot_product(mouth_centroid-eyes_origin, eyes_axis))
+    mouth_eyes_distance = np.abs(proyection(mouth_centroid-eyes_origin, p_eyes_axis))
+    mouth_eyes_distance_u = np.abs(proyection(mouth_centroid-eyes_origin, eyes_axis))
     
     # Eyes angle
-    right_eye_angle = np.arcsin(proyection(right_eye[3]-right_eye[0], p_eyes_axis))
-    left_eye_angle = np.arcsin(proyection(left_eye[3]-left_eye[0], p_eyes_axis))
+    right_eye_angle = np.arcsin(proyection(p_eyes_axis, right_eye[3]-right_eye[0]))
+    left_eye_angle = np.arcsin(proyection(p_eyes_axis, left_eye[3]-left_eye[0]))
     
     # Eyes shape
     try:

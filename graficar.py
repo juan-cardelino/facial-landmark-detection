@@ -3,40 +3,40 @@ import numpy as np
 import elipse
 import procesamiento as pr
 
-def graficar(frame, a, color, thickness):
+def graph_circle(frame, a, color, thickness):
     for x, y in a:
        cv2.circle(frame, (int(x), int(y)), 1, color, thickness)
     return frame
 
-def graficar_elipse(frame, valores_elipse, color, thickness):
+def graph_ellipse(frame, valores_elipse, color, thickness):
     x_y_elipse = elipse.get_ellipse(valores_elipse['center'], valores_elipse['major'], valores_elipse["ratio"], valores_elipse['rotation'], 100)
-    frame = graficar(frame, x_y_elipse, color, thickness)
+    frame = graph_circle(frame, x_y_elipse, color, thickness)
     return frame
    
-def marcadores(frame, ojoder=[], ojoizq=[], boca=[], frente=[], color = (255, 0, 0)):
+def graph_face_section(frame, ojoder=[], ojoizq=[], boca=[], frente=[], color = (255, 0, 0)):
     m = int(frame.shape[1]/256)
 
-    frame = graficar(frame, frente, color, m)
-    frame = graficar(frame, boca, color, m)
-    frame = graficar(frame, ojoder, color, m)
-    frame = graficar(frame, ojoizq, color, m)
+    frame = graph_circle(frame, frente, color, m)
+    frame = graph_circle(frame, boca, color, m)
+    frame = graph_circle(frame, ojoder, color, m)
+    frame = graph_circle(frame, ojoizq, color, m)
     
     return frame
     
-def ojos(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0)):
+def eyes(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0)):
     m = int(frame.shape[1]/256)
-    frame = graficar_elipse(frame, valores_elipse_ojoder, color, m)
-    frame = graficar_elipse(frame, valores_elipse_ojoizq, color, m)
-    frame = graficar(frame, [centroideder], color, m)
-    frame = graficar(frame, [centroideizq], color, m)
+    frame = graph_ellipse(frame, valores_elipse_ojoder, color, m)
+    frame = graph_ellipse(frame, valores_elipse_ojoizq, color, m)
+    frame = graph_circle(frame, [centroideder], color, m)
+    frame = graph_circle(frame, [centroideizq], color, m)
     
     return frame
 
-def proyecciones(frame, origen, eje, distancia, color = (0, 0, 255)):
+def graph_projection(frame, origin, axis, distance, color = (0, 0, 255)):
     m = int(frame.shape[1]/256)
 
-    for i in range(distancia):
-        cv2.circle(frame, (int(origen[0]+eje[0]*i), int(origen[1]+eje[1]*i)), 1, color, m)
+    for i in range(distance):
+        cv2.circle(frame, (int(origin[0]+axis[0]*i), int(origin[1]+axis[1]*i)), 1, color, m)
 
     return frame
 
@@ -53,6 +53,6 @@ def graph_letter(frame, letra, coordenada, color, thickness):
 def graph_axis(frame, origin, axis, length, color = (255, 255, 255)):
     aux = np.array(axis)
     aux = aux/pr.norm(aux)
-    frame = proyecciones(frame, origin, aux, length, color = color)
-    frame = proyecciones(frame, origin, -aux, length, color = color)
+    frame = graph_projection(frame, origin, aux, length, color = color)
+    frame = graph_projection(frame, origin, -aux, length, color = color)
     return frame

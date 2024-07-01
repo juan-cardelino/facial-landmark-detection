@@ -68,7 +68,7 @@ while cap.isOpened():
             # Face centroid
             centroid = np.mean(landmark[0], axis=0)
             # Graph landmars
-            frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
+            frame = gr.graph_circle(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
             # Length axis
             l_axis = int(frame.shape[1]/4)
             # Graph axis 90
@@ -78,7 +78,7 @@ while cap.isOpened():
             # Graph axis 30
             frame = gr.graph_axis(frame, centroid, [1, -2], l_axis)
             # Graph face centroid
-            frame = gr.graficar(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
+            frame = gr.graph_circle(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
             
             
         # Graph frame number

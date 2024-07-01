@@ -70,9 +70,9 @@ while cap.isOpened():
             # Face centroid
             centroid = np.mean(landmark[0], axis=0)
             # Graph landmars
-            frame = gr.graficar(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
+            frame = gr.graph_circle(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
             # Graph face centroid
-            frame = gr.graficar(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
+            frame = gr.graph_circle(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
             
             # Get x and y 
             x, y = pr.get_x_y(landmark[0])
