@@ -75,7 +75,7 @@ while cap.isOpened():
             frame = gr.graficar(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
             
             # Get x and y 
-            x, y = pr.extraer_x_e_y(landmark[0])
+            x, y = pr.get_x_y(landmark[0])
             
             # Max x
             max_x = max(x)

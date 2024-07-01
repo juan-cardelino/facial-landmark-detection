@@ -3,25 +3,25 @@ import json
 import elipse
 import math
 
-def norma(v):
+def norm(v):
     return np.sqrt(sum(v*v))
 
-def producto_escalar(u, v):
+def dot_product(u, v):
     return sum(u*v)
 
-# Cambio de base, renombrar como: change base
-def cambio(vector, axis):
-    perpendicular_axis = np.array([axis[1], -axis[0]])
-    return np.array([producto_escalar(vector, axis), producto_escalar(vector, perpendicular_axis)])
+def proyection(u,v):
+    return dot_product(u,v)/norm(u)
 
-def proyeccion(u,v):
-    return producto_escalar(u,v)/norma(u)
+# Cambio de base, renombrar como: change base
+def change_base(vector, axis):
+    perpendicular_axis = np.array([axis[1], -axis[0]])
+    return np.array([proyection(axis, vector), proyection(perpendicular_axis, vector)])
 
 def seno(alpha):
     return np.sin(np.arccos(alpha))
 
 # Este no se si fletarlo, no se usa
-def homo_rotacion(v, cos, sen):
+def homo_rotation(v, cos, sen):
     v = np.array([[v[0], v[1], 1],]).T
     t = np.matrix([[cos, -sen, 0], [sen, cos, 0], [0, 0, 1]])
     w = np.array(t*v)
@@ -29,10 +29,10 @@ def homo_rotacion(v, cos, sen):
     return w
 
 # Este tambien se podria fletar
-def rotacion(a, cos, sen):
+def rotation(a, cos, sen):
     aux = []
     for i in a:
-        aux.append(homo_rotacion(i, cos, sen))
+        aux.append(homo_rotation(i, cos, sen))
     return np.array(aux)
 
 def get_best_ellipse_radius(points, angle):
@@ -46,7 +46,7 @@ def get_best_ellipse_radius(points, angle):
     norms = []
     for i in distance:
         # Load norm list
-        norms.append(norma(i))
+        norms.append(norm(i))
     
     # Calculate mayor axis
     mayor_axis = np.mean(norms[0:2])
@@ -61,7 +61,7 @@ def get_best_ellipse_radius(points, angle):
         }
     return output
 
-def carga_marcadores(json_file, max_faces, json_dir = 'json'):
+def load_landmarks(json_file, max_faces, json_dir = 'json'):
     with open('{}/{}_deteccion.json'.format(json_dir, json_file)) as file:
         detection = json.load(file)
     # Calculate faces to get landmarks
@@ -79,34 +79,34 @@ def carga_marcadores(json_file, max_faces, json_dir = 'json'):
         right_eyebrow = detection["caras"][i]["ceja derecha"][2:-1]
         left_eyebrow = detection["caras"][i]["ceja izquierda"][1:-2]
         forehead.append(np.array(right_eyebrow + left_eyebrow))
-        labiosup = detection["caras"][i]["labio superior"]
-        labioinf = detection["caras"][i]["labio inferior"]
-        mouth.append(np.array(labiosup+labioinf))
+        sup_lip = detection["caras"][i]["labio superior"]
+        inf_lip = detection["caras"][i]["labio inferior"]
+        mouth.append(np.array(sup_lip+inf_lip))
         boundingbox.append(detection["caras"][i]["boundingbox"])
     return detection['image file'], right_eye, left_eye, forehead, mouth, boundingbox, face_amount
 
-def extraer_x_e_y(a):
+def get_x_y(a):
     # Get transposed array
     aux = np.array(a).T
     # Return first two columns
     return aux[0], aux[1]
 
-def calculos(right_eye, left_eye, forehead, mouth):
+def calculate_facial_feature(right_eye, left_eye, forehead, mouth):
     # Calculate eye centroids
     right_eye_centroid = np.mean(right_eye, axis= 0)
     left_eye_centroid = np.mean(left_eye, axis= 0)
     
     # Calculate eyes centorids distance
-    eye_distance = norma(right_eye_centroid-left_eye_centroid)
+    eye_distance = norm(right_eye_centroid-left_eye_centroid)
     # Calculate face unit from eyes
-    unit = (norma(right_eye[0]-right_eye[3])+norma(left_eye[0]-left_eye[3]))/2
+    unit = (norm(right_eye[0]-right_eye[3])+norm(left_eye[0]-left_eye[3]))/2
     
     # Calculate eyes origin from centroids
     eyes_origin = (right_eye_centroid+left_eye_centroid)/2
     # Calculate eyes axis
     eyes_axis = np.abs(right_eye_centroid-left_eye_centroid)
     # Normalize eyes axis
-    eyes_axis = eyes_axis/norma(eyes_axis)
+    eyes_axis = eyes_axis/norm(eyes_axis)
     # Calculate eyes perpendicular axis
     p_eyes_axis = np.array([eyes_axis[1], -eyes_axis[0]])
     
@@ -118,29 +118,29 @@ def calculos(right_eye, left_eye, forehead, mouth):
     mouth_centroid = np.mean(mouth, axis=0)
 
     # Calculate forehead eyes distance
-    forhead_eyes_distance = np.abs(producto_escalar(forehead_centroid-eyes_origin, p_eyes_axis))
-    forhead_eyes_distance_u = np.abs(producto_escalar(forehead_centroid-eyes_origin, eyes_axis))
+    forhead_eyes_distance = np.abs(dot_product(forehead_centroid-eyes_origin, p_eyes_axis))
+    forhead_eyes_distance_u = np.abs(dot_product(forehead_centroid-eyes_origin, eyes_axis))
     # Calculate mouth eyes distance
-    mouth_eyes_distance = np.abs(producto_escalar(mouth_centroid-eyes_origin, p_eyes_axis))
-    mouth_eyes_distance_u = np.abs(producto_escalar(mouth_centroid-eyes_origin, eyes_axis))
+    mouth_eyes_distance = np.abs(dot_product(mouth_centroid-eyes_origin, p_eyes_axis))
+    mouth_eyes_distance_u = np.abs(dot_product(mouth_centroid-eyes_origin, eyes_axis))
     
     # Eyes angle
-    right_eye_angle = np.arcsin(proyeccion(right_eye[3]-right_eye[0], p_eyes_axis))
-    left_eye_angle = np.arcsin(proyeccion(left_eye[3]-left_eye[0], p_eyes_axis))
+    right_eye_angle = np.arcsin(proyection(right_eye[3]-right_eye[0], p_eyes_axis))
+    left_eye_angle = np.arcsin(proyection(left_eye[3]-left_eye[0], p_eyes_axis))
     
     # Eyes shape
     try:
-        ellipse_values_right_eye = elipse.get_best_ellipse_conical(right_eye)
+        ellipse_values_right_eye = elipse.get_best_ellipse_conical(get_x_y(right_eye))
     except:
         ellipse_values_right_eye = get_best_ellipse_radius(right_eye, face_angle)
     try:
-        ellipse_values_left_eye = elipse.get_best_ellipse_conical(left_eye)
+        ellipse_values_left_eye = elipse.get_best_ellipse_conical(get_x_y(left_eye))
     except:
         ellipse_values_left_eye = get_best_ellipse_radius(left_eye, face_angle)
         
     return right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye
 
-def calculos_alter(right_eye, left_eye, forehead, mouth):
+def calculate_auxiliar(right_eye, left_eye, forehead, mouth):
     # Calculate eyes centroids
     right_eye_centroid = np.mean(right_eye, axis= 0)
     left_eye_centroid = np.mean(left_eye, axis= 0)
@@ -150,7 +150,7 @@ def calculos_alter(right_eye, left_eye, forehead, mouth):
     # Calculate eyes axis
     eyes_axis = np.abs(right_eye_centroid-left_eye_centroid)
     # Normalize eyes axis
-    eyes_axis = eyes_axis/norma(eyes_axis)
+    eyes_axis = eyes_axis/norm(eyes_axis)
     # Calculate eyes perpendicular axis
     p_eyes_axis = np.array([eyes_axis[1], -eyes_axis[0]])
     
@@ -160,7 +160,7 @@ def calculos_alter(right_eye, left_eye, forehead, mouth):
     
     return eyes_axis, p_eyes_axis, forehead_centroid, mouth_centroid
 
-def guardar_marcadores(image_file, right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye, boundingbox, json_name, json_dir = "Json", json_suffix = 'data'):
+def save_features(image_file, right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye, boundingbox, json_name, json_dir = "Json", json_suffix = 'data'):
     # Create data dict
     data = {
         "image file":image_file,

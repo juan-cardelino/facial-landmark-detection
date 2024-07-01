@@ -52,7 +52,7 @@ def graph_letter(frame, letra, coordenada, color, thickness):
 
 def graph_axis(frame, origin, axis, length, color = (255, 255, 255)):
     aux = np.array(axis)
-    aux = aux/pr.norma(aux)
+    aux = aux/pr.norm(aux)
     frame = proyecciones(frame, origin, aux, length, color = color)
     frame = proyecciones(frame, origin, -aux, length, color = color)
     return frame

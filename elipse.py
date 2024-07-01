@@ -3,12 +3,6 @@ import random
 import numpy as np
 from scipy.optimize import minimize
 
-def extraer_x_e_y(a):
-    # Get transposed array
-    aux = np.array(a).T
-    # Return first two columns
-    return aux[0], aux[1]
-
 # renombarar a open eyes
 def abrir_ojo(puntos):
     # Get centroid
@@ -177,7 +171,7 @@ def cart_to_pol(coeffs):
 
 def get_best_ellipse_conical(points):
 
-    tmp = fit_ellipse(extraer_x_e_y(points))
+    tmp = fit_ellipse(points)
     
     x0, y0, ap, bp, e, phi = cart_to_pol(tmp)
 

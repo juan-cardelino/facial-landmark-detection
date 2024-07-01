@@ -67,7 +67,7 @@ while cap.isOpened():
         for landmark in landmarks:
             if calculate_feature:
                 # Calculate facial features
-                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(landmark[0][36:42], landmark[0][42:48], landmark[0][17:27], landmark[0][48:68])
+                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculate_facial_feature(landmark[0][36:42], landmark[0][42:48], landmark[0][17:27], landmark[0][48:68])
                 # Graph facial features
                 frame = gr.ojos(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0))
             # Graph landmars

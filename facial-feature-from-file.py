@@ -45,15 +45,15 @@ if etapas > 1:
 
     for imagen in imagenes:
         # Get landmark from json
-        imagen_file, ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.carga_marcadores(imagen, max_caras, json_dir)
+        imagen_file, ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.load_landmarks(imagen, max_caras, json_dir)
 
         for i in range(cant_caras):
             # Calculate facial features
-            centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculos(ojoder[i], ojoizq[i], frente[i], boca[i])
+            centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculate_facial_feature(ojoder[i], ojoizq[i], frente[i], boca[i])
 
             # Structured storage
             if i == 0:
-                pr.guardar_marcadores(imagen_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen, json_dir, json_suffix_data)
+                pr.save_features(imagen_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen, json_dir, json_suffix_data)
                 print('mejor cara guardada en {}_{}.json'.format(imagen, json_suffix_data))
 
     print("Fin etapa 2\n")

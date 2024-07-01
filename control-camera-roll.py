@@ -1,7 +1,6 @@
 # Import Packages
 import cv2
 import numpy as np
-import procesamiento as pr
 import graficar as gr
 import json
 
