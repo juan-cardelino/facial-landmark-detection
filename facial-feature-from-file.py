@@ -75,7 +75,7 @@ if etapas > 2:
     # Cycle through image extension
     for data in datas:
         # Boundingbox and angle from data.json
-        image_file, boundingbox, angulo = alinear.extraer_datos_json(data, json_dir, json_suffix_data)
+        image_file, boundingbox, angulo = alinear.get_json_data(data, json_dir, json_suffix_data)
         print(image_file)
         # Get frame
         frame = cv2.imread('{}/{}'.format(raw_input, image_file))
