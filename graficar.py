@@ -42,7 +42,7 @@ def graph_projection(frame, origin, axis, distance, color = (0, 0, 255)):
 
 def boundingbox(frame, boundingbox, color):
     m = int(boundingbox[2]/64)
-    cv2.rectangle(frame, (boundingbox[0], boundingbox[1]), (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[4]), color, m)
+    cv2.rectangle(frame, (boundingbox[0], boundingbox[1]), (boundingbox[0]+boundingbox[2], boundingbox[1]+boundingbox[3]), color, m)
     
     return frame
 
