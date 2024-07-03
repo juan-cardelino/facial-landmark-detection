@@ -76,7 +76,7 @@ for i in archivos_json:
         data.append(i[:-l_json_suffix_data-1])
 
 # List of images without faces
-no_data = control_dataset.filtro(detection, data, False)
+no_data = control_dataset.intersection(detection, data, False)
 
 # Show amount of json
 print("total json: {}".format(len(archivos_json)))
@@ -92,8 +92,8 @@ with open('{}.json'.format(dataset_input)) as archivo:
         ffhq_data = json.load(archivo)
 
 # Find indexes for the dataset
-no_data_filtrada = control_dataset.reducir_0(no_data)
-data_filtrada = control_dataset.reducir_0(data)
+no_data_filtrada = control_dataset.takeout_0(no_data)
+data_filtrada = control_dataset.takeout_0(data)
 
 # Extract face color
 face_color_no_data = property(no_data_filtrada, ffhq_data, 'face color')

@@ -1,11 +1,11 @@
-def filtro(a, b, condition=True):
+def intersection(A, B, condition=True):
     # List A in B
     aux_True = []
     # List A not in B
     aux_False = []
-    for i in a:
+    for i in A:
         # Check if A is in B
-        if i in b:
+        if i in B:
             aux_True.append(i)
         else:
             aux_False.append(i)
@@ -18,11 +18,10 @@ def filtro(a, b, condition=True):
         return aux_False
 
 # Takes '0' from a string number
-def reducir_0(a):
-    filtrada = []
+def takeout_0(a):
+    without_0 = []
     for i in a:
-        aux = i
-        while aux[0] == '0':
-            aux = aux[1:]
-        filtrada.append(aux)
-    return filtrada
+        aux = int(i)
+        aux = str(aux)
+        without_0.append(aux)
+    return without_0

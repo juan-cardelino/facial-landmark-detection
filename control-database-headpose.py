@@ -7,7 +7,7 @@ from sklearn import metrics
 dir_json = 'FFHQ Json'
 
 # Direccion de las imagenes de FFHQ
-FFHQ_path = "C:/Users/mauri/OneDrive/Desktop/Facultad/Cuarto/Pasantia/FFHQsmall/faces_dataset_small/"
+FFHQ_path = 'FFHQ small'
 
 # Lista de jsons
 archivos_json = os.listdir(dir_json)

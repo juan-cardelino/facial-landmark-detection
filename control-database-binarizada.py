@@ -75,7 +75,7 @@ for i in archivos_json:
         data.append(i[:-l_json_suffix_data-1])
 
 # List of images without faces
-no_data = control_dataset.filtro(detection, data, False)
+no_data = control_dataset.intersection(detection, data, False)
 
 if verbose:
     # Show amount of json
@@ -95,17 +95,17 @@ with open('{}.json'.format(dataset_binarizada_input)) as archivo:
 no_existe_feature = ffhq_data['feature']['no existe']
 
 # List of processed images with features
-detection_with_feature = control_dataset.filtro(detection, no_existe_feature, False)
+detection_with_feature = control_dataset.intersection(detection, no_existe_feature, False)
 
 # List of images with faces and features
-data_with_feature = control_dataset.filtro(data, detection_with_feature, True)
+data_with_feature = control_dataset.intersection(data, detection_with_feature, True)
 
 # Show amount of images with faces and features
 if verbose:
     print('data without features: {}, {}%'.format(len(data)-len(data_with_feature), round(100*(len(data)-len(data_with_feature))/len(data), 2)))
 
 # List of images without faces but with features
-no_data_with_feature = control_dataset.filtro(no_data, detection_with_feature, True)
+no_data_with_feature = control_dataset.intersection(no_data, detection_with_feature, True)
 
 # Show amount of images without faces but with features
 if verbose:       
