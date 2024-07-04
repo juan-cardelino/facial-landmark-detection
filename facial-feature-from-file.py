@@ -7,19 +7,18 @@ import cv2
 
 # Initial setup
 with open('configuracion.json') as file:
-    configuracion = json.load(file)
+    configuration = json.load(file)
 
-verbose = configuracion["pipeline"]["from_file"]["verbose"]
-minimo_ancho_de_cara = configuracion["pipeline"]["from_file"]["minimo_ancho_de_cara"]
-etapas = configuracion["pipeline"]["from_file"]["etapas"]
-raw_input = configuracion["path"]["input_dir"]
-detected_output = configuracion["path"]["detect_dir"]
-aligned_output = configuracion["path"]["aligned_dir"]
-model_dir = configuracion["path"]["model_dir"]
-json_dir = configuracion["path"]["json_dir"]
-json_suffix_detect = configuracion["path"]["json_suffix_detect"]
-json_suffix_data = configuracion["path"]["json_suffix_data"]
-resize = configuracion["general"]["resize"]
+raw_input = configuration["path"]["input_dir"]
+detected_output = configuration["path"]["detect_dir"]
+aligned_output = configuration["path"]["aligned_dir"]
+json_dir = configuration["path"]["json_dir"]
+verbose = configuration["pipeline"]["from_file"]["verbose"]
+minimo_ancho_de_cara = configuration["pipeline"]["from_file"]["minimo_ancho_de_cara"]
+etapas = configuration["pipeline"]["from_file"]["etapas"]
+json_suffix_detect = configuration['general']['json_suffix_detect']
+json_suffix_data = configuration['general']['json_suffix_data']
+resize = configuration["general"]["resize"]
 
 
 archivos = os.listdir(raw_input)
@@ -29,7 +28,7 @@ print("Se corren {} de 3 etapas".format(etapas))
 # Stage 1, get facial landmarks
 if etapas > 0:
     print("\nInicio etapa 1")
-    fland.find_landmarks(archivos, minimo_ancho_de_cara, verbose, raw_input, detected_output, json_dir, json_suffix_detect, model_dir, resize)
+    fland.find_landmarks(archivos, minimo_ancho_de_cara, verbose, raw_input, detected_output, json_dir, json_suffix_detect, resize)
     print("Fin etapa 1\n")
     
 # Stage 2, calculate facial feature from landmarks

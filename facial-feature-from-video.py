@@ -7,21 +7,25 @@ import json
 
 # Initial setup
 with open('configuracion.json') as file:
-    configuracion = json.load(file)
-    
-calculate_feature = configuracion['pipeline']['from_video']['calculate_feature']
-saving_format = configuracion['pipeline']['from_video']['saving_format']
-video_file = configuracion['pipeline']['from_video']['video_file']
-video_output = configuracion['pipeline']['from_video']['video_output']
-video_detect = configuracion['pipeline']['from_video']['video_detect']
-output_dir = configuracion['path']['output_dir']
+    configuration = json.load(file)
+
+output_dir = configuration['path']['output_dir']
+models_dir = configuration['path']['model_dir'] 
+calculate_feature = configuration['pipeline']['from_video']['calculate_feature']
+saving_format = configuration['pipeline']['from_video']['saving_format']
+video_file = configuration['pipeline']['from_video']['video_file']
+video_output = configuration['pipeline']['from_video']['video_output']
+video_detect = configuration['pipeline']['from_video']['video_detect']
+resize = configuration['general']['resize']
+haarcascade = configuration['general']['face detection model']
+LBFmodel = configuration['general']['landmark detection model']
 
 # Create an instance of the Face Detection Cascade Classifier
-detector = cv2.CascadeClassifier("data/haarcascade_frontalface_alt2.xml")
+detector = cv2.CascadeClassifier("{}/{}".format(models_dir, haarcascade))
 
 # Create an instance of the Facial landmark Detector with the model
 landmark_detector  = cv2.face.createFacemarkLBF()
-landmark_detector.loadModel("data/LFBmodel.yaml")
+landmark_detector.loadModel("{}/{}".format(models_dir, LBFmodel))
 
 # Get image from video or camera
 if video_file == 0:
@@ -84,7 +88,7 @@ while cap.isOpened():
             out.write(frame) 
     
         # Show frame
-        cv2.imshow("frame", cv2.resize(frame,(1600,800)))
+        cv2.imshow("frame", cv2.resize(frame, resize))
 
         # Terminate the capture window
         if cv2.waitKey(30) & 0xFF  == ord('q'):

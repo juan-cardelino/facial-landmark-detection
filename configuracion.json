@@ -5,9 +5,7 @@
         "output_dir": "output",
         "detect_dir": "detected",
         "aligned_dir": "aligned",
-        "json_dir": "json",
-        "json_suffix_detect": "deteccion",
-        "json_suffix_data": "data"
+        "json_dir": "json"
     },
     "pipeline": {
         "from_video": {
@@ -46,6 +44,10 @@
     "general":{
         "resize": [1920, 1080],
         "face detection model": "haarcascade_frontalface_alt2.xml",
-        "landmark detection model": "LFBmodel.yaml"
+        "face detection model_url": "https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcascade_frontalface_alt2.xml",
+        "landmark detection model": "LFBmodel.yaml",
+        "landmark detection model_url": "https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml",
+        "json_suffix_detect": "deteccion",
+        "json_suffix_data": "data"
     }
 }

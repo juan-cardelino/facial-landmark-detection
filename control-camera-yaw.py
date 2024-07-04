@@ -7,18 +7,18 @@ import json
     
 # Initial setup
 with open('configuracion.json') as file:
-    configuracion = json.load(file)
-    
-calculate_feature = configuracion['pipeline']['from_video']['calculate_feature']
-saving_format = configuracion['pipeline']['from_video']['saving_format']
-cap_input = configuracion['pipeline']['camera control']['cap_input']
-video_output = configuracion['pipeline']['camera control']['pitch output']
-video_detect = configuracion['pipeline']['from_video']['video_detect']
-output_dir = configuracion['path']['output_dir']
-model_dir = configuracion['path']['model_dir']
-face_detection_model = configuracion['general']['face detection model']
-landmark_detection_model = configuracion['general']['landmark detection model']
-resize = configuracion['general']["resize"]
+    configuration = json.load(file)
+
+output_dir = configuration['path']['output_dir']
+model_dir = configuration['path']['model_dir']   
+calculate_feature = configuration['pipeline']['from_video']['calculate_feature']
+saving_format = configuration['pipeline']['from_video']['saving_format']
+cap_input = configuration['pipeline']['camera control']['cap_input']
+video_output = configuration['pipeline']['camera control']['pitch output']
+video_detect = configuration['pipeline']['from_video']['video_detect']
+face_detection_model = configuration['general']['face detection model']
+landmark_detection_model = configuration['general']['landmark detection model']
+resize = configuration['general']["resize"]
 
 # Create an instance of the face detection Cascade Classifier
 detector = cv2.CascadeClassifier('{}/{}'.format(model_dir, face_detection_model))

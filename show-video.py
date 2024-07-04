@@ -3,11 +3,11 @@ import json
 
 # Initial setup
 with open('configuracion.json') as file:
-    configuracion = json.load(file)
+    configuration = json.load(file)
 
-folder = configuracion['path']['output_dir']
-file = configuracion['pipeline']['camera_to_video']['video_output']
-resize = (configuracion['general']['resize'][0], configuracion['general']['resize'][1])
+folder = configuration['path']['output_dir']
+file = configuration['pipeline']['camera_to_video']['video_output']
+resize = configuration["general"]["resize"]
 
 # Get capture
 cap = cv2.VideoCapture('{}/{}.avi'.format(folder, file))

@@ -6,14 +6,14 @@ print('\nCargando configuracion\n')
 
 # Initial setup
 with open('configuracion.json') as file:
-    configuracion = json.load(file)
+    configuration = json.load(file)
 
-FFHQ_path = configuracion['path']['input_dir']
-json_dir = configuracion['path']['json_dir']
-json_suffix_detect = configuracion['path']['json_suffix_detect']
-dataset_dir = configuracion['pipeline']['binarizar dataset']['dataset_dir']
-dataset_binarizada_output = configuracion['pipeline']['binarizar dataset']['dataset_binarizada']
-verbose = configuracion['pipeline']['binarizar dataset']['verbose']
+FFHQ_path = configuration['path']['input_dir']
+json_dir = configuration['path']['json_dir']
+dataset_dir = configuration['pipeline']['binarizar dataset']['dataset_dir']
+dataset_binarizada_output = configuration['pipeline']['binarizar dataset']['dataset_binarizada']
+verbose = configuration['pipeline']['binarizar dataset']['verbose']
+json_suffix_detect = configuration['general']['json_suffix_detect']
 
 # Aca reescribo porque si, en la version final borrarlo
 FFHQ_path = 'FFHQ small'

@@ -20,12 +20,20 @@ def save_in_json(to_save, name, json_dir = "Json", json_suffix = 'deteccion'):
         print('Marcadores guardados en formato json')       
     return
 
-def find_landmarks(images, minimum_face_width = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion' ,model_dir = "data", resize = (1920,1080)):
+def find_landmarks(images, minimum_face_width = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion', resize = (1920,1080)):
+    
+    # Initial setup
+    with open('configuracion.json') as file:
+        configuration = json.load(file)
+    
+    models_dir = configuration['path']['model_dir']
+    haarcascade = configuration['general']['face detection model']
+    LBFmodel = configuration['general']['landmark detection model']
     
     # Load models
-    detector = cv2.CascadeClassifier("{}/haarcascade_frontalface_alt2.xml".format(model_dir))
+    detector = cv2.CascadeClassifier("{}/{}".format(models_dir, haarcascade))
     landmark_detector  = cv2.face.createFacemarkLBF()
-    landmark_detector.loadModel("{}/LFBmodel.yaml".format(model_dir))
+    landmark_detector.loadModel("{}/{}".format(models_dir, LBFmodel))
     print('modelos cargados')
     
     for image in images: 

@@ -2,37 +2,48 @@ import os
 import json
 import numpy as np
 from sklearn import metrics
+import control_dataset
 
-# Direccion de jsons
-dir_json = 'FFHQ Json'
+print('\nCargando configuracion\n')
 
-# Direccion de las imagenes de FFHQ
+# Initial setup
+with open('configuracion.json') as file:
+    configuration = json.load(file)
+
+FFHQ_path = configuration['path']['input_dir']
+json_dir = configuration['path']['json_dir']
+json_suffix_detect = configuration['general']['json_suffix_detect']
+json_suffix_data = configuration['general']['json_suffix_data']
+
+# Aca reescribo porque si, en la version final borrarlo
 FFHQ_path = 'FFHQ small'
+json_dir = 'FFHQ Json'
 
-# Lista de jsons
-archivos_json = os.listdir(dir_json)
+print('Inicio ejecucion\n')
 
-# Lista de imagenes procesadas
+# List of FFHQ jsons
+archivos = os.listdir(json_dir)
+
+# List of processed images
 detection = []
-# Lista de imagenes con caras
+# List of images with faces
 data = []
 
-# Identificar json procesados y caras detectadas
-for i in archivos_json:
-    # Se identifica si el json es de deteccion
-    if i[-14:] == "deteccion.json":
-        detection.append(i[:-15])
-    # Se identifica si el json es de data
-    elif i[-9:] == "data.json":
-        data.append(i[:-10])
+# Length of json soffix
+l_json_suffix_detect = len(json_suffix_detect)+5
+l_json_suffix_data = len(json_suffix_data)+5
 
-# Inicio bloque identificar archivos con caras no detectadas
-no_data = []
+# Load processed images
+for i in archivos:
+    # Check if json is from detection list
+    if i[-l_json_suffix_detect:] == '{}.json'.format(json_suffix_detect):
+        detection.append(i[:-l_json_suffix_detect-1])
+    # Check if json is from data list
+    elif i[-l_json_suffix_data:] == "{}.json".format(json_suffix_data):
+        data.append(i[:-l_json_suffix_data-1])
 
-for i in detection:
-    if not i in data:
-        no_data.append(i)
-# Fin bloque identificar archivos con caras no detectadas
+# List of images without faces
+no_data = control_dataset.intersection(detection, data, False)
 
 information = []
 
