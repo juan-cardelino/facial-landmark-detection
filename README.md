@@ -6,7 +6,19 @@ This prorgam calculates facial features from an image. It fist detects faces and
     <img src=Readme_images/Read1.jpg width = "75%">
 </p>
 
-Then uses the landmarks to perform the necesary calculations to obtain facial features
+Then uses the landmarks to perform the necesary calculations to obtain facial features.
+
+The calculation method can by found in [miro/Documentation](https://miro.com/app/board/uXjVKVwTq8w=/)
+
+## Index
+
+[Instalation](https://github.com/juan-cardelino/facial-landmark-detection/blob/master/README.md#instalation)
+
+[Tutorial](https://github.com/juan-cardelino/facial-landmark-detection/blob/master/README.md#tutorial)
+
+[Examples](#examples)
+
+[Credits](#credits)
 
 ## Instalation
 
@@ -55,7 +67,7 @@ The landmarks found in the previous stage are use to perfomr the fetures calcula
 
 
 
-# Examples
+## Examples
 
 ### Eyes centroids
 <p align="center">
