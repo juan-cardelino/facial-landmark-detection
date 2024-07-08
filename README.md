@@ -1,7 +1,5 @@
 # Facial feature detection
 
-[Results](https://github.com/juan-cardelino/facial-landmark-detection/blob/master/README.md#examples)
-
 This prorgam calculates facial features from an image. It fist detects faces and facial landmarks on a given image.
 
 <p align="center">
