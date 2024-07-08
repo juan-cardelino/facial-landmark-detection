@@ -12,9 +12,9 @@ The calculation method can by found in [miro/Documentation](https://miro.com/app
 
 ## Index
 
-[Instalation](https://github.com/juan-cardelino/facial-landmark-detection/blob/master/README.md#instalation)
+[Instalation](#instalation)
 
-[Tutorial](https://github.com/juan-cardelino/facial-landmark-detection/blob/master/README.md#tutorial)
+[Tutorial](#tutorial)
 
 [Examples](#examples)
 
