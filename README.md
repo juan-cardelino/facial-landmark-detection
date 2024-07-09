@@ -100,11 +100,6 @@ Configurate the video input to process in [configuracion](https://github.com/jua
 
 This program cut the video in frames, for each frame, it finds the facial landmarks and caclulate the facial features, then graph all the landmarks and the ellips of the eyes. It opens a new window where the video is shown with the graphed frames. The graphed frames can by save in video and/or image format, depending on [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).
 
-Find more information on how to execute the programs in [pipeline](https://docs.google.com/document/d/13zKQjNVyC3yyjy1iC3ybzMHDT74Gb_B5hFoXsu0esgc/edit#heading=h.wj7nhmmfcxck)
-
-Find more information about feature calculation on [miro][miro]
-
-Finf more tecnical information in Esto lo tengo que hacer aun 
 ## Examples
 
 ### Eyes centroids
@@ -130,3 +125,12 @@ elliptic least squares:
 https://github.com/cjgb/ellipses
 
 [miro]:https://miro.com/app/board/uXjVKVwTq8w=/
+
+# More information
+
+Find more information on how to execute the programs in [pipeline](https://docs.google.com/document/d/13zKQjNVyC3yyjy1iC3ybzMHDT74Gb_B5hFoXsu0esgc/edit#heading=h.wj7nhmmfcxck)
+
+Find more information about feature calculation on [miro][miro]
+
+Finf more tecnical information in Esto lo tengo que hacer aun 
+
