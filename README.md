@@ -8,7 +8,7 @@ This prorgam calculates facial features from an image. It fist detects faces and
 
 Then uses the landmarks to perform the necesary calculations to obtain facial features.
 
-The calculation method can by found in [miro/Documentation][miro]
+The calculation method can by found in [miro/Calculos: Facial Feature][miro]
 
 ## Index
 
@@ -80,7 +80,7 @@ For each image in Input folder, a json file is created in Json folder with the f
 
 #### Stage 2
 
-If landmarks are found in previous stage, there are use to perfomr the fetures calculations (found in [miro/Documentation][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
+If landmarks are found in previous stage, there are use to perfomr the fetures calculations (found in [miro/Calculos: Facial Feature][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
 
 #### Stage 3
 
@@ -98,7 +98,7 @@ Configurate the video input to process in [configuracion](https://github.com/jua
 
 ### Results
 
-This program cut the video in frames, for each frame, it finds the facial landmarks and caclulate the facial features, then graph all the landmarks and the ellips of the eyes. It opens a new window where the video is shown with the graphed frames. The graphed frames can by save in video and/or image format, depending on [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).
+This program cut the video in frames, for each frame, it finds the facial landmarks and caclulate the facial features, then graph all the landmarks and the ellips of the eyes. It opens a new window where the video is shown with the graphed frames. The graphed frames can by save in video and/or image format, depending on [configuration](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).
 
 ## Examples
 
@@ -132,5 +132,5 @@ Find more information on how to execute the programs in [pipeline](https://docs.
 
 Find more information about feature calculation on [miro][miro]
 
-Finf more tecnical information in Esto lo tengo que hacer aun 
+Find more tecnical information in Esto lo tengo que hacer aun 
 
