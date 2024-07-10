@@ -12,6 +12,7 @@ with open('configuracion.json') as file:
 
 FFHQ_path = configuration['path']['input_dir']
 json_dir = configuration['path']['json_dir']
+dataset_dir = configuration['pipeline']['binarizar_dataset']['dataset_dir']
 json_suffix_detect = configuration['general']['json_suffix_detect']
 json_suffix_data = configuration['general']['json_suffix_data']
 
@@ -48,7 +49,7 @@ no_data = control_dataset.intersection(detection, data, False)
 information = []
 
 for i in detection:
-    with open('FFHQ_json_features/{}.json'.format(i)) as dataset:
+    with open('{}/{}.json'.format(dataset_dir, i)) as dataset:
         ffhq_data = json.load(dataset)
     if len(ffhq_data)>0:
         information.append([i in data, ffhq_data[0]['faceAttributes']['headPose']['pitch'], ffhq_data[0]['faceAttributes']['headPose']['roll'], ffhq_data[0]['faceAttributes']['headPose']['yaw']])

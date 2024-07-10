@@ -9,7 +9,7 @@
     },
     "pipeline": {
         "from_video": {
-            "calculate_feature": 2,
+            "calculate_feature": 1,
             "video_file": "output/video",
             "video_output": "feature-from-video",
             "video_detect": "video_detect",
@@ -25,17 +25,17 @@
             "video_output": "video",
             "video_length": 100
         },
-        "camera control":{
+        "camera_control":{
             "cap_input": 0,
-            "roll output": "camera roll",
-            "pitch output": "camera pitch"
+            "roll_output": "roll_angle",
+            "yaw_output": "yaw_angle"
         },
-        "binarizar dataset": {
+        "binarizar_dataset": {
             "dataset_dir": "FFHQ_json_features",
             "dataset_binarizada": "ffhq-feature-dataset-binarizado",
             "verbose": 0
         },
-        "color dataset":{
+        "color_dataset":{
             "dataset_input": "ffhq-dataset-v2",
             "dataset_output": "ffhq-dataset-color",
             "verbose": 0

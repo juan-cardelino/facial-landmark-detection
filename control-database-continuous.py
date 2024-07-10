@@ -11,9 +11,8 @@ with open('configuracion.json') as file:
 
 FFHQ_path = configuration['path']['input_dir']
 json_dir = configuration['path']['json_dir']
-dataset_dir = configuration['pipeline']['binarizar dataset']['dataset_dir']
-dataset_binarizada_output = configuration['pipeline']['binarizar dataset']['dataset_binarizada']
-verbose = configuration['pipeline']['binarizar dataset']['verbose']
+dataset_dir = configuration['pipeline']['binarizar_dataset']['dataset_dir']
+verbose = configuration['pipeline']['binarizar_dataset']['verbose']
 json_suffix_detect = configuration['general']['json_suffix_detect']
 json_suffix_data = configuration['general']['json_suffix_data']
 

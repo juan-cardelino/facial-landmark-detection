@@ -43,8 +43,8 @@ with open('configuracion.json') as file:
     configuration = json.load(file)
 
 json_dir = configuration['path']['json_dir']
-dataset_binarizada_input = configuration['pipeline']['binarizar dataset']['dataset_binarizada']
-verbose = configuration['pipeline']['binarizar dataset']['verbose']
+dataset_binarizada_input = configuration['pipeline']['binarizar_dataset']['dataset_binarizada']
+verbose = configuration['pipeline']['binarizar_dataset']['verbose']
 json_suffix_detect = configuration['general']['json_suffix_detect']
 json_suffix_data = configuration['general']['json_suffix_data']
 

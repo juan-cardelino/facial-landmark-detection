@@ -16,9 +16,9 @@ with open('configuracion.json') as file:
 
 FFHQ_path = configuration['path']['input_dir']
 json_dir = configuration['path']['json_dir']
-dataset_input = configuration['pipeline']['color dataset']['dataset_input']
-dataset_output = configuration['pipeline']['color dataset']['dataset_output']
-verbose = configuration['pipeline']['binarizar dataset']['verbose']
+dataset_input = configuration['pipeline']['color_dataset']['dataset_input']
+dataset_output = configuration['pipeline']['color_dataset']['dataset_output']
+verbose = configuration['pipeline']['color_dataset']['verbose']
 json_suffix_detect = configuration['general']['json_suffix_detect']
 
 # Aca reescribo porque si, en la version final borrarlo

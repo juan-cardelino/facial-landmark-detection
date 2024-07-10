@@ -9,12 +9,10 @@ with open('configuracion.json') as file:
     configuracion = json.load(file)
     
 calculate_feature = configuracion['pipeline']['from_video']['calculate_feature']
-saving_format = configuracion['pipeline']['from_video']['saving_format']
-cap_input = configuracion['pipeline']['camera control']['cap_input']
-video_output = configuracion['pipeline']['camera control']['roll output']
-video_detect = configuracion['pipeline']['from_video']['video_detect']
 output_dir = configuracion['path']['output_dir']
 model_dir = configuracion['path']['model_dir']
+cap_input = configuracion['pipeline']['camera control']['cap_input']
+video_output = configuracion['pipeline']['camera control']['roll_output']
 face_detection_model = configuracion['general']['face detection model']
 landmark_detection_model = configuracion['general']['landmark detection model']
 resize = configuracion['general']['resize']
