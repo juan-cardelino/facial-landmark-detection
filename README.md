@@ -88,7 +88,7 @@ It creates a copy of the images with faces, each images is rotated by the angle 
 
 ### Preprocess
 
-Configurate the video input to process in [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).json file (if video intput = 0, the video will by taken from camera).
+Configurate the video input to process in [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).json file (if video_file = 0, the video will by taken from camera).
 
 ### Run code
 
