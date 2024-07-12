@@ -39,7 +39,7 @@ In order to use this code is necesary to install the modules in requirements.txt
 
 Necesary instalation to run the code:
 
-    pip install requirements.txt
+    pip install -r requirements.txt
     
     python.exe installer.py
 
@@ -74,13 +74,11 @@ This code has 3 stages, the amount of stages to perform can by specified in the 
 
 #### Stage 1
 
-If the image has faces with a boundingbox bigger than 100 pixels, a copy of the image in format jpg is made in detected folder, also a json file is made in the Json folder with the format image_name_deteccion.json with the landmarks off all big enough faces.
-
 For each image in Input folder, a json file is created in Json folder with the format image_name_detection.json. If the image has faces with a boundingbox bigger than 100 pixels, the json is load with the landmarks of all big enough faces, if not, the json is load with an error message (face not detected or face not big enough).
 
 #### Stage 2
 
-If landmarks are found in previous stage, there are use to perfomr the fetures calculations (found in [miro/Calculos: Facial Feature][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
+If landmarks are found in previous stage, there are use to perform the features calculations (found in [miro/Calculos: Facial Feature][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
 
 #### Stage 3
 
@@ -94,7 +92,7 @@ Configurate the video input to process in [configuracion](https://github.com/jua
 
 ### Run code
 
-    python.exe facial-feature-from-vide.py
+    python.exe facial-feature-from-video.py
 
 ### Results
 
