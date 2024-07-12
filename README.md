@@ -1,19 +1,19 @@
 # Facial feature detection
 
-This prorgam calculates facial features from an image. It fist detects faces and facial landmarks on a given image.
+This program calculates facial features from an image. It first detects faces and facial landmarks on a given image.
 
 <p align="center">
     <img src=Readme_images/Read1.jpg width = "75%">
 </p>
 
-Then uses the landmarks to perform the necesary calculations to obtain facial features.
+Then uses the landmarks to perform the necessary calculations to obtain facial features.
 
-The calculation method can by found in [miro/Calculos: Facial Feature][miro]
+The calculation method can be found in [miro/Calculos: Facial Feature][miro]
 
 ## Index
 
 ### Readme
-[Instalation](#instalation)
+[Installation](#installation)
 
 [From file tutorial](#tutorial-facial-feature-from-file)
 
@@ -33,11 +33,11 @@ The calculation method can by found in [miro/Calculos: Facial Feature][miro]
 
 [Configuration](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration)
 
-## Instalation
+## Installation
 
-In order to use this code is necesary to install the modules in requirements.txt and run the installer.py program to download the models use.
+In order to use this code is necessary to install the modules in requirements.txt and run the installer.py program to download the models use.
 
-Necesary instalation to run the code:
+Necessary installation to run the code:
 
     pip install -r requirements.txt
     
@@ -53,7 +53,7 @@ https://raw.githubusercontent.com/opencv/opencv/master/data/haarcascades/haarcas
 The model used for landmark detection can be got from: 
 https://github.com/kurnianggoro/GSOC2017/raw/master/data/lbfmodel.yaml
 
-The model used for aproximating point to an elipse can be found here:
+The model used for approximating point to an elipse can be found here:
 https://github.com/cjgb/ellipses/blob/dev/mylib.py
 
 ## Tutorial facial feature from file
@@ -70,7 +70,7 @@ Insert image/es to process in Input folder
 
 ### Results
 
-This code has 3 stages, the amount of stages to perform can by specified in the [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_file).json file
+This code has 3 stages, the amount of stages to perform can be specified in the [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_file).json file
 
 #### Stage 1
 
@@ -78,7 +78,7 @@ For each image in Input folder, a json file is created in Json folder with the f
 
 #### Stage 2
 
-If landmarks are found in previous stage, there are use to perform the features calculations (found in [miro/Calculos: Facial Feature][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
+Landmarks found in previous stage are use to perform the features calculations (found in [miro/Calculos: Facial Feature][miro]). Facial features from the biggest face are save in Json folder with the format image_name_data.json.
 
 #### Stage 3
 
@@ -88,7 +88,7 @@ It creates a copy of the images with faces, each images is rotated by the angle 
 
 ### Preprocess
 
-Configurate the video input to process in [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).json file (if video_file = 0, the video will by taken from camera).
+Configurate the video input to process in [configuracion](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).json file (if video_file = 0, the video will be taken from camera).
 
 ### Run code
 
@@ -96,7 +96,7 @@ Configurate the video input to process in [configuracion](https://github.com/jua
 
 ### Results
 
-This program cut the video in frames, for each frame, it finds the facial landmarks and caclulate the facial features, then graph all the landmarks and the ellips of the eyes. It opens a new window where the video is shown with the graphed frames. The graphed frames can by save in video and/or image format, depending on [configuration](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).
+This program cut the video in frames, for each frame, it finds the facial landmarks and calculate the facial features, then graph all the landmarks and the ellipse of the eyes. It opens a new window where the video is shown with the graphed frames. The graphed frames can be save in video and/or image format, depending on [configuration](https://github.com/juan-cardelino/facial-landmark-detection/wiki/Configuration#from_video).
 
 ## Examples
 
@@ -105,7 +105,7 @@ This program cut the video in frames, for each frame, it finds the facial landma
     <img src=Readme_images/Read2.jpg width = "50%">
 </p>
 
-### Eyes-forhead distance
+### Eyes-forehead distance
 <p align="center">
     <img src=Readme_images/Read3.jpg width = "50%">
 </p>
