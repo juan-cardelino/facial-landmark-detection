@@ -43,7 +43,12 @@ for i in ojos:
     try: # Existen casos en la que el codigo de ellipse_conical se rompe
         valores_elipse_ojo_conical = elipse.get_best_ellipse_conical(i)
     except: # En esos casos se utiliza dos veces el codigo ellipse_radius
-        valores_elipse_ojo_radius = pr.get_best_ellipse_radius(i, 0)
+        valores_elipse_ojo_conical = {
+            'center': [0, 0],
+            'major': 0,
+            'ratio': 0,
+            'rotation': 0
+        }
     
     # Se calcula el error relativo de los valores (entro, eje mayor, eje menor y ratio)
     aux1 = error_relativo(valores_elipse_ojo_conical['center'], valores_elipse_ojo_radius['center'])
@@ -73,7 +78,7 @@ for i in ojos:
         print("")
     
     # Se guardan los errores relevantes   
-    errores.append([pr.norma(aux1), aux2, aux3, aux4])
+    errores.append([pr.norm(aux1), aux2, aux3, aux4])
 # Se extraen los errores
 errores = np.array(errores).T
 centro = errores[0]

@@ -5,7 +5,7 @@
 import cv2
 
 
-iter_max = 30 # Largo del video a grabar
+iter_max = 100 # Largo del video a grabar
 
 # Captura de camara
 webcam_cap = cv2.VideoCapture(0)
@@ -76,9 +76,8 @@ while cap.isOpened():
         break
 
 # Mostrar en consola condicion de parada
-print()
-print("Press Q to release")
-print()
+print("\nPress Q to release\n")
+
 l = len(video)
 iter = 0
 # Video en bucle

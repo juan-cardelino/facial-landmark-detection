@@ -19,7 +19,7 @@ def get_best_ellipse_radius(puntos, angulo):
     # Vector de normas
     aux4 = []
     for i in aux3:
-        aux4.append(pr.norma(i))
+        aux4.append(pr.norm(i))
     
     # Promediar eje mayor
     aux5 = np.mean(aux4[0:2])

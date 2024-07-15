@@ -4,16 +4,15 @@ import numpy as np
 from scipy.optimize import minimize
 
 # renombarar a open eyes
-def abrir_ojo(puntos):
+def open_eye(points):
     # Get centroid
-    aux1 = np.mean(puntos, axis=0)
+    centroid = np.mean(points, axis=0)
     # Take out eye corner
-    aux2 = np.concatenate((puntos[1:3],puntos[4:6]))
+    eye_edge = np.concatenate((points[1:3],points[4:6]))
     # Increase landmark-centroid distance by 0.5
-    aux3 = (aux2-aux1)*1.5+aux1
+    new_eye_edge = (eye_edge-centroid)*1.5+centroid
     # Regroup landmarks
-    aux4 = np.concatenate((puntos[0:1],aux3,puntos[3:4]))
-    return aux4
+    return np.concatenate((points[0:1],new_eye_edge,points[3:4]))
 
 def get_ellipse(center, major, ratio, rotation, n_points):
     rotation_radians = rotation / 360 * 2 * math.pi

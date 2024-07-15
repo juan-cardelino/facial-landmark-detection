@@ -2,7 +2,6 @@ import sys
 # Agregar la direccion fuera de la carpeta
 sys.path.append(sys.path[0][:-8])
 
-import procesamiento as pr
 import cv2
 import os
 import numpy as np
@@ -37,8 +36,8 @@ if 0:
     for x, y in puntos:
         cv2.circle(img, (int(x), int(y)), 0, (0, 255, 0), 1)
 
-# Calcular los valores de la elipse a partir de los puntos modificados        
-valores_elipse_ojoizq = elipse.get_best_ellipse_conical(aux4)
+# Calcular los valores de la elipse a partir de los puntos modificados 
+valores_elipse_ojoizq = elipse.get_best_ellipse_conical(np.array(aux4).T)
 # Imprimir en consola los valores obtenidos
 if 0:
     print("Centro:", valores_elipse_ojoizq['center'])

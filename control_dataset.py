@@ -17,8 +17,13 @@ def intersection(A, B, condition=True):
         # Return A not in B
         return aux_False
 
-# Takes '0' from a string number
+
 def takeout_0(a):
+    """
+    Takes '0' from a string number
+    lalaland
+    """
+    
     without_0 = []
     for i in a:
         aux = int(i)
