@@ -1,3 +1,6 @@
+'''
+This module is use to aproximate the landmarks of the eye into an elipse by conic least squares.
+'''
 import math
 import random
 import numpy as np
@@ -15,6 +18,9 @@ def open_eye(points):
     return np.concatenate((points[0:1],new_eye_edge,points[3:4]))
 
 def get_ellipse(center, major, ratio, rotation, n_points):
+    '''
+    This function takes as input the center, major axis, ratio (major axis/minor axis) and rotation of the ellipse, also the amount of points. It returns an array with points of the ellipse, the array has a length equal to the amount of points
+    '''
     rotation_radians = rotation / 360 * 2 * math.pi
     rsin, rcos = math.sin(rotation_radians), math.cos(rotation_radians)
 
@@ -25,6 +31,9 @@ def get_ellipse(center, major, ratio, rotation, n_points):
     return xy
 
 def get_random_ellipse(center, n_points):
+    '''
+    This function takes the center of the ellipse and the amount of points. It randomize the major axis, ratio and rotation. It use the function get_ellipse with the randomized parameters, obteining the points of the random ellipse. It returns an array with the points of the random ellipse
+    '''
 
     major = random.uniform(40, 300)
     ratio = random.uniform(.1, 1)
@@ -34,6 +43,9 @@ def get_random_ellipse(center, n_points):
     return xy
 
 def get_best_ellipse(points):
+    '''
+    Alternative way to calculate the ellipse
+    '''
 
     # we need to reweight the points because they may have different concentrations
     # a point will have a weight related to the average distance to the previous and
@@ -169,6 +181,9 @@ def cart_to_pol(coeffs):
     return x0, y0, ap, bp, e, phi
 
 def get_best_ellipse_conical(points):
+    '''
+    This function takes the points and use the functions fit_elipse and cart_to_pol to get the parameters of the elipse that best fit the points. This parameters are return in a dict
+    '''
 
     tmp = fit_ellipse(points)
     

@@ -1,4 +1,11 @@
+'''
+Module use in control-dataset-* programs
+'''
+
 def intersection(A, B, condition=True):
+    '''
+    This function takes 2 list (A and B) and a condition. If condition in true, return a list with the elements in A that are in B, in not, returns a list with the elements in A that ar not in B
+    '''
     # List A in B
     aux_True = []
     # List A not in B
@@ -20,8 +27,7 @@ def intersection(A, B, condition=True):
 
 def takeout_0(a):
     """
-    Takes '0' from a string number
-    lalaland
+    This function takes a list of sting numbers with left 0 (ex: 0001) and return a list of string number without left 0 (ex:1)
     """
     
     without_0 = []

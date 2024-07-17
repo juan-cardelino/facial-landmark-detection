@@ -1,7 +1,5 @@
 ''' 
-Facial Landmark Detection in Python with OpenCV
-
-Detection from web cam
+This module find landmarks from images in a folder and save them in a json file
 '''
 
 # Import Packages
@@ -12,6 +10,9 @@ import json
 import graficar
 
 def save_in_json(to_save, name, json_dir = "Json", json_suffix = 'deteccion'):
+    '''
+    This sub function, takes dict and saves it in a json file
+    '''
     # Create and write json file
     with open('{}/{}_{}.json'.format(json_dir, name, json_suffix), 'w') as file:
         json.dump(to_save, file, indent=4)
@@ -21,7 +22,9 @@ def save_in_json(to_save, name, json_dir = "Json", json_suffix = 'deteccion'):
     return
 
 def find_landmarks(images, minimum_face_width = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion', resize = (1920,1080)):
-    
+    '''
+    This function take a list of images and other setup variables. It finds if there are faces in the image, if there are faces, it calculate their landmark and save them in a json file
+    '''
     # Initial setup
     with open('configuracion.json') as file:
         configuration = json.load(file)

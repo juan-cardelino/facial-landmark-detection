@@ -1,19 +1,35 @@
+
+'''
+This module main functions use the landmarks to calculte all facial features and save them in a json file. The other functions are algebraic operations use to calculate facial feature
+'''
 import numpy as np
 import json
 import elipse
 import math
 
 def norm(v):
+    '''
+    This algorith takes a vector as v and returns its two-dimensional norm
+    '''
     return np.sqrt(sum(v*v))
 
 def dot_product(v, u):
+    '''
+    This function takes two vectors as u and v and returns the dot product of the two vectors
+    '''
     return sum(v*u)
 
 def proyection(v, u):
+    '''
+    This function takes two vectors as u and v and returns the proyection of v in u
+    '''
     return dot_product(v, u)/norm(u)
 
 # Cambio de base, renombrar como: change base
 def change_base(vector, axis):
+    '''
+    This function takes a vector and a axis, and return the proyections of the vector in the axis and its perpendicular counterpart
+    '''
     perpendicular_axis = np.array([axis[1], -axis[0]])
     return np.array([proyection(axis, vector), proyection(perpendicular_axis, vector)])
 
@@ -36,6 +52,9 @@ def rotation(a, cos, sen):
     return np.array(aux)
 
 def get_best_ellipse_radius(points, angle):
+    '''
+    This function takes a 6 points array and an angle. It calculate the parameters of the ellipse that best fits base on the radius from the point centroid. This parameters are return in a dict
+    '''
     # Get points centroid
     centroid = np.mean(points, axis=0)
     # Reorganize point
@@ -62,6 +81,9 @@ def get_best_ellipse_radius(points, angle):
     return output
 
 def load_landmarks(json_file, max_faces, json_dir = 'json'):
+    '''
+    This function takes the name and direction of json file as json_file and json_dir, also takes the amount of faces to unpack as max_faces (unpack minimun between max_faces and faces able in json). It returns the image file name, arrays with landmarks of right_eye, left_eye, forehead, mouth and boundingbox of every face, also returns the amount of faces unpacked
+    '''
     with open('{}/{}_deteccion.json'.format(json_dir, json_file)) as file:
         detection = json.load(file)
     # Calculate faces to get landmarks
@@ -86,12 +108,18 @@ def load_landmarks(json_file, max_faces, json_dir = 'json'):
     return detection['image file'], right_eye, left_eye, forehead, mouth, boundingbox, face_amount
 
 def get_x_y(a):
+    '''
+    This function takes as input a two dimensional array and return the first two columns
+    '''
     # Get transposed array
     aux = np.array(a).T
     # Return first two columns
     return aux[0], aux[1]
 
 def calculate_facial_feature(right_eye, left_eye, forehead, mouth):
+    '''
+    This function takes the right eye, left eye, forehead and mouth landmarks to calculate all facial features
+    '''
     # Calculate eye centroids
     right_eye_centroid = np.mean(right_eye, axis= 0)
     left_eye_centroid = np.mean(left_eye, axis= 0)
@@ -161,6 +189,9 @@ def calculate_auxiliar(right_eye, left_eye, forehead, mouth):
     return eyes_axis, p_eyes_axis, forehead_centroid, mouth_centroid
 
 def save_features(image_file, right_eye_centroid, left_eye_centroid, unit, eyes_origin, eye_distance, forhead_eyes_distance, mouth_eyes_distance, face_angle, right_eye_angle, left_eye_angle, ellipse_values_right_eye, ellipse_values_left_eye, boundingbox, json_name, json_dir = "Json", json_suffix = 'data'):
+    '''
+    This function takes the calculated facial features and save them in a json file
+    '''
     # Create data dict
     data = {
         "image file":image_file,
