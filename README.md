@@ -66,7 +66,7 @@ Insert image/es to process in Input folder
 
 ### Run code
 
-    python.exe facial-feature-from-file.py
+    python.exe facial_feature_from_file.py
 
 ### Results
 
@@ -92,7 +92,7 @@ Configurate the video input to process in [configuracion](https://github.com/jua
 
 ### Run code
 
-    python.exe facial-feature-from-video.py
+    python.exe facial_feature_from_video.py
 
 ### Results
 
