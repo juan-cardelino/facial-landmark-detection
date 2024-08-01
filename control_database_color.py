@@ -12,6 +12,16 @@ import control_dataset
 def property(a, dataset, key = 'face color'):
     '''
     This function extracts a property from a dict
+    
+    Args:
+        a (list): List of image keys in dataset
+        
+        dataset (dict): Dataset infromation
+        
+        key (String): Key of atribute of images in dataset
+    
+    Returns:
+        atributes (array): List of the atribute of every image, transposed
     '''
     aux = []
     for i in a:
@@ -22,6 +32,13 @@ def property(a, dataset, key = 'face color'):
 def plotBGR(a, b, title = ''):
     '''
     This function makes 3 2D plots of BGR color
+    
+    Args:
+        a (list): RGB list, x axis
+        
+        b (list): RGB list, y axis
+        
+        title (String): Graph title
     '''
     plt.figure()
     plt.title(title)

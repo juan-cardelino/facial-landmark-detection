@@ -33,51 +33,51 @@ def main():
     aligned_output = configuration["path"]["aligned_dir"]
     json_dir = configuration["path"]["json_dir"]
     verbose = configuration["pipeline"]["from_file"]["verbose"]
-    minimo_ancho_de_cara = configuration["pipeline"]["from_file"]["minimo_ancho_de_cara"]
-    etapas = configuration["pipeline"]["from_file"]["etapas"]
+    minimum_face_width = configuration["pipeline"]["from_file"]["minimo_ancho_de_cara"]
+    stage = configuration["pipeline"]["from_file"]["etapas"]
     json_suffix_detect = configuration['general']['json_suffix_detect']
     json_suffix_data = configuration['general']['json_suffix_data']
     resize = configuration["general"]["resize"]
 
 
-    archivos = os.listdir(raw_input)
+    file = os.listdir(raw_input)
 
-    print("Se corren {} de 3 etapas".format(etapas))
+    print("Se corren {} de 3 etapas".format(stage))
 
     # Stage 1, get facial landmarks
-    if etapas > 0:
+    if stage > 0:
         print("\nInicio etapa 1")
-        fland.find_landmarks(archivos, minimo_ancho_de_cara, verbose, raw_input, detected_output, json_dir, json_suffix_detect, resize)
+        fland.find_landmarks(file, minimum_face_width, verbose, raw_input, detected_output, json_dir, json_suffix_detect, resize)
         print("Fin etapa 1\n")
         
     # Stage 2, calculate facial feature from landmarks
-    if etapas > 1:
+    if stage > 1:
         print("Inicio etapa 2")
-        imagenes = []
+        images = []
         l_suffix = len(json_suffix_detect)+5
         for i in os.listdir(json_dir):
             # Detect json suffix
             if i[-l_suffix:] == json_suffix_detect+'.json':
-                imagenes.append(i[:-l_suffix-1])
-        max_caras = 1
+                images.append(i[:-l_suffix-1])
+        max_faces = 1
 
-        for imagen in imagenes:
+        for image in images:
             # Get landmark from json
-            imagen_file, ojoder, ojoizq, frente, boca, boundingbox, cant_caras = pr.load_landmarks(imagen, max_caras, json_dir)
+            image_file, right_eye, left_eye, forehead, mouth, boundingbox, face_amount = pr.load_landmarks(image, max_faces, json_dir)
 
-            for i in range(cant_caras):
+            for i in range(face_amount):
                 # Calculate facial features
-                centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculate_facial_feature(ojoder[i], ojoizq[i], frente[i], boca[i])
+                right_eye_centroid, left_eye_centroid, unit, eyes_origin, eyes_distance, eyes_forehead_distance, eyes_mouth_distance, face_angle, right_eye_angle, left_eye_angle, right_eye_ellipse_values, left_eye_ellipse_values = pr.calculate_facial_feature(right_eye[i], left_eye[i], forehead[i], mouth[i])
 
                 # Structured storage
                 if i == 0:
-                    pr.save_features(imagen_file, centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq, boundingbox[0], imagen, json_dir, json_suffix_data)
-                    print('mejor cara guardada en {}_{}.json'.format(imagen, json_suffix_data))
+                    pr.save_features(image_file, right_eye_centroid, left_eye_centroid, unit, eyes_origin, eyes_distance, eyes_forehead_distance, eyes_mouth_distance, face_angle, right_eye_angle, left_eye_angle, right_eye_ellipse_values, left_eye_ellipse_values, boundingbox[0], image, json_dir, json_suffix_data)
+                    print('mejor cara guardada en {}_{}.json'.format(image, json_suffix_data))
 
         print("Fin etapa 2\n")
 
     # Stage 3, 
-    if etapas > 2:
+    if stage > 2:
         print("Inicio etapa 3\n")
         # Finding images with faces
         # Length of json suffix
@@ -93,12 +93,12 @@ def main():
         # Cycle through image extension
         for data in datas:
             # Boundingbox and angle from data.json
-            image_file, boundingbox, angulo = alinear.get_json_data(data, json_dir, json_suffix_data)
+            image_file, boundingbox, angle = alinear.get_json_data(data, json_dir, json_suffix_data)
             print(image_file)
             # Get frame
             frame = cv2.imread('{}/{}'.format(raw_input, image_file))
             # Rotate frame using boundingbox
-            frame_rotated = alinear.rotate(frame, boundingbox, angulo)
+            frame_rotated = alinear.rotate(frame, boundingbox, -angle)
             # Cropp frame using boundingbox
             frame_cropped = alinear.cropp(frame_rotated, boundingbox)
             # Save frame in aligned folder

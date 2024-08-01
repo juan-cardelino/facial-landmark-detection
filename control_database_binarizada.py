@@ -10,6 +10,20 @@ import control_dataset
 def probar_caracteristica(ffhq_data, detection_with_feature, data_with_feature, caracteristica, verbose = False):
     '''
     This function calculates the confusion matrix
+    
+    Args:
+        ffhq_data (dict): dataset information
+        
+        detection_with_feature (list): list of images proceced
+        
+        data_with_feature (list): list of images with faces
+        
+        caracteristica (String): dataset key
+        
+        verbose (Boolean): condition to display graphs
+    
+    Returns:
+        confusion_matrix (list): list with True Positive, False Positive False Negative and True Negative
     '''
     
     # List of detected and not detected

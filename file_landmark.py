@@ -11,7 +11,16 @@ import graficar
 
 def save_in_json(to_save, name, json_dir = "Json", json_suffix = 'deteccion'):
     '''
-    This sub function, takes dict and saves it in a json file
+    This function, takes dict and saves it in a json file
+    
+    Args:
+        to_save (dict): Information to save in json file
+        
+        name (String): Name of the json file
+        
+        json_dir (String): Name of the folder to save json file
+        
+        json_suffix (String): Suffix of the name of json file
     '''
     # Create and write json file
     with open('{}/{}_{}.json'.format(json_dir, name, json_suffix), 'w') as file:
@@ -24,6 +33,24 @@ def save_in_json(to_save, name, json_dir = "Json", json_suffix = 'deteccion'):
 def find_landmarks(images, minimum_face_width = 100, verbose = 1, input_dir="input", output_dir="detected", json_dir="Json", json_suffix = 'deteccion', resize = (1920,1080)):
     '''
     This function take a list of images and other setup variables. It finds if there are faces in the image, if there are faces, it calculate their landmark and save them in a json file
+    
+    Args:
+        images (list): List of images to process
+        
+        minimun_face_width (int): Minimun number of pixels a face boundingbox need to be process
+        
+        vervose (int): Number of stages to run
+        
+        input_dir (Sting): Name of input folder
+        
+        output_dir (Sting): Name of output folder
+        
+        json_dir (Sting): Name of json folder
+        
+        json_suffix (Sting): Suffix of json name
+        
+        resize (tuple): Tuple to resize image shown in window
+        
     '''
     # Initial setup
     with open('configuracion.json') as file:

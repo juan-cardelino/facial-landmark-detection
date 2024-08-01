@@ -10,6 +10,12 @@ import alinear
 def color(frame):
     '''
     This function calculates frame color
+    
+    Args:
+        frame (Array of Array): image frame
+        
+    Returns:
+        color (list): List of BGR color
     '''
     aux = np.mean(np.mean(frame, axis=0), axis=0)
     return [int(aux[0]), int(aux[1]), int(aux[2])]

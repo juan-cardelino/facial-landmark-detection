@@ -7,6 +7,20 @@ import cv2
 def get_json_data(image, json_dir, json_suffix):
     '''
     This function takes an image name and othe setup values. It returns the image file name, the boundingbox and face angle
+    
+    Args:
+        image (String): Image name 
+        
+        json_dir (String): Folder where image json file is located
+        
+        json_suffix (String): suffix of image json file
+    
+    Returns:
+        image_file (String): Name of full image file name
+        
+        boundingbox (List): Boundignbox of the face in the image
+        
+        face_angle (Float): Angle of inclination of the face in the image
     '''
     # Open json file
     with open('{}/{}_{}.json'.format(json_dir, image, json_suffix)) as file:
@@ -18,6 +32,16 @@ def get_json_data(image, json_dir, json_suffix):
 def cropp(frame, boundingbox, scale_boundingbox_by = 0):
     '''
     This function takes a frame, boundigbox and a scaling factor. It sacle the bounding box by the scaling factor and cropp the image by the scaled boundingbox. It return the frame cropped
+    
+    Args:
+        frame (Array of Arrays): Frame to cropp 
+        
+        boundingbox (List): Boundignbox of the face in the image
+        
+        scale_boundingbox_by (Float): Sacaling factor of bounding box. 
+    
+    Returns:
+        cropped_frame (Array of Arrays): Frame cropped by the boundigbox
     '''
     # Get boundingbox corners coordenates
     x = boundingbox[0]
@@ -36,6 +60,17 @@ def cropp(frame, boundingbox, scale_boundingbox_by = 0):
 def rotate(frame, boundingbox, angle):
     '''
     This function takes a frame, a bounding box and a face angle. It returns the frame rotated by the face angles, using the boundingbox center as origin
+    
+    Args:
+        frame (Array of Arrays): Frame to cropp 
+        
+        boundingbox (List): Boundignbox of the face in the frame, the frame is rotated by the center of the boundingbox
+        
+        angle (Float): Angle to rotate the frame
+    
+    Returns:
+        rotated_frame (Array of Arrays): Frame rotated by the angle given
+    
     '''
     # Get frame height and width
     height, width = frame.shape[:2]

@@ -10,6 +10,9 @@ import json
 def check_folder(name):
     '''
     This function checks if a folder exists
+    
+    Args:
+        name (String): Name of folder to check
     '''
     # Check folder exists
     if (os.path.isdir(name)):

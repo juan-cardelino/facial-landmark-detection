@@ -85,9 +85,9 @@ def main():
             for landmark in landmarks:
                 if calculate_feature:
                     # Calculate facial features
-                    centroideder, centroideizq, unidad, origen_ojo, distojos, distfrente_ojo, distboca_ojo, angulo_cara, angulo_ojo_derecho, angulo_ojo_izquierdo, valores_elipse_ojoder, valores_elipse_ojoizq = pr.calculate_facial_feature(landmark[0][36:42], landmark[0][42:48], landmark[0][17:27], landmark[0][48:68])
+                    right_centroid, left_centroid, unit, eye_origin, eye_distance, eye_forhead_distance, ete_mouth_distance, face_angle, right_eye_angle, left_eye_angle, right_eye_ellipse_values, left_eye_ellipse_values = pr.calculate_facial_feature(landmark[0][36:42], landmark[0][42:48], landmark[0][17:27], landmark[0][48:68])
                     # Graph facial features
-                    frame = gr.graph_eyes(frame, centroideder, centroideizq, valores_elipse_ojoder, valores_elipse_ojoizq, color = (0, 255, 0))
+                    frame = gr.graph_eyes(frame, right_centroid, left_centroid, right_eye_ellipse_values, left_eye_ellipse_values, color = (0, 255, 0))
                 # Graph landmars
                 frame = gr.graph_circle(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
             # Graph frame number

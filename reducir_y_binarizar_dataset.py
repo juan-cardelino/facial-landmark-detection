@@ -6,6 +6,9 @@ import json
 import numpy as np
 
 def main():
+    '''
+    Rune code
+    '''
     print('\nCargando configuracion\n')
 
     # Initial setup

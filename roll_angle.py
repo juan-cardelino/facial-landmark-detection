@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import graficar as gr
 import json
+import math
 
 def main():
     '''
@@ -24,8 +25,8 @@ def main():
     calculate_feature = configuracion['pipeline']['from_video']['calculate_feature']
     output_dir = configuracion['path']['output_dir']
     model_dir = configuracion['path']['model_dir']
-    cap_input = configuracion['pipeline']['camera control']['cap_input']
-    video_output = configuracion['pipeline']['camera control']['roll_output']
+    cap_input = configuracion['pipeline']['camera_control']['cap_input']
+    video_output = configuracion['pipeline']['camera_control']['roll_output']
     face_detection_model = configuracion['general']['face detection model']
     landmark_detection_model = configuracion['general']['landmark detection model']
     resize = configuracion['general']['resize']
@@ -56,6 +57,7 @@ def main():
     iter = 0
     # Frame number coordenate
     coordinate = (int(w*.87), int(h*.95))
+    angles = []
     while cap.isOpened():
         # Get frame
         ret, frame = cap.read()
@@ -78,7 +80,7 @@ def main():
             for landmark in landmarks:
                 # Face centroid
                 centroid = np.mean(landmark[0], axis=0)
-                # Graph landmars
+                # Graph landmarks
                 frame = gr.graph_circle(frame, landmark[0], (255, 0, 0), int(frame.shape[1]/256))
                 # Length axis
                 l_axis = int(frame.shape[1]/4)
@@ -91,6 +93,16 @@ def main():
                 # Graph face centroid
                 frame = gr.graph_circle(frame, [centroid], (0, 0, 0), int(frame.shape[1]/64))
                 
+                # Calculate eyes centroids
+                right_eye_centroid = np.mean(landmark[0][36:42].tolist(), axis=0)
+                left_eye_centroid = np.mean(landmark[0][42:48].tolist(), axis=0)
+                
+                # Calculate eyes axis
+                eyes_axis = right_eye_centroid-left_eye_centroid
+                # Calculate face angle
+                face_angle = math.degrees(math.atan2(eyes_axis[1], -eyes_axis[0]))
+                
+                angles.append(face_angle)
                 
             # Graph frame number
             frame = gr.graph_letter(frame, str(iter), coordinate, (255, 255, 255), 3)
@@ -111,6 +123,8 @@ def main():
     cap.release()
     out.release()
     cv2.destroyAllWindows()
+    
+    print('\nMax roll: {}\nMin roll: {}'.format(max(angles), min(angles)))
     return
 
 if __name__ == "__main__":

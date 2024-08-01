@@ -8,6 +8,16 @@ from scipy.optimize import minimize
 
 # renombarar a open eyes
 def open_eye(points):
+    '''
+    This function takes a list of 6 points, and increas the distance of the second, third, fifth and six to the centroid of the points
+    
+    Args:
+        points (list): List of points
+        
+    Returns:
+        new_points (array): Array of new points
+    '''
+    
     # Get centroid
     centroid = np.mean(points, axis=0)
     # Take out eye corner
@@ -45,6 +55,12 @@ def get_random_ellipse(center, n_points):
 def get_best_ellipse(points):
     '''
     Alternative way to calculate the ellipse
+    
+    Args:
+        points (list): List of points
+        
+    Returns:
+        ellipse_values (dict): Dict with center, mayor axis, ratio and rotation    
     '''
 
     # we need to reweight the points because they may have different concentrations
@@ -122,7 +138,7 @@ def cart_to_pol(coeffs):
     ellipse centre; (ap, bp) are the semi-major and semi-minor axes,
     respectively; e is the eccentricity; and phi is the rotation of the semi-
     major axis from the x-axis.
-
+    
     """
 
     # We use the formulas from https://mathworld.wolfram.com/Ellipse.html
