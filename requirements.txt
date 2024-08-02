@@ -1,5 +1,0 @@
-numpy==1.26.4
-opencv-contrib-python==4.9.0.80
-scipy==1.13.0
-matplotlib
-scikit-learn
