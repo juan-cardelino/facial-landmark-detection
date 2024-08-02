@@ -1,0 +1,7 @@
+graficar module
+===============
+
+.. automodule:: graficar
+   :members:
+   :undoc-members:
+   :show-inheritance:

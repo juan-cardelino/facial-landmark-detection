@@ -1,0 +1,7 @@
+reducir\_y\_color\_dataset module
+=================================
+
+.. automodule:: reducir_y_color_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:

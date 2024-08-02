@@ -1,0 +1,7 @@
+control\_database\_binarizada module
+====================================
+
+.. automodule:: control_database_binarizada
+   :members:
+   :undoc-members:
+   :show-inheritance:

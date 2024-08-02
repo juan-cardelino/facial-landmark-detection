@@ -1,0 +1,7 @@
+reducir\_y\_binarizar\_dataset module
+=====================================
+
+.. automodule:: reducir_y_binarizar_dataset
+   :members:
+   :undoc-members:
+   :show-inheritance:

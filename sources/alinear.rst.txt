@@ -1,0 +1,7 @@
+alinear module
+==============
+
+.. automodule:: alinear
+   :members:
+   :undoc-members:
+   :show-inheritance:

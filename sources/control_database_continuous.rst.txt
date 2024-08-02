@@ -1,0 +1,7 @@
+control\_database\_continuous module
+====================================
+
+.. automodule:: control_database_continuous
+   :members:
+   :undoc-members:
+   :show-inheritance:

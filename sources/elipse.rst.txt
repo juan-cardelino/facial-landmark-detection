@@ -1,0 +1,7 @@
+elipse module
+=============
+
+.. automodule:: elipse
+   :members:
+   :undoc-members:
+   :show-inheritance:

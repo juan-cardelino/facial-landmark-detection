@@ -1,0 +1,7 @@
+control\_database\_headpose module
+==================================
+
+.. automodule:: control_database_headpose
+   :members:
+   :undoc-members:
+   :show-inheritance:
