@@ -1,0 +1,243 @@
+[gd_scene load_steps=7 format=3 uid="uid://cf1n5t3fvs5yi"]
+
+[ext_resource type="Texture2D" uid="uid://dakq2k4ap2iyk" path="res://animacion fondo/suelo.png" id="1_sgf4t"]
+[ext_resource type="PackedScene" uid="uid://do3wvrlyjmkg6" path="res://ore.tscn" id="2_macjo"]
+[ext_resource type="PackedScene" uid="uid://dcehsq7xcm2sh" path="res://HUD.tscn" id="3_tw3li"]
+
+[sub_resource type="GDScript" id="GDScript_1y02w"]
+script/source = "extends Node2D
+
+@export var ore_node: PackedScene
+@onready var tilemap = $TileMap
+@onready var hud = $HUD
+
+const tile_length = 32
+const ore_leyer = 0
+const building_layer = 1
+const nada_tileset = -1
+const minor_tileset = 1
+const adder_tileset = 2
+const belt_tileset = 3
+var minors:Array = []
+var belts:Array = []
+var adders:Array = []
+var full_inventory:Array = []
+var units:Array = []
+var modo:String = 'nada'
+var rotacion:int = 0
+var moving:Array = []
+var modo_array = ['nada', 'nada', 'minor', 'adder', 'belt']
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(_delta):
+	for i in units:
+		var world_position:Vector2 = i.position
+		var map_position:Vector2i = tilemap.local_to_map(world_position)
+		if  map_position in belts:
+			var tile_atlas_coor:Vector2i = tilemap.get_cell_atlas_coords(building_layer, map_position)
+			var direction:Vector2 = Vector2(1,0).rotated(tile_atlas_coor[0]*PI/4)
+			if i not in moving:
+				var output_map_position:Vector2i = map_position+Vector2i(direction)
+				if tilemap.get_cell_atlas_coords(building_layer, output_map_position)[1] == belt_tileset:
+					if output_map_position not in full_inventory:
+						full_inventory += [output_map_position]
+						i.direction = direction
+						i.target_position = world_position+direction*tile_length
+						moving += [i]
+						i.current_belt = map_position
+				elif tilemap.get_cell_atlas_coords(building_layer, output_map_position) != Vector2i(-1, -1):
+					# Aca tengo que contrrolar el error
+					i.direction = direction
+					#full_inventory.remove_at(full_inventory.rfind(i.current_belt))
+					moving += [i]
+			else:
+				if i.position.distance_to(i.target_position) < 1:
+					i.position = i.target_position
+					i.direction = Vector2(0,0)
+					moving.remove_at(moving.rfind(i))
+				if map_position != i.current_belt:
+					full_inventory.remove_at(full_inventory.rfind(i.current_belt))
+					i.current_belt = map_position
+		else:
+			if i in moving:
+				moving.remove_at(moving.rfind(i))
+			if i.current_belt in full_inventory:
+				full_inventory.remove_at(full_inventory.rfind(i.current_belt))
+			units.remove_at(units.rfind(i))
+			i.queue_free()
+
+
+func _input(_event):
+	if Input.is_action_just_pressed(\"Seleccionar\"):
+		var map_position:Vector2i = tilemap.local_to_map(get_global_mouse_position())
+		var set_modo:int = tilemap.get_cell_atlas_coords(building_layer, map_position)[1] + 1
+		modo = modo_array[set_modo]
+	if Input.is_action_just_pressed(\"Rotar\"):
+		rotacion = (rotacion+1)%4
+	if Input.is_action_just_pressed(\"click\"):
+		if modo != 'nada':
+			var map_position:Vector2i = tilemap.local_to_map(get_global_mouse_position())
+			var tile_atlas_coor: Vector2i = tilemap.get_cell_atlas_coords(building_layer, map_position)
+			var tile_status: int = tile_atlas_coor[1]
+			var ore_tile_atlas_coor:Vector2i = tilemap.get_cell_atlas_coords(ore_leyer, map_position)
+			if modo == 'minor':
+				if ore_tile_atlas_coor != Vector2i(-1, -1):
+					if tile_status == minor_tileset or tile_status == nada_tileset:
+						tilemap.set_cell(building_layer, map_position, 0, Vector2i(rotacion+ore_tile_atlas_coor[0]*4, minor_tileset))
+						if map_position not in minors:
+							minors += [map_position]
+			elif modo == 'belt':
+				if tile_status == belt_tileset or tile_status == nada_tileset:
+					tilemap.set_cell(building_layer, map_position, 0, Vector2i(rotacion*2, belt_tileset))
+					if map_position not in belts:
+						belts += [map_position]
+			elif modo == 'adder':
+				if tile_status == nada_tileset:
+					var next_tile: Vector2i = Vector2i(Vector2(1,0).rotated((rotacion+3)*PI/2))
+					var next_tile_atlas_coor: Vector2i = tilemap.get_cell_atlas_coords(building_layer, map_position+next_tile)
+					var next_tile_status: int = next_tile_atlas_coor[1]
+					if next_tile_status == nada_tileset:
+						tilemap.set_cell(building_layer, map_position, 0, Vector2i(rotacion*2, adder_tileset))
+						tilemap.set_cell(building_layer, map_position+next_tile, 0, Vector2i(rotacion*2+1, adder_tileset))
+						if map_position not in adders:
+							adders += [map_position, map_position+next_tile]
+			
+	if Input.is_action_just_pressed('click negativo'):
+		if modo != 'nada':
+			var map_position = tilemap.local_to_map(get_global_mouse_position())
+			var tile_atlas_coor: Vector2i = tilemap.get_cell_atlas_coords(building_layer, map_position)
+			var tile_status: int = tile_atlas_coor[1]
+			if modo == 'minor':
+				if tile_status == minor_tileset:
+					tilemap.erase_cell(building_layer, map_position)
+					minors.remove_at(minors.rfind(map_position))
+			elif modo == 'belt':
+				if tile_status == belt_tileset:
+					tilemap.erase_cell(building_layer, map_position)
+					belts.remove_at(belts.rfind(map_position))
+					if map_position in full_inventory:
+						full_inventory.remove_at(full_inventory.rfind(map_position))
+			elif modo == 'adder':
+				if tile_status == adder_tileset:
+					var tile_rotation: int = tile_atlas_coor[0]/2 + (tile_atlas_coor[0]%2)*2
+					var next_tile: Vector2i = Vector2i(Vector2(1,0).rotated((tile_rotation+3)*PI/2))
+					tilemap.erase_cell(building_layer, map_position)
+					adders.remove_at(adders.rfind(map_position))
+					tilemap.erase_cell(building_layer, map_position+next_tile)
+					adders.remove_at(adders.rfind(map_position+next_tile))
+				
+
+func _on_ore_timer_timeout():
+	for i in minors:
+		var tile_atlas_coor:Vector2i = tilemap.get_cell_atlas_coords(building_layer, i)
+		var output_belt_map_coord:Vector2i = i+Vector2i(Vector2(1,0).rotated(tile_atlas_coor[0]*PI/2))
+		if tilemap.get_cell_atlas_coords(building_layer, output_belt_map_coord)[1] == belt_tileset:
+			if output_belt_map_coord not in full_inventory:
+				full_inventory += [output_belt_map_coord]
+				var unit = ore_node.instantiate()
+				unit.current_belt = output_belt_map_coord
+				unit.position = output_belt_map_coord*tile_length + Vector2i(16, 16)
+				add_child(unit)
+				units += [unit]
+
+
+func _on_hud_cambiar_modo():
+	modo = hud.modo
+
+func ore_tile():
+	pass
+
+func belt_tile():
+	pass
+
+func minor_tile():
+	pass
+
+func module_tile():
+	pass
+"
+
+[sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_8vi0c"]
+texture = ExtResource("1_sgf4t")
+texture_region_size = Vector2i(32, 32)
+0:0/0 = 0
+1:0/0 = 0
+0:1/0 = 0
+0:1/0/custom_data_0 = true
+1:1/0 = 0
+1:1/0/custom_data_0 = true
+2:1/0 = 0
+2:1/0/custom_data_0 = true
+0:2/0 = 0
+0:2/0/custom_data_0 = true
+0:3/animation_columns = 2
+0:3/animation_frame_0/duration = 0.2
+0:3/animation_frame_1/duration = 0.2
+0:3/0 = 0
+2:3/animation_columns = 2
+2:3/animation_frame_0/duration = 0.1
+2:3/animation_frame_1/duration = 0.1
+2:3/0 = 0
+3:1/0 = 0
+4:1/0 = 0
+5:1/0 = 0
+6:1/0 = 0
+7:1/0 = 0
+4:3/animation_columns = 2
+4:3/animation_frame_0/duration = 0.1
+4:3/animation_frame_1/duration = 0.1
+4:3/0 = 0
+6:3/animation_columns = 2
+6:3/animation_frame_0/duration = 0.1
+6:3/animation_frame_1/duration = 0.1
+6:3/0 = 0
+1:2/0 = 0
+0:4/0 = 0
+2:2/0 = 0
+3:2/0 = 0
+4:2/0 = 0
+5:2/0 = 0
+6:2/0 = 0
+7:2/0 = 0
+
+[sub_resource type="TileSet" id="TileSet_11v83"]
+tile_size = Vector2i(32, 32)
+custom_data_layer_0/name = "inventory_full"
+custom_data_layer_0/type = 1
+sources/0 = SubResource("TileSetAtlasSource_8vi0c")
+
+[node name="Game" type="Node2D"]
+script = SubResource("GDScript_1y02w")
+ore_node = ExtResource("2_macjo")
+
+[node name="ColorRect" type="ColorRect" parent="."]
+offset_right = 1152.0
+offset_bottom = 648.0
+
+[node name="TileMap" type="TileMap" parent="."]
+tile_set = SubResource("TileSet_11v83")
+cell_quadrant_size = 32
+format = 2
+layer_0/name = "ores"
+layer_0/tile_data = PackedInt32Array(262154, 0, 0, 327690, 0, 0, 327689, 0, 0, 393225, 0, 0, 393224, 0, 0, 327687, 0, 0, 262151, 0, 0, 262150, 0, 0, 196615, 0, 0, 196616, 0, 0, 196617, 0, 0, 262153, 0, 0, 262152, 0, 0, 327688, 0, 0, 393243, 65536, 0, 393244, 65536, 0, 327708, 65536, 0, 327709, 65536, 0, 262172, 65536, 0, 262171, 65536, 0, 262170, 65536, 0, 327706, 65536, 0, 327707, 65536, 0, 327686, 0, 0, 393223, 0, 0, 458760, 0, 0, 458761, 0, 0, 524296, 0, 0, 524295, 0, 0, 458758, 0, 0, 393221, 0, 0, 393222, 0, 0, 327685, 0, 0, 458759, 0, 0, 393245, 65536, 0, 393246, 65536, 0, 393247, 65536, 0, 458783, 65536, 0, 524318, 65536, 0, 589854, 65536, 0, 655391, 65536, 0, 720927, 65536, 0, 720926, 65536, 0, 655389, 65536, 0, 589853, 65536, 0, 589852, 65536, 0, 524316, 65536, 0, 458780, 65536, 0, 458781, 65536, 0, 524317, 65536, 0, 458782, 65536, 0, 524319, 65536, 0, 589855, 65536, 0, 655390, 65536, 0, 589856, 65536, 0, 524320, 65536, 0, 720912, 0, 4, 720913, 0, 4, 720914, 0, 4, 720915, 0, 4, 786448, 0, 4, 786449, 0, 4, 786450, 0, 4, 786451, 0, 4, 851984, 0, 4, 851985, 0, 4, 851986, 0, 4, 851987, 0, 4, 917520, 0, 4, 917521, 0, 4, 917522, 0, 4, 917523, 0, 4)
+layer_1/name = "buildings"
+layer_1/enabled = true
+layer_1/modulate = Color(1, 1, 1, 1)
+layer_1/y_sort_enabled = false
+layer_1/y_sort_origin = 0
+layer_1/z_index = 0
+layer_1/tile_data = PackedInt32Array()
+metadata/full_inventory = false
+
+[node name="Ore_timer" type="Timer" parent="TileMap"]
+autostart = true
+
+[node name="HUD" parent="." instance=ExtResource("3_tw3li")]
+
+[connection signal="timeout" from="TileMap/Ore_timer" to="." method="_on_ore_timer_timeout"]
+[connection signal="cambiar_modo" from="HUD" to="." method="_on_hud_cambiar_modo"]

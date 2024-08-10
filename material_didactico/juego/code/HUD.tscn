@@ -1,0 +1,61 @@
+[gd_scene load_steps=2 format=3 uid="uid://dcehsq7xcm2sh"]
+
+[ext_resource type="Script" path="res://HUD.gd" id="1_jt7x6"]
+
+[node name="HUD" type="CanvasLayer"]
+script = ExtResource("1_jt7x6")
+
+[node name="Bottom" type="ColorRect" parent="."]
+modulate = Color(0.498039, 0.498039, 0.498039, 0.498039)
+anchors_preset = -1
+anchor_top = 0.901235
+anchor_right = 1.0
+anchor_bottom = 1.0
+metadata/_edit_use_anchors_ = true
+
+[node name="Top" type="ColorRect" parent="."]
+modulate = Color(0.498039, 0.498039, 0.498039, 0.498039)
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 0.0987654
+tooltip_text = "
+"
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="Top"]
+layout_mode = 0
+offset_left = 18.0
+offset_right = 218.0
+offset_bottom = 64.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 44
+text = "Level 1"
+visible_characters = 5
+visible_ratio = 0.714286
+
+[node name="Minor" type="Button" parent="."]
+offset_left = 1070.0
+offset_top = 600.0
+offset_right = 1134.0
+offset_bottom = 632.0
+text = "Minor"
+
+[node name="Belt" type="Button" parent="."]
+offset_left = 988.0
+offset_top = 600.0
+offset_right = 1052.0
+offset_bottom = 632.0
+text = "Belt"
+
+[node name="Adder" type="Button" parent="."]
+offset_left = 906.0
+offset_top = 600.0
+offset_right = 970.0
+offset_bottom = 632.0
+text = "Adder"
+
+[connection signal="pressed" from="Minor" to="." method="_on_minor_pressed"]
+[connection signal="pressed" from="Belt" to="." method="_on_belt_pressed"]
+[connection signal="pressed" from="Adder" to="." method="_on_adder_pressed"]
