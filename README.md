@@ -130,5 +130,5 @@ Find more information on how to execute the programs in [pipeline](https://docs.
 
 Find more information about feature calculation on [miro][miro]
 
-Find more tecnical information in Esto lo tengo que hacer aun 
+Find more tecnical information in [documentation][https://hisokam324.github.io/]
 
